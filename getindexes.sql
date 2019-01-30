@@ -25,4 +25,10 @@ select * from @non_clustered_indexes;
 
 dbcc freeproccache
 dbcc dropcleanbuffers
-exec dbo.sp_SimpleAnonymizer @db='CNFS_HUN', @schema='dbo', @tablep='agreement_historic_data_table', @column_name = 'total_amount_payable'
+exec dbo.sp_SimpleAnonymizer @db='cnfs_hun', @schema='dbo', @tablep='agreement_table', @column_name = 'total_amount_payable'
+
+use cnfs_hun;
+
+select rows, rowmodctr
+from cnfs_hun.sys.sysindexes with (nolock)
+where id = object_id('agreement_historic_data_table')
