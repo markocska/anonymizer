@@ -23,5 +23,6 @@ insert into @non_clustered_indexes exec (@sql_to_get_clust_indexes)
 select * from @non_clustered_indexes;
 
 
-
-exec dbo.sp_SimpleAnonymizer @db='CNFS_HUN', @schema='dbo', @tablep='agreement_table', @column_name = 'loan_reason_code'
+dbcc freeproccache
+dbcc dropcleanbuffers
+exec dbo.sp_SimpleAnonymizer @db='CNFS_HUN', @schema='dbo', @tablep='agreement_historic_data_table', @column_name = 'total_amount_payable'
