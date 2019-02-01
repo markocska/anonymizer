@@ -1,11 +1,13 @@
 declare @sql_to_get_clust_indexes varchar(MAX) = '',
 		@sql_to_turn_off_clust_indexes varchar(MAX) = '',
 		@db nvarchar(100) = 'cnfs_hun', 
+		@schema nvarchar(100) = 'dbo', 
+		@table_name nvarchar(100) = 'agreement_table', 
 		@full_table_name nvarchar(300) = 'cnfs_hun.dbo.agreement_table',
 		@query_to_run nvarchar(max) = ''
 		declare @non_clustered_indexes table ([index_name] nvarchar(128))
 
-
+--exec dbo.sp_EnableDisableClusteredIndexes @db=@db, @schema=@schema, @table_name=@table_name, @enable = 1
 		
 select @sql_to_get_clust_indexes = 
 	'select i.name 
@@ -28,7 +30,7 @@ dbcc freeproccache
 dbcc dropcleanbuffers
 exec dbo.sp_SimpleAnonymizer @db='cnfs_hun', @schema='dbo', @tablep='agreement_table', @column_name = 'creation_week'
 
-exec dbo.sp_EnableDisableClusteredIndexes @db='cnfs_hun', @schema='dbo', @table_name='agreement_table', @enable = 1
+exec dbo.sp_EnableDisableClusteredIndexes @db=@db, @schema='dbo', @table_name='agreement_table', @enable = 1
 
 use cnfs_hun;
 
@@ -44,3 +46,5 @@ alter index gi_t_actors100 on dbo.t_actors disable;
 alter index gi_t_actors100 on dbo.t_actors rebuild;
 
 commit
+
+select cast(cucuka as nvarchar(128))
