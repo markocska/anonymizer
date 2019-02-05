@@ -1,8 +1,10 @@
 
 declare @const_columns dbo.ConstantColumnList
+declare @columns dbo.ColumnList
 declare @const_columns_in_clause nvarchar(MAX) = ''
 
-insert into @const_columns values ('linked_agreement_number','22'), ('dt_transaction_id','6F9619FF-8B86-D011-B42D-00C04FC964FF'), ('company_rate_cap_id','2')
+insert into @const_columns values ('refinancing_agreement_id','1')
+insert into @columns values ('reporting_week_num'), ('customer_id')
 
 
 declare @sql_to_get_clust_indexes varchar(MAX) = '',
@@ -18,4 +20,4 @@ declare @sql_to_get_clust_indexes varchar(MAX) = '',
 use Anonymizer;
 dbcc freeproccache
 dbcc dropcleanbuffers
-exec dbo.sp_SimpleAnonymizer @db='cnfs_hun', @schema='dbo', @tablep='agreement_table', @column_name = 'creation_week', @constant_columns = @const_columns
+exec dbo.sp_SimpleAnonymizer @db='cnfs_hun', @schema='dbo', @tablep='agreement_table', @scrambled_columns = @columns, @constant_columns = @const_columns

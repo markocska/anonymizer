@@ -1,9 +1,9 @@
 declare @sql_to_get_clust_indexes varchar(MAX) = '',
 		@sql_to_turn_off_clust_indexes varchar(MAX) = '',
-		@db nvarchar(100) = 'cnfs_hun', 
+		@db nvarchar(100) = 'target_ifuat', 
 		@schema nvarchar(100) = 'dbo', 
-		@table_name nvarchar(100) = 'agreement_table', 
-		@full_table_name nvarchar(300) = 'cnfs_hun.dbo.agreement_table',
+		@table_name nvarchar(100) = 't_actors', 
+		@full_table_name nvarchar(300) = 'target_ifuat.dbo.t_actors',
 		@query_to_run nvarchar(max) = ''
 		declare @non_clustered_indexes table ([index_name] nvarchar(128))
 
