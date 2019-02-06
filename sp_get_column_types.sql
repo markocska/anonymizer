@@ -19,6 +19,12 @@ with execute as caller
 as
 begin
 	
+	declare @column_count int
+	select @column_count = count(1) from @columns
+
+	if @column_count = 0
+		return ''
+
 	declare @sql_to_describe nvarchar(MAX), @columns_in_clause nvarchar(MAX),
 			@sql_to_get_type nvarchar(MAX)
 	declare @const_columns_with_types table([column_name] nvarchar(128), [column_type] nvarchar(128))
