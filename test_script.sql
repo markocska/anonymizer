@@ -1,10 +1,12 @@
 
+use Anonymizer;
+
 declare @const_columns dbo.ConstantColumnList
 declare @columns dbo.ColumnList
 declare @const_columns_in_clause nvarchar(MAX) = ''
 
-insert into @const_columns values ('refinancing_agreement_id','1')
-insert into @columns values ('reporting_week_num'), ('customer_id')
+insert into @const_columns values ('refinancing_agreement_id','1'), ('settlement_balance', '2')
+insert into @columns values ('reporting_week_num'), ('customer_id'), ('actual_paid_up_week')
 
 
 declare @sql_to_get_clust_indexes varchar(MAX) = '',

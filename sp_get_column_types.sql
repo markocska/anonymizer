@@ -40,3 +40,5 @@ begin
 
 	return @sql_to_get_type
 end
+
+
