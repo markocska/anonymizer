@@ -5,8 +5,8 @@ declare @const_columns dbo.ConstantColumnList
 declare @columns dbo.ColumnList
 declare @const_columns_in_clause nvarchar(MAX) = ''
 
-insert into @const_columns values ('refinancing_agreement_id','3'), ('settlement_balance', '4')
-insert into @columns values ('reporting_week_num'), ('customer_id'), ('actual_paid_up_week')
+insert into @const_columns values ('customer_id','3'), ('settlement_balance', '4')
+insert into @columns values ('reporting_week_num'), ('customer_id'), ('settlement_balance')
 
 
 declare @sql_to_get_clust_indexes varchar(MAX) = '',
