@@ -5,8 +5,8 @@ declare @const_columns dbo.ConstantColumnList
 declare @columns dbo.ColumnList
 declare @const_columns_in_clause nvarchar(MAX) = ''
 
-insert into @const_columns values ('customer_id','3'),('settlement_balance', '4')
-insert into @columns values ('reporting_week_num'), ('issue_date')
+insert into @const_columns values 
+insert into @columns values ('nameced')
 
 
 declare @sql_to_get_clust_indexes varchar(MAX) = '',
@@ -20,8 +20,6 @@ declare @sql_to_get_clust_indexes varchar(MAX) = '',
 
 
 use Anonymizer;
-dbcc freeproccache
-dbcc dropcleanbuffers
 exec dbo.sp_SimpleAnonymizer @db='cnfs_hun', @schema='dbo', @tablep='agreement_table', @scrambled_columns = @columns, @constant_columns = @const_columns
 
 
@@ -41,6 +39,10 @@ select f.name, f.object_id
 	select o.name 
 	from target_ifuat.sys.objects o
 	where o.object_id = 1106102981
+
+
+alter table cnfs_hun.dbo.agreement_table
+add constraint 
 
 
 --alter index all on cnfs_hun.dbo.agreement_table rebuild;
