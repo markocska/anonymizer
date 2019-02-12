@@ -47,3 +47,5 @@ add constraint
 
 --alter index all on cnfs_hun.dbo.agreement_table rebuild;
 
+
+
