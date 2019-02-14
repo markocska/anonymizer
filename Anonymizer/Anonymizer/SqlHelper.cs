@@ -11,7 +11,7 @@ namespace Anonymizer
     public static class SqlHelper
     {
         #region Synchronous Methods
-        private static void ExecuteNonQuery(string connectionString, List<SqlParameter> cmdParameters, string cmdStr, CommandType cmdType)
+        public static void ExecuteNonQuery(string connectionString, List<SqlParameter> cmdParameters, string cmdStr)
         {
             using (var conn = new SqlConnection(connectionString))
             {
@@ -51,17 +51,6 @@ namespace Anonymizer
             }
 
             return Results;
-        }
-
-        public static SqlParameter ExecuteProcedure(string connectionString, List<SqlParameter> cmdParameters, string cmdStr)
-        {
-            SqlParameter returnValue = new SqlParameter();
-            returnValue.Direction = ParameterDirection.ReturnValue;
-            cmdParameters.Add(returnValue);
-
-            ExecuteNonQuery(connectionString, cmdParameters, cmdStr, System.Data.CommandType.Text);
-
-            return returnValue;
         }
 
         public static void ScrambleTable(string connectionString, string db, string schema, string table, string whereClause )

@@ -27,9 +27,9 @@ select i.name
 		from CNFS_HUN.sys.indexes i
 		join CNFS_HUN.sys.objects o
 			ON i.object_id = o.object_id 
-		where i.object_id = object_id('target_ifuat.dbo.T_ROLES')
+		where i.object_id = object_id('cnfs_hun.dbo.agreement_table')
 			and i.is_primary_key = 0
-			and i.is_disabled = 0
+			and i.is_disabled = 1
 			and o.type_desc = 'USER_TABLE';
 
 select f.name, f.object_id

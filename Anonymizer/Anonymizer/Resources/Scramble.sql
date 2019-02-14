@@ -1,10 +1,6 @@
-USE [Anonymizer]
-GO
 /****** Object:  StoredProcedure [dbo].[sp_SimpleAnonymizer]    Script Date: 2019. 01. 17. 10:35:57 ******/
 SET ANSI_NULLS ON
-GO
 SET QUOTED_IDENTIFIER ON
-GO
 
 
 -- =============================================
@@ -22,21 +18,25 @@ declare @db nvarchar(128), @schema nvarchar(128), @table nvarchar(128),
 declare @constant_columns table(column_name nvarchar(128), column_value nvarchar(max))
 declare @scrambled_columns table(column_name nvarchar(128))
 
-insert into @const_columns 
+declare @sql_to_get_constant_types nvarchar(max), @sql_to_get_scrambled_types nvarchar(max)
+
+insert into @constant_columns 
 select column_name, column_value 
 from @const_columns_and_values_table
 
 insert into @scrambled_columns
 select column_name
-from @scrambled_columns_and_values_table
+from @scrambled_columns_table
 
 set @db = @db_value
 set @schema = @schema_value
 set @table = @table_value
 set @where = @where_value
+set @sql_to_get_constant_types = @sql_to_get_constant_types_value
+set @sql_to_get_scrambled_types = @sql_to_get_scrambled_types_value
 
 --Variables to store the error messages and the operation that is currently done
-declare  @error_message nvarchar(500), @operation nvarchar(200) 
+declare  @error_message nvarchar(max), @operation nvarchar(max) 
 
 --We store the script that does that actual scrambling and that we will execute in this variable
 declare  @proc nvarchar(MAX) = ''
@@ -59,150 +59,6 @@ Select @db = '[' + @db + ']',
 declare @full_table_name nvarchar(300) = @db + '.' + @schema + '.' + @table
 
 BEGIN TRY
-
--- Parameter checkings
-	
-	set @operation = 'checking the input parameters.'
-	
-	declare @check_script nvarchar(MAX) = '', @check_count int,
-			@param_definition nvarchar(MAX) = ''
-	declare @section_check_table table ([column_name] nvarchar(128)) 
-	declare @all_columns_list table ([column_name] nvarchar(128))
-
-	-- Checking whether the are columns that appear both at the scrambled and constant columns
-	insert into @section_check_table 
-		select column_name from @constant_columns
-		intersect
-		select column_name from @scrambled_columns
-
-	select @check_count = count(1) from @section_check_table;
-
-	if @check_count <> 0
-	begin
-		declare @duplicated_columns nvarchar(MAX) = ''
-		
-		select @duplicated_columns =  @duplicated_columns + '[' + column_name + '], '
-		from @section_check_table
-
-		set @error_message = 'A column can''t appear both among the constant and scrambled columns. The following columns '
-		+ 'appear in both: ' + @duplicated_columns + '.'
-
-		raiserror(@error_message,16,1)
-	end
-	
-	-- Checking whether the table to anonymize exists
-	if OBJECT_ID(@db + '.' + @schema + '.' + @table) IS NULL
-		begin		
-			set @error_message = 'The table ' + @db + '.' + @schema + '.' + @table + ' does not exist.';
-			raiserror(@error_message,16,1);
-		end
-
-	--Checking whether every column to anonymize exists in the table
-	declare @all_columns_list_str nvarchar(MAX) = '', @not_existing_column_list_str nvarchar(MAX) = ''
-	declare @not_existing_column_list table ([column_name] nvarchar(128))
-	declare @existing_column_list table ([column_name] nvarchar(128))
-	
-	insert into @all_columns_list 
-		select column_name from @constant_columns
-		union 
-		select column_name from @scrambled_columns
-
-	select @all_columns_list_str = @all_columns_list_str + '''' + column_name + '''' + ',' 
-		from @all_columns_list
-
-	set @all_columns_list_str = stuff(@all_columns_list_str, len(@all_columns_list_str),1,'')
-
-	set @check_script =	 ' SELECT c.[name] '
-						+ 'FROM '   
-							+ @db + '.sys.columns c '
-						+ 'WHERE
-							c.object_id = OBJECT_ID(''' + @db + '.' + @schema + '.' + @table + ''') and ' + 'c.[name] in (' + @all_columns_list_str + ')' ;
-
-	insert into @existing_column_list exec (@check_script)
-
-	insert into @not_existing_column_list
-		select a.column_name from @all_columns_list a
-		where not exists(
-			select column_name from @existing_column_list e
-			where e.column_name = a.column_name
-		)
-
-
-	select @check_count = count(1) from @not_existing_column_list
-
-	if @check_count <> 0
-	begin
-		select @not_existing_column_list_str = @not_existing_column_list_str + '[' + column_name + '], ' from @not_existing_column_list
-		set @error_message = 'The following columns doesn''t exist in the table: ' + @not_existing_column_list_str
-		raiserror(@error_message, 16, 1)
-	end
-
-	-- We create a table that contains all the primary key columns and unique constraint columns
-	declare @unique_pr_column_list table([column_name] nvarchar(128), [is_unique_constraint] nvarchar(128), 
-										[is_primary_key] nvarchar(128))
-
-	set @check_script =	 '(select c.name, i.is_unique_constraint, i.is_primary_key
-			    from ' + @db + '.sys.columns c
-				inner join ' + @db + '.' + 'sys.index_columns ic on c.object_id = ic.object_id and c.column_id = ic.column_id
-				inner join ' + @db + '.' + 'sys.indexes i on ic.object_id = i.object_id and ic.index_id = i.index_id
-				where 
-			     	(i.is_unique_constraint = 1 or i.is_primary_key = 1)
-				and i.is_disabled = 0
-				and	c.object_id = OBJECT_ID(''' + @db + '.' + @schema + '.' + @table + '''))'
-	
-	insert into @unique_pr_column_list exec (@check_script)
-
-		
-	--- We check whether the table has a primary key
-
-	set @operation = 'checking if the table has a primary key'
-
-	select @check_count = count(1) from @unique_pr_column_list l where l.is_primary_key = 1
-
-	if @check_count = 0
-	begin
-		set @error_message = 'The table ' + @db + '.' + @schema + '.' + @table + ' has no primary key!'
-		raiserror(@error_message, 16, 1)
-	end
-
-	-- We check whether any of the input columns is part of a primary key or a unique constraint
-	
-	declare @input_unique_intersection table([column_name] nvarchar(128), [is_unique_constraint] nvarchar(128),
-											 [is_primary_key] nvarchar(128))
-
-	insert into @input_unique_intersection 
-	select up.column_name, up.is_primary_key, up.is_unique_constraint
-	from @unique_pr_column_list up 
-	join @all_columns_list al on up.column_name = al.column_name 
-
-	select @check_count = count(1) from @input_unique_intersection
-
-	if @check_count <> 0 
-	begin
-		declare @unique_columns_str nvarchar(max) = '', @prkey_columns_str nvarchar(max) = ''
-		
-		select @unique_columns_str = @unique_columns_str + ' [' + column_name + '] ' 
-		from @input_unique_intersection i 
-		where i.is_primary_key = 1
-
-		if @unique_columns_str <> ''
-		begin
-			set @error_message = 'The following input columns are part of a unique constraint: ' + @unique_columns_str + ' .' + CHAR(13) + CHAR(11)
-		end
-
-		select @prkey_columns_str = @prkey_columns_str + ' [' + column_name + '] '
-		from @input_unique_intersection i 
-		where i.is_unique_constraint = 1
-
-		if @prkey_columns_str <> ''
-		begin
-			set @error_message = 'The following input columns are part of a primary key constraint: ' + @prkey_columns_str + ' .' + CHAR(13) + CHAR(11) 
-		end
-
-		raiserror(@error_message, 16, 1)
-	end
-
---------
 
 --- Get the primary key/keys's name and type
 	
@@ -265,17 +121,7 @@ BEGIN TRY
 	set @operation = 'getting the constant column''s types.'
 	
     declare @const_columns_with_types table ([column_name] nvarchar(128), [column_type] nvarchar(128))
-	declare @const_column_name_list dbo.ColumnList,
-			@sql_to_get_constant_types nvarchar(MAX),
-			@const_count int 
-
-	insert into @const_column_name_list 
-	select c.column_name
-	from @constant_columns c
-
-	exec @sql_to_get_constant_types = dbo.func_get_column_types @columns = @const_column_name_list, @db=@db, @schema = @schema, @table = @table
-
-	select @const_count = COUNT(1) from @constant_columns
+	declare @const_count int 
 
 	insert into @const_columns_with_types exec (@sql_to_get_constant_types)
 
@@ -301,15 +147,14 @@ BEGIN TRY
 		set @i = @i + 1
 	end
 
+
 --------
 -------- Get the scrambled columns's types 
 
 	set @operation = 'getting the scrambled columns''s types.'
 	
-	declare @sql_to_get_scrambled_types nvarchar(MAX)
 	declare @scrambled_columns_with_types table ([column_name] nvarchar(128), [column_type] nvarchar(128))
 
-	exec @sql_to_get_scrambled_types = dbo.func_get_column_types @columns = @scrambled_columns, @db=@db, @schema = @schema, @table = @table
 
 	insert into @scrambled_columns_with_types exec (@sql_to_get_scrambled_types)
 
@@ -413,9 +258,8 @@ BEGIN TRY
 		@create_indexes_clause  
 
 	set @proc = @proc + 
-		'alter table ' + @db + '.' + @schema + '.' + @table + ' nocheck constraint all; ' + CHAR(13) + CHAR(10) + 
-				
-		'exec dbo.sp_EnableDisableNon_PrKeyUniqueClust_Indexes @db=''' + @db + ''', @schema = ''' + @schema + ''', @table_name = ''' + @table + ''', @enable = 0;'
+		'alter table ' + @db + '.' + @schema + '.' + @table + ' nocheck constraint all; ' + CHAR(13) + CHAR(10) 
+			
 
 	set @proc = @proc + ' update ' + @db + '.' + @schema + '.' + @table + 'with (tablock)' +
 		' set ' + @scrambled_update_clause + ' '
@@ -436,13 +280,13 @@ BEGIN TRY
 			' alter table ' + @db + '.' + @schema + '.' + @table + ' check constraint all; '
 	
 	set @operation = 'doing the scrambling.'
-	print @proc
+
 	exec (@proc)
 ---------
 
 -------- Enable all non-clustered indexes
-	set @operation = 'enabling all the non-clustered indexes'
-	exec dbo.sp_EnableDisableNon_PrKeyUniqueClust_Indexes @db=@db, @schema = @schema, @table_name = @table, @enable = 1
+	--set @operation = 'enabling all the non-clustered indexes'
+	--exec dbo.sp_EnableDisableNon_PrKeyUniqueClust_Indexes @db=@db, @schema = @schema, @table_name = @table, @enable = 1
 
 END TRY
 BEGIN CATCH

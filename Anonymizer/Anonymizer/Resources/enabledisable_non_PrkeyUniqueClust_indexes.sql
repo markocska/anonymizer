@@ -1,10 +1,7 @@
-USE [Anonymizer]
-GO
+
 /****** Object:  StoredProcedure [dbo].[sp_SimpleAnonymizer]    Script Date: 2019. 01. 17. 10:35:57 ******/
 SET ANSI_NULLS ON
-GO
 SET QUOTED_IDENTIFIER ON
-GO
 
 
 declare @db nvarchar(128), @schema nvarchar(128),@table_name nvarchar(128),@enable bit

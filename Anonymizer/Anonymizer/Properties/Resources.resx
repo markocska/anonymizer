@@ -130,4 +130,10 @@
   <data name="Scramble" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Scramble.sql;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;windows-1250</value>
   </data>
+  <data name="Check_Input_Params" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Check_Input_Params.sql;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;windows-1250</value>
+  </data>
+  <data name="Check_Primary_keys" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Check_Primary_keys.sql;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;windows-1250</value>
+  </data>
 </root>

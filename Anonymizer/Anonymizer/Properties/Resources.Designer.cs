@@ -62,12 +62,57 @@ namespace Anonymizer.Properties {
         
         /// <summary>
         ///   Looks up a localized string similar to USE [Anonymizer]
-        ///GO
+        ///
         ////****** Object:  StoredProcedure [dbo].[sp_SimpleAnonymizer]    Script Date: 2019. 01. 17. 10:35:57 ******/
         ///SET ANSI_NULLS ON
-        ///GO
         ///SET QUOTED_IDENTIFIER ON
-        ///GO
+        ///
+        ///-- =============================================
+        ///-- Author:		Mark Rusz
+        ///-- Create date: 2019-01-15
+        ///-- Description:	Scrambles the given columns and sets other given columns to a constant value for a table
+        ///-- =============================================
+        ///
+        ///SET XACT_ABORT, NOCOUNT ON
+        ///
+        ///--Input parameters
+        ///declare @db nvarchar(128),  [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string Check_Input_Params {
+            get {
+                return ResourceManager.GetString("Check_Input_Params", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to USE [Anonymizer]
+        ///
+        ////****** Object:  StoredProcedure [dbo].[sp_SimpleAnonymizer]    Script Date: 2019. 01. 17. 10:35:57 ******/
+        ///SET ANSI_NULLS ON
+        ///SET QUOTED_IDENTIFIER ON
+        ///
+        ///-- =============================================
+        ///-- Author:		Mark Rusz
+        ///-- Create date: 2019-01-15
+        ///-- Description:	Scrambles the given columns and sets other given columns to a constant value for a table
+        ///-- =============================================
+        ///
+        ///SET XACT_ABORT, NOCOUNT ON
+        ///
+        ///--Input parameters
+        ///declare @db nvarchar(128),  [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string Check_Primary_keys {
+            get {
+                return ResourceManager.GetString("Check_Primary_keys", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to USE [Anonymizer]
+        ////****** Object:  StoredProcedure [dbo].[sp_SimpleAnonymizer]    Script Date: 2019. 01. 17. 10:35:57 ******/
+        ///SET ANSI_NULLS ON
+        ///SET QUOTED_IDENTIFIER ON
         ///
         ///if type_id(&apos;dbo.AnonymizerColumnAndValueList&apos;) is null
         ///	begin
@@ -78,14 +123,13 @@ namespace Anonymizer.Properties {
         ///			column_value nvarchar(max)
         ///		);
         ///	end
-        ///go
         ///
         ///if type_id(&apos;dbo.AnonymizerColumnList&apos;) is null
         ///	begin
-        ///		create type dbo.dbo.AnonymizerColumnList
+        ///		create type dbo.AnonymizerColumnList
         ///		as table
         ///		(
-        /// [rest of string was truncated]&quot;;.
+        ///			column_name nvarc [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string Create_types {
             get {
@@ -119,24 +163,21 @@ namespace Anonymizer.Properties {
         
         /// <summary>
         ///   Looks up a localized string similar to USE [Anonymizer]
-        ///GO
         ////****** Object:  StoredProcedure [dbo].[sp_SimpleAnonymizer]    Script Date: 2019. 01. 17. 10:35:57 ******/
         ///SET ANSI_NULLS ON
-        ///GO
         ///SET QUOTED_IDENTIFIER ON
-        ///GO
         ///
         ///	declare @columns as dbo.AnonymizerColumnList 
+        ///	--declare @columns_table as dbo.AnonymizerColumnList 
         ///    declare @db as nvarchar(128), @schema as nvarchar(128), @table as nvarchar(128)
+        ///
+        ///	select @db = @db_value, @schema = @schema_value, @table = @table_value
         ///
         ///	insert into @columns 
         ///	select column_name 
         ///	from @columns_table
         ///
-        ///	select @db = @db_value, @schema = @schema_value, @table = @table_value
-        ///	
-        ///	declare @column_count int
-        ///	select @column_c [rest of string was truncated]&quot;;.
+        ///	- [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string Get_Column_Types {
             get {

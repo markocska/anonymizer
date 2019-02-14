@@ -1,4 +1,3 @@
-USE [Anonymizer]
 /****** Object:  StoredProcedure [dbo].[sp_SimpleAnonymizer]    Script Date: 2019. 01. 17. 10:35:57 ******/
 SET ANSI_NULLS ON
 SET QUOTED_IDENTIFIER ON
@@ -19,7 +18,7 @@ SET QUOTED_IDENTIFIER ON
 	select @column_count = count(1) from @columns
 
 	if @column_count = 0
-		select 'cucuka'
+		select ''
 
 	declare @sql_to_describe nvarchar(MAX) = '', @columns_in_clause nvarchar(MAX) = '',
 			@sql_to_get_type nvarchar(MAX) = ''
