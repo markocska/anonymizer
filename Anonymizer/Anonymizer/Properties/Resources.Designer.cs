@@ -61,7 +61,7 @@ namespace Anonymizer.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to USE [Anonymizer]
+        ///   Looks up a localized string similar to 
         ///
         ////****** Object:  StoredProcedure [dbo].[sp_SimpleAnonymizer]    Script Date: 2019. 01. 17. 10:35:57 ******/
         ///SET ANSI_NULLS ON
@@ -76,7 +76,7 @@ namespace Anonymizer.Properties {
         ///SET XACT_ABORT, NOCOUNT ON
         ///
         ///--Input parameters
-        ///declare @db nvarchar(128),  [rest of string was truncated]&quot;;.
+        ///declare @db nvarchar(128), @schema nvarchar [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string Check_Input_Params {
             get {
@@ -85,8 +85,7 @@ namespace Anonymizer.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to USE [Anonymizer]
-        ///
+        ///   Looks up a localized string similar to 
         ////****** Object:  StoredProcedure [dbo].[sp_SimpleAnonymizer]    Script Date: 2019. 01. 17. 10:35:57 ******/
         ///SET ANSI_NULLS ON
         ///SET QUOTED_IDENTIFIER ON
@@ -100,7 +99,7 @@ namespace Anonymizer.Properties {
         ///SET XACT_ABORT, NOCOUNT ON
         ///
         ///--Input parameters
-        ///declare @db nvarchar(128),  [rest of string was truncated]&quot;;.
+        ///declare @db nvarchar(128), @schema nvarchar(1 [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string Check_Primary_keys {
             get {
@@ -109,7 +108,7 @@ namespace Anonymizer.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to USE [Anonymizer]
+        ///   Looks up a localized string similar to 
         ////****** Object:  StoredProcedure [dbo].[sp_SimpleAnonymizer]    Script Date: 2019. 01. 17. 10:35:57 ******/
         ///SET ANSI_NULLS ON
         ///SET QUOTED_IDENTIFIER ON
@@ -129,7 +128,9 @@ namespace Anonymizer.Properties {
         ///		create type dbo.AnonymizerColumnList
         ///		as table
         ///		(
-        ///			column_name nvarc [rest of string was truncated]&quot;;.
+        ///			column_name nvarchar(128)
+        ///		);
+        /// [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string Create_types {
             get {
@@ -138,32 +139,7 @@ namespace Anonymizer.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to USE [Anonymizer]
-        ///GO
-        ////****** Object:  StoredProcedure [dbo].[sp_SimpleAnonymizer]    Script Date: 2019. 01. 17. 10:35:57 ******/
-        ///SET ANSI_NULLS ON
-        ///GO
-        ///SET QUOTED_IDENTIFIER ON
-        ///GO
-        ///
-        ///
-        ///declare @db nvarchar(128), @schema nvarchar(128),@table_name nvarchar(128),@enable bit
-        ///
-        ///select @db = @db_value, @schema = @schema_value, @table_name = @table_value, @enable = @enable_value
-        ///
-        ///declare @sql_to_get_indexes nvarchar(MAX) = &apos;&apos;, 
-        ///		@full_table_name nvarchar(500) = @db + &apos;.&apos; + @schema + &apos;.&apos; + @table_name,
-        ///		@ [rest of string was truncated]&quot;;.
-        /// </summary>
-        internal static string enabledisable_non_PrkeyUniqueClust_indexes {
-            get {
-                return ResourceManager.GetString("enabledisable_non_PrkeyUniqueClust_indexes", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to USE [Anonymizer]
-        ////****** Object:  StoredProcedure [dbo].[sp_SimpleAnonymizer]    Script Date: 2019. 01. 17. 10:35:57 ******/
+        ///   Looks up a localized string similar to /****** Object:  StoredProcedure [dbo].[sp_SimpleAnonymizer]    Script Date: 2019. 01. 17. 10:35:57 ******/
         ///SET ANSI_NULLS ON
         ///SET QUOTED_IDENTIFIER ON
         ///
@@ -177,7 +153,7 @@ namespace Anonymizer.Properties {
         ///	select column_name 
         ///	from @columns_table
         ///
-        ///	- [rest of string was truncated]&quot;;.
+        ///	--select @db = @db_ [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string Get_Column_Types {
             get {
@@ -186,13 +162,9 @@ namespace Anonymizer.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to USE [Anonymizer]
-        ///GO
-        ////****** Object:  StoredProcedure [dbo].[sp_SimpleAnonymizer]    Script Date: 2019. 01. 17. 10:35:57 ******/
+        ///   Looks up a localized string similar to /****** Object:  StoredProcedure [dbo].[sp_SimpleAnonymizer]    Script Date: 2019. 01. 17. 10:35:57 ******/
         ///SET ANSI_NULLS ON
-        ///GO
         ///SET QUOTED_IDENTIFIER ON
-        ///GO
         ///
         ///
         ///-- =============================================
@@ -205,11 +177,32 @@ namespace Anonymizer.Properties {
         ///SET XACT_ABORT, NOCOUNT ON
         ///
         ///--Input parameters
-        ///declare @db n [rest of string was truncated]&quot;;.
+        ///declare @db nvarchar(128), @schema nvarchar [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string Scramble {
             get {
                 return ResourceManager.GetString("Scramble", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 
+        ////****** Object:  StoredProcedure [dbo].[sp_SimpleAnonymizer]    Script Date: 2019. 01. 17. 10:35:57 ******/
+        ///SET ANSI_NULLS ON
+        ///SET QUOTED_IDENTIFIER ON
+        ///
+        ///
+        ///declare @db nvarchar(128), @schema nvarchar(128),@table_name nvarchar(128),@enable bit
+        ///
+        ///select @db = @db_value, @schema = @schema_value, @table_name = @table_value, @enable = @enable_value
+        ///
+        ///declare @sql_to_get_indexes nvarchar(MAX) = &apos;&apos;, 
+        ///		@full_table_name nvarchar(500) = @db + &apos;.&apos; + @schema + &apos;.&apos; + @table_name,
+        ///		@sql_to_en_dis_non_clust_inde [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string TurnOnOff_Non_PrkeyUniqueClust_Indexes {
+            get {
+                return ResourceManager.GetString("TurnOnOff_Non_PrkeyUniqueClust_Indexes", resourceCulture);
             }
         }
     }

@@ -53,11 +53,6 @@ namespace Anonymizer
             return Results;
         }
 
-        public static void ScrambleTable(string connectionString, string db, string schema, string table, string whereClause )
-        {
-            
-        }
-
         #endregion
 
         #region Async methods

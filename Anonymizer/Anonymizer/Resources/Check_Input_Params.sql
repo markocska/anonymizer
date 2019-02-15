@@ -1,4 +1,5 @@
 
+
 /****** Object:  StoredProcedure [dbo].[sp_SimpleAnonymizer]    Script Date: 2019. 01. 17. 10:35:57 ******/
 SET ANSI_NULLS ON
 SET QUOTED_IDENTIFIER ON

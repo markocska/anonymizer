@@ -121,9 +121,6 @@
   <data name="Create_types" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Create_types.sql;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;windows-1250</value>
   </data>
-  <data name="enabledisable_non_PrkeyUniqueClust_indexes" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\enabledisable_non_PrkeyUniqueClust_indexes.sql;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;windows-1250</value>
-  </data>
   <data name="Get_Column_Types" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Get_Column_Types.sql;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;windows-1250</value>
   </data>
@@ -135,5 +132,8 @@
   </data>
   <data name="Check_Primary_keys" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Check_Primary_keys.sql;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;windows-1250</value>
+  </data>
+  <data name="TurnOnOff_Non_PrkeyUniqueClust_Indexes" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\TurnOnOff_Non_PrkeyUniqueClust_Indexes.sql;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;windows-1250</value>
   </data>
 </root>
