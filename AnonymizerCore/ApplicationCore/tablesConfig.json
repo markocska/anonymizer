@@ -1,0 +1,93 @@
+{
+  "databases": [
+    {
+      "type": "MSSQL",
+      "version": "11.0.7",
+      "connectionString": "data source=huvdev1;initial catalog=Target_ifuat;integrated security=True;",
+      "tables": [
+        {
+          "nameWithSchema": "dbo.t_actors",
+          "scrambledColumns": [
+            { "name": "firstname" },
+            { "name": "familyname" }
+          ],
+          "constantColumns": [
+            {
+              "name": "isforgeten",
+              "value": "1"
+            }
+          ],
+          "pairedColumnsInsideTable": [
+            [ "firstname", "birthdate" ],
+            [ "familyname", "personnumber" ]
+          ],
+          "pairedColumnsOutsideTable": [
+            {
+              "scrambledColumnInSourceTable": "firstname",
+              "scrambledColumnInTargetTable": "name", 
+              "connectionString": "data source=huvdev1;initial catalog=Target_ifuat;integrated security=True;",
+              "tableNameWithSchema": "dbo.t_address",
+              "uniqueMapping": [
+                {
+                  "connectionString": "data source=huvdev1;initial catalog=Target_ifuat;integrated security=True;",
+                  "tableNameWithSchema": "dbo.t_actor_address",
+                  "foreignKeyMappings": [
+                    { "dbId_f": "db_id" },
+                    { "tableId_f": "table_id" }
+                  ]
+                },
+                {
+                  "connectionString": "data source=huvdev1;initial catalog=Target_ifuat;integrated security=True;",
+                  "tableNameWithSchema": "dbo.t_address",
+                  "foreignKeyMappings": [
+                    { "addr_id_f": "address_id" }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "nameWithSchema": "dbo.t_jobs",
+          "scrambledColumns": [
+            { "name": "payment" },
+            { "name": "credit_card_number" }
+          ],
+          "constantColumns": [
+            {
+              "name": "isdead",
+              "value": "0"
+            }
+          ],
+          "pairedColumnsInsideTable": [
+            [ "payment", "payment_code", "payment_type" ]
+          ],
+          "pairedColumnsOutsideTable": [
+            {
+              "scrambledColumnInSourceTable": "job_type",
+              "scrambledColumnInTargetTable": "job",
+              "connectionString": "data source=huvdev1;initial catalog=Target_ifuat;integrated security=True;",
+              "tableNameWithSchema": "dbo.t_employee",
+              "uniqueMapping": [
+                {
+                  "connectionString": "data source=huvdev1;initial catalog=Target_ifuat;integrated security=True;",
+                  "tableNameWithSchema": "dbo.t_employee_job",
+                  "foreignKeyMappings": [
+                    { "job_f": "job_id" }
+                  ]
+                },
+                {
+                  "connectionString": "data source=huvdev1;initial catalog=Target_ifuat;integrated security=True;",
+                  "tableNameWithSchema": "dbo.t_job",
+                  "foreignKeyMappings": [
+                    { "job_id": "id" }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
