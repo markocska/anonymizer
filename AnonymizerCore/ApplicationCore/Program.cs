@@ -1,4 +1,10 @@
-﻿using System;
+﻿using ApplicationCore.Config;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using System;
+using System.Collections.Generic;
+using System.Data.Common;
+using System.IO;
 
 namespace ApplicationCore
 {
@@ -6,7 +12,11 @@ namespace ApplicationCore
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello World!");
+            var config = File.ReadAllText(".\\tablesConfig.json");
+            var tablesConfig = JsonConvert.DeserializeObject<DatabasesConfig>(config);
+
+            Console.ReadKey();
+
         }
     }
 }

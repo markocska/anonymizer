@@ -3,3 +3,10 @@
 /Anonymizer/Anonymizer/obj
 /Anonymizer/Anonymizer/bin
 /Anonymizer/.vs
+/AnonymizerCore/ApplicationCore/obj
+/AnonymizerCore/ApplicationCore/bin
+/AnonymizerCore/.vs
+.vs
+/AnonymizerCore/.vs/AnonymizerCore/v15/Server/sqlite3
+/AnonymizerCore/.vs/AnonymizerCore/v15/*.suo
+/AnonymizerCore/.vs/AnonymizerCore/v15/.suo

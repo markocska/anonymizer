@@ -24,23 +24,24 @@
           "pairedColumnsOutsideTable": [
             {
               "scrambledColumnInSourceTable": "firstname",
-              "scrambledColumnInTargetTable": "name", 
-              "connectionString": "data source=huvdev1;initial catalog=Target_ifuat;integrated security=True;",
-              "tableNameWithSchema": "dbo.t_address",
-              "uniqueMapping": [
+              "scrambledColumnInTargetTable": "name",
+              "sourceConnectionString": "data source=huvdev1;initial catalog=Target_ifuat;integrated security=True;",
+              "sourceTableNameWithSchema": "dbo.t_address",
+              "sourceDestMapping": [
                 {
                   "connectionString": "data source=huvdev1;initial catalog=Target_ifuat;integrated security=True;",
                   "tableNameWithSchema": "dbo.t_actor_address",
-                  "foreignKeyMappings": [
-                    { "dbId_f": "db_id" },
-                    { "tableId_f": "table_id" }
+                  "foreignKeyMapping": [
+                    [ "dbId_f", "db_id" ],
+                    [ "tableId_f", "table_id" ]
                   ]
                 },
                 {
                   "connectionString": "data source=huvdev1;initial catalog=Target_ifuat;integrated security=True;",
                   "tableNameWithSchema": "dbo.t_address",
-                  "foreignKeyMappings": [
-                    { "addr_id_f": "address_id" }
+                  "foreignKeyMapping": [
+                    [ "addr_id_f" ],
+                    [ "address_id" ]
                   ]
                 }
               ]
@@ -68,19 +69,21 @@
               "scrambledColumnInTargetTable": "job",
               "connectionString": "data source=huvdev1;initial catalog=Target_ifuat;integrated security=True;",
               "tableNameWithSchema": "dbo.t_employee",
-              "uniqueMapping": [
+              "sourceDestMapping": [
                 {
                   "connectionString": "data source=huvdev1;initial catalog=Target_ifuat;integrated security=True;",
                   "tableNameWithSchema": "dbo.t_employee_job",
-                  "foreignKeyMappings": [
-                    { "job_f": "job_id" }
+                  "foreignKeyMapping": [
+                    [ "job_f" ],
+                    [ "job_id" ]
                   ]
                 },
                 {
                   "connectionString": "data source=huvdev1;initial catalog=Target_ifuat;integrated security=True;",
                   "tableNameWithSchema": "dbo.t_job",
                   "foreignKeyMappings": [
-                    { "job_id": "id" }
+                    [ "job_id" ],
+                    [ "id" ]
                   ]
                 }
               ]
