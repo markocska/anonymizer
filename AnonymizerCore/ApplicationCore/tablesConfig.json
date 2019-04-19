@@ -23,10 +23,10 @@
           ],
           "pairedColumnsOutsideTable": [
             {
-              "scrambledColumnInSourceTable": "firstname",
-              "scrambledColumnInTargetTable": "name",
-              "sourceConnectionString": "data source=huvdev1;initial catalog=Target_ifuat;integrated security=True;",
-              "sourceTableNameWithSchema": "dbo.t_address",
+              "columnMapping": [
+                [ "firstname", "first_name" ],
+                [ "secondname", "second_name" ]
+              ],
               "sourceDestMapping": [
                 {
                   "connectionString": "data source=huvdev1;initial catalog=Target_ifuat;integrated security=True;",
