@@ -1,24 +1,23 @@
 ﻿using ApplicationCore.Config;
-using ApplicationCore.Validators;
-using ApplicationCore.Validators.ConfigValidators;
+using ApplicationCore.Logging;
 using ApplicationCore.Validators.ParameterValidators;
-using ApplicationCore.Validators.ParameterValidators.Templates;
-using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
-using System.Data.Common;
 using System.IO;
 
 namespace ApplicationCore
 {
     class Program
     {
+       static Program()
+        {
+            SerilogInitializer.Register();
+        }
         static void Main(string[] args)
         {
-            //var config = File.ReadAllText(".\\tablesConfig.json");
-            //var tablesConfig = JsonConvert.DeserializeObject<DatabasesConfig>(config);
+            var config = File.ReadAllText(".\\tablesConfig.json");
+            var databasesConfig = JsonConvert.DeserializeObject<DatabasesConfig>(config);
 
             //var serviceProvider = new ServiceCollection()
             //    .AddSingleton<IConfigValidator, SqlConfigValidator>()
@@ -33,11 +32,26 @@ namespace ApplicationCore
             //Console.WriteLine(pageContent);
 
             var primKeys = new SqlParameterValidator();
-            var result = primKeys.CheckParams("data source=MARKO-PC\\SQLEXPRESS;initial catalog=People;integrated security=True;", "dbo.[cucuka]",
-                new List<string> {"id","anya", "baba" }, new List<string> { "name"});
 
-            Console.WriteLine(result);
-            Console.ReadKey();
+            try
+            {
+                bool result = true;
+                foreach (var database in databasesConfig.Databases)
+                {
+                    foreach (var tableConfig in database.Tables)
+                    {
+                        result = primKeys.AreTheParamsValid(database.ConnectionString, tableConfig);
+                        Console.WriteLine(result);
+                    }
+                }
+                Console.ReadKey();
+            }
+            catch (Exception ex)
+            {
+                Console.ReadKey();
+            }
+
+         
 
         }
     }

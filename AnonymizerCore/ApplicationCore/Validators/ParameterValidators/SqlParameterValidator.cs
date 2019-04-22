@@ -1,4 +1,6 @@
-﻿using ApplicationCore.Logging;
+﻿using ApplicationCore.Config;
+using ApplicationCore.Logging;
+using ApplicationCore.Validators.Abstract;
 using Serilog;
 using System;
 using System.Collections.Generic;
@@ -8,95 +10,96 @@ using System.Linq;
 
 namespace ApplicationCore.Validators.ParameterValidators
 {
-    public class SqlParameterValidator
+    public class SqlParameterValidator : ParameterValidator
     {
-        ILogger _logger;
         public SqlParameterValidator()
         {
             _logger = Serilog.Log.ForContext<SqlParameterValidator>();
         }
 
-        public bool CheckParams(string connectionString, string tableNameWithSchema,
-            List<string> constantColumns, List<string> scrambledColumns)
+        public override bool AreTheParamsValid(string connectionString, TableConfig tableConfig)
         {
-            bool isThereAnyError = false;
 
             using (var sqlConnection = new SqlConnection(connectionString))
-            using (var adapter = new SqlDataAdapter("select * from " + tableNameWithSchema + ";", sqlConnection))
-            using (var tableMetadata = new DataTable(tableNameWithSchema))
+            using (var adapter = new SqlDataAdapter("select * from " + tableConfig.NameWithSchema + ";", sqlConnection))
+            using (var tableMetadata = new DataTable(tableConfig.NameWithSchema))
             {
-                var schemaTable = adapter
-                   .FillSchema(tableMetadata, SchemaType.Mapped);
+                try
+                {
+                    var schemaTable = adapter
+                       .FillSchema(tableMetadata, SchemaType.Mapped);
 
-                var loggingInfo = new LoggingInfo { ConnectionString = connectionString, TableNameWithSchema = tableNameWithSchema };
-                var allColumns = constantColumns.Concat(scrambledColumns);
+                    var loggingInfo = new LoggingInfo { ConnectionString = connectionString, TableNameWithSchema = tableConfig.NameWithSchema };
 
-                isThereAnyError = DoAllColumnsExist(schemaTable, loggingInfo, allColumns) ? false : true;
-                isThereAnyError = IsThereAPrimaryKeyConflict(schemaTable, loggingInfo, allColumns);
-                isThereAnyError = IsThereAUniqueConstraintConflict(schemaTable, loggingInfo, allColumns);
+                    var constantColumns = tableConfig.ConstantColumns.Select(c => c.Name)
+                        .Select(c => 
+                        {
+                            if (c.StartsWith('['))
+                            {
+                                return c.TrimStart('[').TrimEnd(']');
+                            }
+                            else
+                            {
+                                return c;
+                            }
+                        });
+
+                    var scrambledColumns = tableConfig.ScrambledColumns.Select(c => c.Name)
+                        .Select(c =>
+                        {
+                            if (c.StartsWith('['))
+                            {
+                                return c.TrimStart('[').TrimEnd(']');
+                            }
+                            else
+                            {
+                                return c;
+                            }
+                        });
+
+                    var pairedColumns = tableConfig.PairedColumnsInsideTable
+                        .Select(cl =>
+                            cl.Select(c =>
+                            {
+                                if (c.StartsWith('['))
+                                {
+                                    return c.TrimStart('[').TrimEnd(']');
+                                }
+                                else
+                                {
+                                    return c;
+                                }
+                            }).ToList()).ToList();
+
+                    var allColumns = constantColumns.Concat(scrambledColumns);
+
+                    var doConstantScrambledDuplicatesExist = DoConstantScrambledDuplicatesExist(loggingInfo, scrambledColumns, constantColumns);
+                    var doAllColumnsExist = DoAllColumnsExist(schemaTable, loggingInfo, allColumns);
+                    var doAllPairedColumnsInsideExist = DoAllPairedColumnsInsideExist(loggingInfo, schemaTable, pairedColumns);
+                    var isThereAPrimaryKeyConflict = IsThereAPrimaryKeyConflict(schemaTable, loggingInfo, allColumns);
+                    var isThereAUniqueConstraintConflict = IsThereAUniqueConstraintConflict(schemaTable, loggingInfo, allColumns);
+
+                    return (!doConstantScrambledDuplicatesExist && doAllColumnsExist && doAllPairedColumnsInsideExist &&
+                        !isThereAPrimaryKeyConflict && !isThereAUniqueConstraintConflict);
+
+                }
+                catch (Exception ex)
+                {
+                    _logger.Error($"There was an error while connecting to the server. {ex.Message}.", ex);
+                    throw;
+                }
             }
-
-            return isThereAnyError;
         }
 
-        private bool DoAllColumnsExist(DataTable schemaTable, LoggingInfo logInfo, IEnumerable<string> columns)
+        protected override DataTable GetTableSchema(string connectionString, string nameWithSchema)
         {
-            var allColumns = schemaTable
-                .Columns;
-
-            bool doAllColumnsExist = true;
-            foreach (var column in columns)
+            using (var sqlConnection = new SqlConnection(connectionString))
+            using (var adapter = new SqlDataAdapter("select * from " + nameWithSchema + ";", sqlConnection))
+            using (var tableMetadata = new DataTable(nameWithSchema))
             {
-                if (allColumns[column] == null)
-                {
-                    _logger.Error($"The column {column} doesn't exist in the table.", logInfo);
-                    doAllColumnsExist = false;
-                }
+                return adapter
+                       .FillSchema(tableMetadata, SchemaType.Mapped);
             }
-
-            return doAllColumnsExist;
-        }
-
-        private bool IsThereAUniqueConstraintConflict(DataTable schemaTable, LoggingInfo logInfo, IEnumerable<string> columns)
-        {
-            var allColumns = schemaTable
-                   .Columns;
-
-            bool isThereAUniqueConstraintConflict = false;
-            foreach (var column in columns)
-            {
-                if (allColumns[column] == null)
-                {
-                    continue;
-                }
-
-                if (allColumns[column].Unique)
-                {
-                    _logger.Error($"The column {column} doesn't exist in the table.", logInfo);
-                    isThereAUniqueConstraintConflict = true;
-                }
-            }
-
-            return isThereAUniqueConstraintConflict;
-        }
-
-        private bool IsThereAPrimaryKeyConflict(DataTable schemaTable, LoggingInfo logInfo, IEnumerable<string> columns)
-        {
-            var primaryKeys = schemaTable.PrimaryKey.Select(c => c.ColumnName);
-
-            bool isThereAPrimaryKeyConflict = false;
-            foreach (var primaryKey in primaryKeys)
-            {
-                if (columns.Contains(primaryKey))
-                {
-                    _logger.Error($"The following column is part of a primary key: {primaryKey} .",
-                        logInfo);
-                    isThereAPrimaryKeyConflict = true;
-                }
-            }
-
-            return isThereAPrimaryKeyConflict;
-
         }
     }
 }

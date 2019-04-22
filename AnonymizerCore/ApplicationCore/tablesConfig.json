@@ -3,23 +3,23 @@
     {
       "type": "MSSQL",
       "version": "11.0.7",
-      "connectionString": "data source=huvdev1;initial catalog=Target_ifuat;integrated security=True;",
+      "connectionString": "data source=MARKO-PC\\SQLEXPRESS;initial catalog=People;integrated security=True;",
       "tables": [
         {
-          "nameWithSchema": "dbo.t_actors",
+          "nameWithSchema": "dbo.[big table]",
           "scrambledColumns": [
-            { "name": "firstname" },
-            { "name": "familyname" }
+            { "name": "first name" },
+            { "name": "[last name]" }
           ],
           "constantColumns": [
             {
-              "name": "isforgeten",
-              "value": "1"
+              "name": "demail",
+              "value": "2"
             }
           ],
           "pairedColumnsInsideTable": [
-            [ "firstname", "birthdate" ],
-            [ "familyname", "personnumber" ]
+            [ "[first name]", "[last name]" ],
+            [ "[demail]", "[net worth]" ]
           ],
           "pairedColumnsOutsideTable": [
             {
@@ -49,19 +49,19 @@
           ]
         },
         {
-          "nameWithSchema": "dbo.t_jobs",
+          "nameWithSchema": "dbo.employees",
           "scrambledColumns": [
-            { "name": "payment" },
-            { "name": "credit_card_number" }
+            { "name": "[location]" },
+            { "name": "[shift]" }
           ],
           "constantColumns": [
             {
-              "name": "isdead",
-              "value": "0"
+              "name": "[first name]",
+              "value": "marko"
             }
           ],
           "pairedColumnsInsideTable": [
-            [ "payment", "payment_code", "payment_type" ]
+            [ "shift", "location", "base rate" ]
           ],
           "pairedColumnsOutsideTable": [
             {

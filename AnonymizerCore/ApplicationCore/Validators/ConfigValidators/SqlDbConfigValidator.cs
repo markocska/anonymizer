@@ -2,8 +2,6 @@
 using Serilog;
 using System;
 using System.Data.SqlClient;
-using System.Collections.Generic;
-using System.Text;
 
 namespace ApplicationCore.Validators.ConfigValidators
 {
@@ -18,12 +16,8 @@ namespace ApplicationCore.Validators.ConfigValidators
 
         public bool IsTableConfigValid(DatabaseConfig dbConfig, TableConfig tableConfig)
         {
-            var tableAndSchemaName = tableConfig.NameWithSchema.Split('.');
-
-            if (tableAndSchemaName.Length != 2)
+            if (!IsTableNameValid(dbConfig.ConnectionString, tableConfig.NameWithSchema))
             {
-                _logger.Error($"The following schema and name config parameter is invalid {tableConfig.NameWithSchema}.",
-                    tableConfig, dbConfig);
                 return false;
             }
 
@@ -34,40 +28,79 @@ namespace ApplicationCore.Validators.ConfigValidators
                 return false;
             }
 
+            foreach (var pairedColumnConfig in tableConfig.PairedColumnsOutsideTable)
+            {
+                foreach (var connectedTableConfig in pairedColumnConfig.SourceDestMapping)
+                {
+                    if (!IsConnectionStringValid(connectedTableConfig.ConnectionString) ||
+                        !IsTableNameValid(connectedTableConfig.ConnectionString, connectedTableConfig.TableNameWithSchema))
+                    {
+                        _logger.Error($"Error while checking the paired columns outside of table {tableConfig.NameWithSchema}. " +
+                            $"Connection string: {dbConfig.ConnectionString}.");
+                        return false;
+                    }
+                }
+            }
+
+            return true;
+        }
+
+        private bool IsTableNameValid(string connectionString, string tableNameWithSchema)
+        {
+            var tableAndSchemaName = tableNameWithSchema.Split('.');
+
+            if (tableAndSchemaName.Length != 2)
+            {
+                _logger.Error($"The following schema and name config parameter is invalid {tableNameWithSchema}." +
+                    $" Connection string: {connectionString}");
+                return false;
+            }
+
             return true;
         }
 
         public bool IsDbConfigValid(DatabaseConfig dbConfig)
         {
+            if (!IsConnectionStringValid(dbConfig.ConnectionString))
+            {
+                return false;
+            }
+
+            if (dbConfig.Tables == null)
+            {
+                _logger.Error($"The database with the connection string {dbConfig.ConnectionString} has a Tables property of null.",
+                    dbConfig);
+                return false;
+            }
+
+            return true;
+        }
+
+        private bool IsConnectionStringValid(string connectionString)
+        {
             try
             {
-                var connectionStringBuilder = new SqlConnectionStringBuilder(dbConfig.ConnectionString);
+                var connectionStringBuilder = new SqlConnectionStringBuilder(connectionString);
 
                 if (connectionStringBuilder.InitialCatalog == string.Empty)
                 {
-                    _logger.Error($"The following connection string doesn't contain an initial catalog: {dbConfig.ConnectionString}.",
-                        dbConfig);
+                    _logger.Error($"The following connection string doesn't contain an initial catalog: {connectionString}.",
+                        connectionString);
                     return false;
                 }
 
                 if (connectionStringBuilder.DataSource == string.Empty)
                 {
-                    _logger.Error($"The following connection string doesn't contain a data source {dbConfig.ConnectionString}.",
-                        dbConfig);
+                    _logger.Error($"The following connection string doesn't contain a data source {connectionString}.",
+                        connectionString);
                     return false;
                 }
 
-                if (dbConfig.Tables == null)
-                {
-                    _logger.Error($"The database with the connection string {dbConfig.ConnectionString} has a Tables property of null.",
-                        dbConfig);
-                    return false;
-                }
             }
             catch (Exception ex)
             {
-                _logger.Error($"The connection string : {dbConfig.ConnectionString} has an invalid format. " +
-                    $"Error message: {ex.Message}.", dbConfig.ConnectionString);
+                _logger.Error($"The connection string : {connectionString} has an invalid format. " +
+                    $"Error message: {ex.Message}.", connectionString);
                 return false;
             }
 
