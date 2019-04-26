@@ -1,13 +1,12 @@
 ﻿using ApplicationCore.Config;
+using ApplicationCore.Extensions;
 using ApplicationCore.Logging;
-using ApplicationCore.TableInfo;
 using ApplicationCore.Validators.ParameterValidators;
 using Serilog;
 using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
-using System.Text;
 
 namespace ApplicationCore.Validators.Abstract
 {
@@ -110,7 +109,7 @@ namespace ApplicationCore.Validators.Abstract
             return isThereADuplicationConflict;
         }
 
-        protected bool DoAllPairedColumnsInsideExist(LoggingInfo logInfo, DataTable schemaTable,  List<List<string>> pairdColumnsInside)
+        protected bool DoAllPairedColumnsInsideExist(LoggingInfo logInfo, DataTable schemaTable, List<List<string>> pairdColumnsInside)
         {
             var pairedColumns = pairdColumnsInside.SelectMany(pd => pd, (listOfLists, list) => list).Distinct();
 
@@ -138,35 +137,79 @@ namespace ApplicationCore.Validators.Abstract
         {
             bool doAllPairedColumnsOutsideExist = true;
 
-            foreach (var pairedColumnOutsideConfig in tableConfig.PairedColumnsOutsideTable)
+            foreach (var pairedColumnsOutsideConfig in tableConfig.PairedColumnsOutsideTable)
             {
-                var sourceDestColumnMapping = pairedColumnOutsideConfig.ColumnMapping;
-                var columnsInSourceTable = sourceDestColumnMapping.SelectMany(list => list, (list, listElement) => list.ElementAt(0));
-                var sourceSchemaTable = GetTableSchema(connectionString, tableConfig.NameWithSchema);
-
-                if (!DoAllColumnsExist(sourceSchemaTable, logInfo, columnsInSourceTable))
+                //Checking the source table's columns
+                if (!DoAllSourceTableFrnKeyMapColsExist(connectionString, tableConfig, pairedColumnsOutsideConfig, logInfo))
                 {
                     doAllPairedColumnsOutsideExist = false;
-                    _logger.Error($"Error while checking the paired columns outside of table: {tableConfig.NameWithSchema}. " +
-                            $"Connection string: {connectionString}. ");
                 }
 
-                int i = 0;
-                foreach (var mappingTable in pairedColumnOutsideConfig.SourceDestMapping)
+                //Checking the dest table's columns
+                if (!DoAllDestTableFrnKeyMapColsExist(tableConfig, pairedColumnsOutsideConfig, logInfo))
                 {
-                    var schemaTable = GetTableSchema(mappingTable.ConnectionString, mappingTable.TableNameWithSchema);
-                    var columns = mappingTable.ForeignKeyMapping.SelectMany(list => list, (list, listElement) => list.ElementAt(1));
+                    doAllPairedColumnsOutsideExist = false;
+                }
 
+                for (int i = 1; i < (pairedColumnsOutsideConfig.SourceDestMapping.Count-1); i++)
+                {
+                    var mappingTable = pairedColumnsOutsideConfig.SourceDestMapping[i];
+                    var nextMappingTable = pairedColumnsOutsideConfig.SourceDestMapping[i + 1];
+
+                    var schemaTable = GetTableSchema(mappingTable.ConnectionString, mappingTable.TableNameWithSchema);
+                    var columns = mappingTable.ForeignKeyMapping.GetSubListElementsOfIndex(1)
+                        .Concat(nextMappingTable.ForeignKeyMapping.GetSubListElementsOfIndex(0));
                     if (!DoAllColumnsExist(schemaTable, logInfo, columns))
-                    {   
+                    {
                         doAllPairedColumnsOutsideExist = false;
                         _logger.Error($"Error while checking the paired columns outside of table: {mappingTable.TableNameWithSchema}. " +
                             $"Connection string: {mappingTable.ConnectionString}. ");
                     }
-                    i++;
+
                 }
             }
             return doAllPairedColumnsOutsideExist;
+        }
+
+        private bool DoAllSourceTableFrnKeyMapColsExist(string connectionString, TableConfig tableConfig,
+            PairedColumnsOutsideTableConfig pairedColumnsOutsideConfig, LoggingInfo logInfo)
+        {
+            var columnsInSourceTable = pairedColumnsOutsideConfig.ColumnMapping.GetSubListElementsOfIndex(0)
+                   .Concat(pairedColumnsOutsideConfig.SourceDestMapping.First().ForeignKeyMapping
+                       .GetSubListElementsOfIndex(0));
+
+            var sourceSchemaTable = GetTableSchema(connectionString, tableConfig.NameWithSchema);
+
+            if (!DoAllColumnsExist(sourceSchemaTable, logInfo, columnsInSourceTable))
+            {
+                _logger.Error($"Error while checking the paired columns outside of table: {tableConfig.NameWithSchema}. " +
+                        $"Connection string: {connectionString}. ");
+                return false;
+            }
+
+            return true;
+        }
+
+        private bool DoAllDestTableFrnKeyMapColsExist(TableConfig tableConfig, PairedColumnsOutsideTableConfig pairedColumnsOutsideConfig
+            , LoggingInfo logInfo)
+        {
+            string connectionString = pairedColumnsOutsideConfig.SourceDestMapping.Last().ConnectionString;
+            string tableNameWithSchema = pairedColumnsOutsideConfig.SourceDestMapping.Last().TableNameWithSchema;
+
+            var columnsInSourceTable = pairedColumnsOutsideConfig.ColumnMapping.GetSubListElementsOfIndex(1)
+                   .Concat(pairedColumnsOutsideConfig.SourceDestMapping.Last().ForeignKeyMapping
+                       .GetSubListElementsOfIndex(1));
+
+            var sourceSchemaTable = GetTableSchema(connectionString, tableNameWithSchema);
+
+            if (!DoAllColumnsExist(sourceSchemaTable, logInfo, columnsInSourceTable))
+            {
+                _logger.Error($"Error while checking the paired columns outside of table: {tableNameWithSchema}. " +
+                        $"Connection string: {connectionString}. ");
+                return false;
+            }
+
+            return true;
         }
     }
 }
