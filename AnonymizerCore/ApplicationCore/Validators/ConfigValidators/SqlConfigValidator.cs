@@ -2,6 +2,7 @@
 using Serilog;
 using System;
 using System.Data.SqlClient;
+using System.Linq;
 
 namespace ApplicationCore.Validators.ConfigValidators
 {
@@ -16,6 +17,9 @@ namespace ApplicationCore.Validators.ConfigValidators
 
         public bool IsTableConfigValid(DatabaseConfig dbConfig, TableConfig tableConfig)
         {
+            if (dbConfig == null) { throw new ArgumentNullException("The db config parameter can not be null"); }
+            if (tableConfig == null) { throw new ArgumentNullException("The table config parameter can not be null"); }
+
             if (!IsTableNameValid(dbConfig.ConnectionString, tableConfig.NameWithSchema))
             {
                 return false;
@@ -28,16 +32,37 @@ namespace ApplicationCore.Validators.ConfigValidators
                 return false;
             }
 
-            foreach (var pairedColumnConfig in tableConfig.PairedColumnsOutsideTable)
+            if (tableConfig.PairedColumnsOutsideTable != null)
             {
-                foreach (var connectedTableConfig in pairedColumnConfig.SourceDestMapping)
+                foreach (var pairedColumnConfig in tableConfig.PairedColumnsOutsideTable)
                 {
-                    if (!IsConnectionStringValid(connectedTableConfig.ConnectionString) ||
-                        !IsTableNameValid(connectedTableConfig.ConnectionString, connectedTableConfig.TableNameWithSchema))
+                    if (pairedColumnConfig.ColumnMapping.Any(l => l.Count != 2))
                     {
+
                         _logger.Error($"Error while checking the paired columns outside of table {tableConfig.NameWithSchema}. " +
-                            $"Connection string: {dbConfig.ConnectionString}.");
+                                $"Connection string: {dbConfig.ConnectionString}. " +
+                                $"The column mapping arrays must consist of 2 columns.");
                         return false;
+                    }
+
+                    foreach (var connectedTableConfig in pairedColumnConfig.SourceDestMapping)
+                    {
+                        if (connectedTableConfig.ForeignKeyMapping.Any(l => l.Count != 2))
+                        {
+                            _logger.Error($"Error while checking the paired columns outside of table {tableConfig.NameWithSchema}. " +
+                               $"Connection string: {dbConfig.ConnectionString}. " +
+                               $"The foreign key mapping arrays must consist of 2 columns for mapped table {connectedTableConfig.TableNameWithSchema}. " +
+                               $"Connection string: {connectedTableConfig.ConnectionString}.");
+                            return false;
+                        }
+
+                        if (!IsConnectionStringValid(connectedTableConfig.ConnectionString) ||
+                            !IsTableNameValid(connectedTableConfig.ConnectionString, connectedTableConfig.TableNameWithSchema))
+                        {
+                            _logger.Error($"Error while checking the paired columns outside of table {tableConfig.NameWithSchema}. " +
+                                $"Connection string: {dbConfig.ConnectionString}.");
+                            return false;
+                        }
                     }
                 }
             }
@@ -61,6 +86,11 @@ namespace ApplicationCore.Validators.ConfigValidators
 
         public bool IsDbConfigValid(DatabaseConfig dbConfig)
         {
+            if (dbConfig == null)
+            {
+                throw new ArgumentNullException("The dbConfigParameter can not be null");
+            }
+
             if (!IsConnectionStringValid(dbConfig.ConnectionString))
             {
                 return false;

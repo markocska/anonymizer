@@ -1,6 +1,6 @@
 ﻿using ApplicationCore.Config;
 using ApplicationCore.Logging;
-using ApplicationCore.Validators.ParameterValidators;
+using ApplicationCore.Validators.ConfigValidators;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -10,7 +10,7 @@ namespace ApplicationCore
 {
     class Program
     {
-       static Program()
+        static Program()
         {
             SerilogInitializer.Register();
         }
@@ -27,32 +27,52 @@ namespace ApplicationCore
 
             //string pageContent = myTemplate.TransformText();
 
-
+            var validTableConfigs = new List<(string connectionString, TableConfig tableConfig)>();
 
             //Console.WriteLine(pageContent);
-
-            var primKeys = new SqlParameterValidator();
-
-            try
+            var sqlConfigValidator = new SqlConfigValidator();
+            foreach (var dbConfig in databasesConfig.Databases)
             {
-                bool result = true;
-                foreach (var database in databasesConfig.Databases)
+                if (!sqlConfigValidator.IsDbConfigValid(dbConfig))
                 {
-                    foreach (var tableConfig in database.Tables)
+                    continue;
+                }
+
+                foreach (var tableConfig in dbConfig.Tables)
+                {
+                    if (!sqlConfigValidator.IsTableConfigValid(dbConfig, tableConfig))
                     {
-                        result = primKeys.AreTheParamsValid(database.ConnectionString, tableConfig);
-                        Console.WriteLine(result);
+                        continue;
+                    }
+                    else
+                    {
+                        validTableConfigs.Add((connectionString: dbConfig.ConnectionString, tableConfig: tableConfig));
                     }
                 }
-                Console.ReadKey();
-            }
-            catch (Exception ex)
-            {
-                Console.ReadKey();
             }
 
-         
+            //var primKeys = new SqlParameterValidator();
 
+            //try
+            //{
+            //    bool result = true;
+            //    foreach (var database in databasesConfig.Databases)
+            //    {
+            //        foreach (var tableConfig in database.Tables)
+            //        {
+            //            result = primKeys.AreTheParamsValid(database.ConnectionString, tableConfig);
+            //            Console.WriteLine(result);
+            //        }
+            //    }
+            //    Console.ReadKey();
+            //}
+            //catch (Exception ex)
+            //{
+            //    Console.ReadKey();
+            //}
+
+
+            Console.ReadKey();
         }
     }
 }

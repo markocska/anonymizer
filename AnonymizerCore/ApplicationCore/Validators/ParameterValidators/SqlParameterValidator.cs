@@ -19,6 +19,12 @@ namespace ApplicationCore.Validators.ParameterValidators
 
         public override bool AreTheParamsValid(string connectionString, TableConfig tableConfig)
         {
+            bool doConstantScrambledDuplicatesExist;
+            bool doAllColumnsExist;
+            bool doAllPairedColumnsInsideExist;
+            bool doAllPairedColumnsOutsideExist;
+            bool isThereAPrimaryKeyConflict;
+            bool isThereAUniqueConstraintConflict;
 
             using (var sqlConnection = new SqlConnection(connectionString))
             using (var adapter = new SqlDataAdapter("select * from " + tableConfig.NameWithSchema + ";", sqlConnection))
@@ -31,7 +37,7 @@ namespace ApplicationCore.Validators.ParameterValidators
 
                     var loggingInfo = new LoggingInfo { ConnectionString = connectionString, TableNameWithSchema = tableConfig.NameWithSchema };
 
-                    var constantColumns = tableConfig.ConstantColumns.Select(c => c.Name)
+                    var constantColumns = tableConfig.ConstantColumns?.Select(c => c.Name)
                         .Select(c => 
                         {
                             if (c.StartsWith('['))
@@ -42,9 +48,9 @@ namespace ApplicationCore.Validators.ParameterValidators
                             {
                                 return c;
                             }
-                        });
+                        }) ?? new List<string>();
 
-                    var scrambledColumns = tableConfig.ScrambledColumns.Select(c => c.Name)
+                    var scrambledColumns = tableConfig.ScrambledColumns?.Select(c => c.Name)
                         .Select(c =>
                         {
                             if (c.StartsWith('['))
@@ -55,9 +61,9 @@ namespace ApplicationCore.Validators.ParameterValidators
                             {
                                 return c;
                             }
-                        });
+                        }) ?? new List<string>();
 
-                    var pairedColumns = tableConfig.PairedColumnsInsideTable
+                    var pairedColumns = tableConfig.PairedColumnsInsideTable?
                         .Select(cl =>
                             cl.Select(c =>
                             {
@@ -69,18 +75,19 @@ namespace ApplicationCore.Validators.ParameterValidators
                                 {
                                     return c;
                                 }
-                            }).ToList()).ToList();
+                            }).ToList()).ToList() ?? new List<List<string>>();
 
                     var allColumns = constantColumns.Concat(scrambledColumns);
 
-                    var doConstantScrambledDuplicatesExist = DoConstantScrambledDuplicatesExist(loggingInfo, scrambledColumns, constantColumns);
-                    var doAllColumnsExist = DoAllColumnsExist(schemaTable, loggingInfo, allColumns);
-                    var doAllPairedColumnsInsideExist = DoAllPairedColumnsInsideExist(loggingInfo, schemaTable, pairedColumns);
-                    var isThereAPrimaryKeyConflict = IsThereAPrimaryKeyConflict(schemaTable, loggingInfo, allColumns);
-                    var isThereAUniqueConstraintConflict = IsThereAUniqueConstraintConflict(schemaTable, loggingInfo, allColumns);
+                    doConstantScrambledDuplicatesExist = DoConstantScrambledDuplicatesExist(loggingInfo, scrambledColumns, constantColumns);
+                    doAllColumnsExist = DoAllColumnsExist(schemaTable, loggingInfo, allColumns);
+                    doAllPairedColumnsInsideExist = DoAllPairedColumnsInsideExist(loggingInfo, schemaTable, pairedColumns);
+                    doAllPairedColumnsOutsideExist = DoAllPairedColumnsOutsideExist(connectionString, loggingInfo, tableConfig);
+                    isThereAPrimaryKeyConflict = IsThereAPrimaryKeyConflict(schemaTable, loggingInfo, allColumns);
+                    isThereAUniqueConstraintConflict = IsThereAUniqueConstraintConflict(schemaTable, loggingInfo, allColumns);
 
                     return (!doConstantScrambledDuplicatesExist && doAllColumnsExist && doAllPairedColumnsInsideExist &&
-                        !isThereAPrimaryKeyConflict && !isThereAUniqueConstraintConflict);
+                        doAllPairedColumnsOutsideExist && !isThereAPrimaryKeyConflict && !isThereAUniqueConstraintConflict);
 
                 }
                 catch (Exception ex)

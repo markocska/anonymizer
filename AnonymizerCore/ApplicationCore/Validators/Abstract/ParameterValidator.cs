@@ -16,6 +16,8 @@ namespace ApplicationCore.Validators.Abstract
 
         public abstract bool AreTheParamsValid(string connectionString, TableConfig tableConfig);
 
+        protected abstract DataTable GetTableSchema(string connectionString, string nameWithSchema);
+
         protected bool DoAllColumnsExist(DataTable schemaTable, LoggingInfo logInfo, IEnumerable<string> columns)
         {
             var allColumns = schemaTable
@@ -79,7 +81,19 @@ namespace ApplicationCore.Validators.Abstract
         }
 
         protected bool DoConstantScrambledDuplicatesExist(LoggingInfo logInfo, IEnumerable<string> scrambledColumns, IEnumerable<string> constantColumns)
-        {
+        {   
+            if (scrambledColumns == null && constantColumns == null)
+            {
+                _logger.Error($"There are no constant or scrambled columns in the table to scramble/set. " +
+                            $"{logInfo.TableNameWithSchema}. Connection string: {logInfo.ConnectionString}", logInfo);
+                throw new ArgumentNullException("Constant and scrambled column lists can not be both empty.");
+            }
+
+            if (scrambledColumns == null || constantColumns == null)
+            {
+                return false;
+            }
+
             bool isThereADuplicationConflict = false;
             foreach (var scrambledColumn in scrambledColumns)
             {
@@ -109,9 +123,14 @@ namespace ApplicationCore.Validators.Abstract
             return isThereADuplicationConflict;
         }
 
-        protected bool DoAllPairedColumnsInsideExist(LoggingInfo logInfo, DataTable schemaTable, List<List<string>> pairdColumnsInside)
+        protected bool DoAllPairedColumnsInsideExist(LoggingInfo logInfo, DataTable schemaTable, List<List<string>> pairedColumnsInside)
         {
-            var pairedColumns = pairdColumnsInside.SelectMany(pd => pd, (listOfLists, list) => list).Distinct();
+            if (pairedColumnsInside == null)
+            {
+                return true;
+            }
+
+            var pairedColumns = pairedColumnsInside.SelectMany(pd => pd, (listOfLists, list) => list).Distinct();
 
             var allColumns = schemaTable
                  .Columns;
@@ -131,10 +150,13 @@ namespace ApplicationCore.Validators.Abstract
 
         }
 
-        protected abstract DataTable GetTableSchema(string connectionString, string nameWithSchema);
-
         protected bool DoAllPairedColumnsOutsideExist(string connectionString, LoggingInfo logInfo, TableConfig tableConfig)
         {
+            if (tableConfig.PairedColumnsOutsideTable == null)
+            {
+                return true;
+            }
+
             bool doAllPairedColumnsOutsideExist = true;
 
             foreach (var pairedColumnsOutsideConfig in tableConfig.PairedColumnsOutsideTable)
