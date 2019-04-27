@@ -6,6 +6,7 @@ using Serilog;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Data.SqlClient;
 using System.Linq;
 
 namespace ApplicationCore.Validators.Abstract
@@ -81,7 +82,7 @@ namespace ApplicationCore.Validators.Abstract
         }
 
         protected bool DoConstantScrambledDuplicatesExist(LoggingInfo logInfo, IEnumerable<string> scrambledColumns, IEnumerable<string> constantColumns)
-        {   
+        {
             if (scrambledColumns == null && constantColumns == null)
             {
                 _logger.Error($"There are no constant or scrambled columns in the table to scramble/set. " +
@@ -173,19 +174,32 @@ namespace ApplicationCore.Validators.Abstract
                     doAllPairedColumnsOutsideExist = false;
                 }
 
-                for (int i = 1; i < (pairedColumnsOutsideConfig.SourceDestMapping.Count-1); i++)
+                for (int i = 1; i < (pairedColumnsOutsideConfig.SourceDestMapping.Count - 1); i++)
                 {
                     var mappingTable = pairedColumnsOutsideConfig.SourceDestMapping[i];
                     var nextMappingTable = pairedColumnsOutsideConfig.SourceDestMapping[i + 1];
 
-                    var schemaTable = GetTableSchema(mappingTable.ConnectionString, mappingTable.TableNameWithSchema);
+                    DataTable schemaTable;
+                    try
+                    {
+                        schemaTable = GetTableSchema(mappingTable.ConnectionString, mappingTable.TableNameWithSchema);
+                    }
+                    catch (SqlException ex)
+                    {
+                        _logger.Error($"Error while checking the paired columns outside of table: {logInfo.TableNameWithSchema}. " +
+                       $"Connection string: {logInfo.ConnectionString}. " +
+                       $"The mapped database {mappingTable.ConnectionString} or table {mappingTable.TableNameWithSchema} doesn't exist or it is unreachable. " +
+                       $"Error message: {ex.Message}.");
+                        return false;
+                    }
+
                     var columns = mappingTable.ForeignKeyMapping.GetSubListElementsOfIndex(1)
                         .Concat(nextMappingTable.ForeignKeyMapping.GetSubListElementsOfIndex(0));
                     if (!DoAllColumnsExist(schemaTable, logInfo, columns))
                     {
                         doAllPairedColumnsOutsideExist = false;
-                        _logger.Error($"Error while checking the paired columns outside of table: {mappingTable.TableNameWithSchema}. " +
-                            $"Connection string: {mappingTable.ConnectionString}. ");
+                        _logger.Error($"Error while checking the paired columns outside of table: {logInfo.TableNameWithSchema}. " +
+                            $"Connection string: {logInfo.ConnectionString}. ");
                     }
 
                 }
@@ -204,8 +218,8 @@ namespace ApplicationCore.Validators.Abstract
 
             if (!DoAllColumnsExist(sourceSchemaTable, logInfo, columnsInSourceTable))
             {
-                _logger.Error($"Error while checking the paired columns outside of table: {tableConfig.NameWithSchema}. " +
-                        $"Connection string: {connectionString}. ");
+                _logger.Error($"Error while checking the paired columns outside of table: {logInfo.TableNameWithSchema}. " +
+                        $"Connection string: {logInfo.ConnectionString}. ");
                 return false;
             }
 
@@ -222,12 +236,25 @@ namespace ApplicationCore.Validators.Abstract
                    .Concat(pairedColumnsOutsideConfig.SourceDestMapping.Last().ForeignKeyMapping
                        .GetSubListElementsOfIndex(1));
 
-            var sourceSchemaTable = GetTableSchema(connectionString, tableNameWithSchema);
+            DataTable destSchemaTable;
 
-            if (!DoAllColumnsExist(sourceSchemaTable, logInfo, columnsInSourceTable))
+            try
             {
-                _logger.Error($"Error while checking the paired columns outside of table: {tableNameWithSchema}. " +
-                        $"Connection string: {connectionString}. ");
+                destSchemaTable = GetTableSchema(connectionString, tableNameWithSchema);
+            }
+            catch (SqlException ex)
+            {
+                _logger.Error($"Error while checking the paired columns outside of table: {logInfo.TableNameWithSchema}. " +
+                        $"Connection string: {logInfo.ConnectionString}. " +
+                        $"The mapped database {connectionString} or table {tableNameWithSchema} doesn't exist or it is unreachable. " +
+                        $"Error message: {ex.Message}");
+                return false;
+            }
+
+            if (!DoAllColumnsExist(destSchemaTable, logInfo, columnsInSourceTable))
+            {
+                _logger.Error($"Error while checking the paired columns outside of table: {logInfo.TableNameWithSchema}. " +
+                        $"Connection string: {logInfo.ConnectionString}. ");
                 return false;
             }
 

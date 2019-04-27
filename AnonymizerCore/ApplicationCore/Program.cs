@@ -1,6 +1,7 @@
 ﻿using ApplicationCore.Config;
 using ApplicationCore.Logging;
 using ApplicationCore.Validators.ConfigValidators;
+using ApplicationCore.Validators.ParameterValidators;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -51,25 +52,21 @@ namespace ApplicationCore
                 }
             }
 
-            //var primKeys = new SqlParameterValidator();
+            var parameterValidator = new SqlParameterValidator();
 
-            //try
-            //{
-            //    bool result = true;
-            //    foreach (var database in databasesConfig.Databases)
-            //    {
-            //        foreach (var tableConfig in database.Tables)
-            //        {
-            //            result = primKeys.AreTheParamsValid(database.ConnectionString, tableConfig);
-            //            Console.WriteLine(result);
-            //        }
-            //    }
-            //    Console.ReadKey();
-            //}
-            //catch (Exception ex)
-            //{
-            //    Console.ReadKey();
-            //}
+            try
+            {
+                bool result = true;
+                foreach (var (connectionString, tableConfig) in validTableConfigs)
+                {
+                        result = parameterValidator.AreTheParamsValid(connectionString, tableConfig);                    
+                }
+                Console.ReadKey();
+            }
+            catch (Exception ex)
+            {
+                Console.ReadKey();
+            }
 
 
             Console.ReadKey();

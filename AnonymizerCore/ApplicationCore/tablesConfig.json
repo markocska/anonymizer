@@ -41,7 +41,7 @@
                   "tableNameWithSchema": "dbo.t_address",
                   "foreignKeyMapping": [
                     [ "addr_id_f", "addr_id_f" ],
-                    [ "address_id" ]
+                    [ "address_id", "addr_id" ]
                   ]
                 }
               ]
