@@ -22,26 +22,26 @@
             [ "[demail]", "[net worth]" ]
           ],
           "pairedColumnsOutsideTable": [
-            {
+            { 
               "columnMapping": [
-                [ "firstname", "first_name" ],
-                [ "secondname", "second_name" ]
+                [ "first name", "first name" ],
+                [ "last name", "last name" ]
               ],
               "sourceDestMapping": [
                 {
-                  "connectionString": "data source=huvdev1;initial catalog=Target_ifuat;integrated security=True;",
-                  "tableNameWithSchema": "dbo.t_actor_address",
+                  "destinationConnectionString": "data source=MARKO-PC\\SQLEXPRESS;initial catalog=People;integrated security=True;",
+                  "destinationTableNameWithSchema": "dbo.cucuka",
                   "foreignKeyMapping": [
-                    [ "dbId_f", "db_id" ],
-                    [ "tableId_f", "table_id" ]
+                    [ "demail", "baba" ],
+                    [ "id", "name" ]
                   ]
                 },
                 {
-                  "connectionString": "data source=huvdev1;initial catalog=Target_ifuat;integrated security=True;",
-                  "tableNameWithSchema": "dbo.t_address",
+                  "destinationConnectionString": "data source=MARKO-PC\\SQLEXPRESS;initial catalog=People;integrated security=True;",
+                  "destinationTableNameWithSchema": "dbo.employees",
                   "foreignKeyMapping": [
-                    [ "addr_id_f", "addr_id_f" ],
-                    [ "address_id", "addr_id" ]
+                    [ "baba", "base rate" ],
+                    [ "id", "shift" ]
                   ]
                 }
               ]

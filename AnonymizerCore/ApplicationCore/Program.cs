@@ -1,5 +1,6 @@
 ﻿using ApplicationCore.Config;
 using ApplicationCore.Logging;
+using ApplicationCore.SqlScripts.SqlServer;
 using ApplicationCore.Validators.ConfigValidators;
 using ApplicationCore.Validators.ParameterValidators;
 using Newtonsoft.Json;
@@ -26,7 +27,9 @@ namespace ApplicationCore
             //var myTemplate = new PrimaryKeyValidationTemplate(new List<string> { "cucu", "lucu", "mucu"}, new List<string> { "pucu", "cucu"},
             //    "marko","rusz","ize");
 
-            //string pageContent = myTemplate.TransformText();
+            string pagecontent = new GetColumnTypes("cucu", "mucu", "lucu", new List<string>()).TransformText();
+            Console.WriteLine(pagecontent);
+            Console.ReadKey();
 
             var validTableConfigs = new List<(string connectionString, TableConfig tableConfig)>();
 
@@ -67,7 +70,6 @@ namespace ApplicationCore
             {
                 Console.ReadKey();
             }
-
 
             Console.ReadKey();
         }

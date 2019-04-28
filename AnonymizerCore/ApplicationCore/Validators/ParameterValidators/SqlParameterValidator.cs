@@ -87,14 +87,12 @@ namespace ApplicationCore.Validators.ParameterValidators
             doConstantScrambledDuplicatesExist = DoConstantScrambledDuplicatesExist(loggingInfo, scrambledColumns, constantColumns);
             doAllColumnsExist = DoAllColumnsExist(schemaTable, loggingInfo, allColumns);
             doAllPairedColumnsInsideExist = DoAllPairedColumnsInsideExist(loggingInfo, schemaTable, pairedColumns);
-            doAllPairedColumnsOutsideExist = DoAllPairedColumnsOutsideExist(connectionString, loggingInfo, tableConfig);
+            doAllPairedColumnsOutsideExist = DoAllPairedColumnsOutsideExist(connectionString, tableConfig);
             isThereAPrimaryKeyConflict = IsThereAPrimaryKeyConflict(schemaTable, loggingInfo, allColumns);
             isThereAUniqueConstraintConflict = IsThereAUniqueConstraintConflict(schemaTable, loggingInfo, allColumns);
 
             return (!doConstantScrambledDuplicatesExist && doAllColumnsExist && doAllPairedColumnsInsideExist &&
                 doAllPairedColumnsOutsideExist && !isThereAPrimaryKeyConflict && !isThereAUniqueConstraintConflict);
-
-
 
         }
 

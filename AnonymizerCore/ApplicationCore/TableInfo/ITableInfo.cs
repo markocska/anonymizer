@@ -11,7 +11,8 @@ namespace ApplicationCore.TableInfo
         List<string> ScrambledColumns { get; set; }
         Dictionary<string, string> ConstantColumnsAndValues { get; set; }
         List<ColumnPair> PairedColumnsInside { get; set; }
-        List<ColumnPair> PairedColumnsOutside { get; set; }
+        ColumnPair SourceDestPairedColumnsOutside { get; set; }
+        List<MappedColumnPair> mappedColumnPairsOutside { get; set; }
         string SqlToGetScrambledColumnTypes { get; set; }
         string SqlToGetConstantColumnTypes { get; set; }
         string WhereClause { get; set; }

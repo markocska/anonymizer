@@ -51,13 +51,13 @@ namespace ApplicationCore.Validators.ConfigValidators
                         {
                             _logger.Error($"Error while checking the paired columns outside of table {tableConfig.NameWithSchema}. " +
                                $"Connection string: {dbConfig.ConnectionString}. " +
-                               $"The foreign key mapping arrays must consist of 2 columns for mapped table {connectedTableConfig.TableNameWithSchema}. " +
-                               $"Connection string: {connectedTableConfig.ConnectionString}.");
+                               $"The foreign key mapping arrays must consist of 2 columns for mapped table {connectedTableConfig.DestinationTableNameWithSchema}. " +
+                               $"Connection string: {connectedTableConfig.DestinationConnectionString}.");
                             return false;
                         }
 
-                        if (!IsConnectionStringValid(connectedTableConfig.ConnectionString) ||
-                            !IsTableNameValid(connectedTableConfig.ConnectionString, connectedTableConfig.TableNameWithSchema))
+                        if (!IsConnectionStringValid(connectedTableConfig.DestinationConnectionString) ||
+                            !IsTableNameValid(connectedTableConfig.DestinationConnectionString, connectedTableConfig.DestinationTableNameWithSchema))
                         {
                             _logger.Error($"Error while checking the paired columns outside of table {tableConfig.NameWithSchema}. " +
                                 $"Connection string: {dbConfig.ConnectionString}.");

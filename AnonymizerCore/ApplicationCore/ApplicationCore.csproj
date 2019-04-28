@@ -32,6 +32,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Update="SqlScripts\SqlServer\GetColumnTypes.tt">
+      <Generator>TextTemplatingFilePreprocessor</Generator>
+      <LastGenOutput>GetColumnTypes.cs</LastGenOutput>
+    </None>
     <None Update="tablesConfig.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
@@ -46,6 +50,11 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Update="SqlScripts\SqlServer\GetColumnTypes.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>GetColumnTypes.tt</DependentUpon>
+    </Compile>
     <Compile Update="Validators\ParameterValidators\Templates\PrimaryKeyValidationTemplate.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
