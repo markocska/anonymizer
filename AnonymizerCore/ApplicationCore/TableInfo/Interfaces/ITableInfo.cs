@@ -1,6 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using ApplicationCore.TableInfo.Common;
+using System.Collections.Generic;
 
-namespace ApplicationCore.TableInfo
+namespace ApplicationCore.TableInfo.Interfaces
 {
     public interface ITableInfo
     {
@@ -8,13 +9,11 @@ namespace ApplicationCore.TableInfo
         string DbName { get; set; }
         string SchemaName { get; set; }
         string TableName { get; set; }
-        List<string> ScrambledColumns { get; set; }
-        Dictionary<string, string> ConstantColumnsAndValues { get; set; }
+        Dictionary<string, string> ScrambledColumns { get; set; }
+        List<ColumnAndTypeAndValue> ConstantColumnsAndValues { get; set; }
         List<ColumnPair> PairedColumnsInside { get; set; }
         ColumnPair SourceDestPairedColumnsOutside { get; set; }
         List<MappedColumnPair> mappedColumnPairsOutside { get; set; }
-        string SqlToGetScrambledColumnTypes { get; set; }
-        string SqlToGetConstantColumnTypes { get; set; }
         string WhereClause { get; set; }
         string FullTableName { get; }
     }

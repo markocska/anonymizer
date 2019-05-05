@@ -35,12 +35,24 @@ SET QUOTED_IDENTIFIER ON
 
 	declare @sql_to_describe nvarchar(MAX) = '', 
 			@sql_to_get_type nvarchar(MAX) = '';
-	declare @const_columns_with_types table([column_name] nvarchar(128), [column_type] nvarchar(128));
-	
-	set @sql_to_describe = 'select * from ");
+	declare @columns_with_types table(");
+            
+            #line 13 "E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\ApplicationCore\SqlScripts\SqlServer\GetColumnTypes.tt"
+ Write(columnName); 
+            
+            #line default
+            #line hidden
+            this.Write(" nvarchar(128), ");
+            
+            #line 13 "E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\ApplicationCore\SqlScripts\SqlServer\GetColumnTypes.tt"
+ Write(columnType); 
+            
+            #line default
+            #line hidden
+            this.Write(" nvarchar(128));\r\n\t\r\n\tset @sql_to_describe = \'select * from ");
             
             #line 15 "E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\ApplicationCore\SqlScripts\SqlServer\GetColumnTypes.tt"
-    Write($"{Database}.{Schema}.{Table}"); 
+ Write($"{Database}.{Schema}.{Table}"); 
             
             #line default
             #line hidden
@@ -51,9 +63,9 @@ SET QUOTED_IDENTIFIER ON
 		FROM ' + @db + '.sys.dm_exec_describe_first_result_set(''' + @sql_to_describe + ' '', NULL, 1)
 		where name in ' + @columns_in_clause;
 
-    insert into @const_columns_with_types exec (@sql_to_get_type);
+    insert into @columns_with_types exec (@sql_to_get_type);
 
-	select * from @const_columns_with_types;
+	select * from @columns_with_types;
 ");
             return this.GenerationEnvironment.ToString();
         }

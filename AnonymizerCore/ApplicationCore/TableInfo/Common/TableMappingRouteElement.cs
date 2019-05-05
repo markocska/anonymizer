@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace ApplicationCore.TableInfo
+namespace ApplicationCore.TableInfo.Common
 {
     public class TableMappingRouteElement
     {

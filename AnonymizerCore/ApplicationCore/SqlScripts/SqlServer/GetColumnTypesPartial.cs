@@ -17,5 +17,8 @@ namespace ApplicationCore.SqlScripts.SqlServer
             Table = table;
             Columns = columns;
         }
+
+        public const string columnName = "column_name";
+        public const string columnType = "column_type";
     }
 }

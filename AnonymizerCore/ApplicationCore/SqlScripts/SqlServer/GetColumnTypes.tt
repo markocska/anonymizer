@@ -10,15 +10,15 @@ SET QUOTED_IDENTIFIER ON
 
 	declare @sql_to_describe nvarchar(MAX) = '', 
 			@sql_to_get_type nvarchar(MAX) = '';
-	declare @const_columns_with_types table([column_name] nvarchar(128), [column_type] nvarchar(128));
+	declare @columns_with_types table(<# Write(columnName); #> nvarchar(128), <# Write(columnType); #> nvarchar(128));
 	
-	set @sql_to_describe = 'select * from <#    Write($"{Database}.{Schema}.{Table}"); #> ;'
+	set @sql_to_describe = 'select * from <# Write($"{Database}.{Schema}.{Table}"); #> ;'
 	
 	set @sql_to_get_type = 
 	'select	name, system_type_name
 		FROM ' + @db + '.sys.dm_exec_describe_first_result_set(''' + @sql_to_describe + ' '', NULL, 1)
 		where name in ' + @columns_in_clause;
 
-    insert into @const_columns_with_types exec (@sql_to_get_type);
+    insert into @columns_with_types exec (@sql_to_get_type);
 
-	select * from @const_columns_with_types;
+	select * from @columns_with_types;

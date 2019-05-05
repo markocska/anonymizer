@@ -1,14 +1,17 @@
 ﻿using ApplicationCore.Config;
 using ApplicationCore.DatabaseServices.ColumnTypes;
+using ApplicationCore.TableInfo.Common;
 using ApplicationCore.TableInfo.Exceptions;
+using ApplicationCore.TableInfo.Interfaces;
 using ApplicationCore.Validators;
 using ApplicationCore.Validators.ConfigValidators;
 using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
+using System.Linq;
 using System.Text;
 
-namespace ApplicationCore.TableInfo
+namespace ApplicationCore.TableInfo.Abstract
 {
     public abstract class TableInfoBuilder : ITableInfoBuilder
     {
@@ -52,57 +55,16 @@ namespace ApplicationCore.TableInfo
                     WhereClause = ""
                 };
 
-            var constantColumnsAndValues = new Dictionary<string, string>();
-            var constantColumns = new List<string>();
-            var scrambledColumns = new List<string>();
+            var scrambledColumns = _columnTypeManager.GetColumnNamesAndTypes(tableInfo, TableConfig.ScrambledColumns.Select(c => c.Name).ToList());
 
-            for (int i = 0; i < TableConfig.ScrambledColumns.Count; i++)
-            {
-                var column = TableConfig.ScrambledColumns[i];
+            var constantColumnsAndTypes = _columnTypeManager.GetColumnNamesAndTypes(tableInfo, TableConfig.ConstantColumns.Select(c => c.Name).ToList());
 
-                scrambledColumns.Add(RemoveParenthesis(column.Name));
-            }
-
+            var constantColumnsAndValues = new List<ColumnAndTypeAndValue>();
             for (int i = 0; i < TableConfig.ConstantColumns.Count; i++)
             {
                 var column = TableConfig.ConstantColumns[i];
 
-                constantColumns.Add(RemoveParenthesis(column.Name));
-                constantColumnsAndValues.Add(RemoveParenthesis(column.Name), column.Value);
-            }
-
-            //var inputParameterValidationResult = SqlParameterValidator.AreInputParamsValid(tableInfo, scrambledColumns, constantColumns);
-            //if (!inputParameterValidationResult.IsValid)
-            //{
-            //    throw new TableInfoException(tableInfo.FullTableName, tableInfo.DbConnectionString, $"Error while creating the TableInfo object: " +
-            //        $"{inputParameterValidationResult.ValidationMessage}");
-            //}
-
-            //var inputPrKeyParameterValidationResult = SqlParameterValidator.ArePrimaryKeysValid(tableInfo, scrambledColumns, constantColumns);
-            //if (!inputPrKeyParameterValidationResult.IsValid)
-            //{
-            //    throw new TableInfoException(tableInfo.FullTableName, tableInfo.DbConnectionString, $"Error while creating the TableInfo object: " +
-            //        $"{inputPrKeyParameterValidationResult.ValidationMessage}");
-            //}
-
-            try
-            {
-                //tableInfo.SqlToGetConstantColumnTypes = ColumnTypeManager.GenerateColumnTypeSqlQuery(tableInfo, constantColumns);
-            }
-            catch (Exception ex)
-            {
-                throw new TableInfoException(tableInfo.FullTableName, tableInfo.DbConnectionString,
-                    $"Error while generating the sql script for getting constant column types: {ex.Message}", ex);
-            }
-
-            try
-            {
-                //tableInfo.SqlToGetScrambledColumnTypes = ColumnTypeManager.GenerateColumnTypeSqlQuery(tableInfo, scrambledColumns);
-            }
-            catch (Exception ex)
-            {
-                throw new TableInfoException(tableInfo.FullTableName, tableInfo.DbConnectionString,
-                    $"Error while generating the sql script for getting scrambled column types: {ex.Message}", ex);
+                constantColumnsAndValues.Add(new ColumnAndTypeAndValue {Name = column.Name, Type = constantColumnsAndTypes[column.Name], Value = column.Value });
             }
 
             tableInfo.ConstantColumnsAndValues = constantColumnsAndValues;
@@ -145,16 +107,13 @@ namespace ApplicationCore.TableInfo
             public string DbName { get; set; }
             public string SchemaName { get; set; }
             public string TableName { get; set; }
-            public List<string> ScrambledColumns { get; set; }
-            public Dictionary<string, string> ConstantColumnsAndValues { get; set; }
-            public string SqlToGetScrambledColumnTypes { get; set; }
-            public string SqlToGetConstantColumnTypes { get; set; }
+            public Dictionary<string, string> ScrambledColumns { get; set; }
+            public List<ColumnAndTypeAndValue> ConstantColumnsAndValues { get; set; }
             public string WhereClause { get; set; }
             public string FullTableName => $"{DbName}.{SchemaName}.{TableName}";
-
-            public List<ColumnPair> PairedColumnsInside { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-            public ColumnPair SourceDestPairedColumnsOutside { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-            public List<MappedColumnPair> mappedColumnPairsOutside { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+            public List<ColumnPair> PairedColumnsInside { get; set; }
+            public ColumnPair SourceDestPairedColumnsOutside { get; set; }
+            public List<MappedColumnPair> mappedColumnPairsOutside { get; set; }
         }
     }
 }
