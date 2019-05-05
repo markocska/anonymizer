@@ -39,10 +39,6 @@
     <None Update="tablesConfig.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="Validators\ParameterValidators\Templates\PrimaryKeyValidationTemplate.tt">
-      <Generator>TextTemplatingFilePreprocessor</Generator>
-      <LastGenOutput>PrimaryKeyValidationTemplate.cs</LastGenOutput>
-    </None>
   </ItemGroup>
 
   <ItemGroup>
@@ -54,11 +50,6 @@
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
       <DependentUpon>GetColumnTypes.tt</DependentUpon>
-    </Compile>
-    <Compile Update="Validators\ParameterValidators\Templates\PrimaryKeyValidationTemplate.cs">
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-      <DependentUpon>PrimaryKeyValidationTemplate.tt</DependentUpon>
     </Compile>
   </ItemGroup>
 

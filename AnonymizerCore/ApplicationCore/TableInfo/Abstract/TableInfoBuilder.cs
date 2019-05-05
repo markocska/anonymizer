@@ -49,9 +49,9 @@ namespace ApplicationCore.TableInfo.Abstract
                 new TableInfo
                 {
                     DbConnectionString = DatabaseConfig.ConnectionString,
-                    DbName = RemoveParenthesis(dbName),
-                    SchemaName = RemoveParenthesis(ParseSchemaAndTableName(TableConfig.NameWithSchema).schemaName),
-                    TableName = RemoveParenthesis(ParseSchemaAndTableName(TableConfig.NameWithSchema).tableName),
+                    DbName = dbName,
+                    SchemaName = ParseSchemaAndTableName(TableConfig.NameWithSchema).schemaName,
+                    TableName = ParseSchemaAndTableName(TableConfig.NameWithSchema).tableName,
                     WhereClause = ""
                 };
 
@@ -60,48 +60,38 @@ namespace ApplicationCore.TableInfo.Abstract
             var constantColumnsAndTypes = _columnTypeManager.GetColumnNamesAndTypes(tableInfo, TableConfig.ConstantColumns.Select(c => c.Name).ToList());
 
             var constantColumnsAndValues = new List<ColumnAndTypeAndValue>();
-            for (int i = 0; i < TableConfig.ConstantColumns.Count; i++)
+            foreach (var column in TableConfig.ConstantColumns)
             {
-                var column = TableConfig.ConstantColumns[i];
-
                 constantColumnsAndValues.Add(new ColumnAndTypeAndValue {Name = column.Name, Type = constantColumnsAndTypes[column.Name], Value = column.Value });
             }
 
             tableInfo.ConstantColumnsAndValues = constantColumnsAndValues;
             tableInfo.ScrambledColumns = scrambledColumns;
 
+            tableInfo.PairedColumnsInside = TableConfig.PairedColumnsInsideTable;
+
             return tableInfo;
         }
 
-        private string ParseDataSource(string connectionString)
-        {
-            var connectionStringBuilder = new SqlConnectionStringBuilder(DatabaseConfig.ConnectionString);
+        protected abstract string ParseDataSource(string connectionString);
 
-            return connectionStringBuilder.InitialCatalog;
-        }
+        protected abstract (string schemaName, string tableName) ParseSchemaAndTableName(string schemaAndTableName);
 
-        private (string schemaName, string tableName) ParseSchemaAndTableName(string schemaAndTableName)
-        {
-            var tableAndSchemaName = schemaAndTableName.Split('.');
+        //private string RemoveParenthesis(string column)
+        //{
+        //    var columnNameWithoutParenthesis = column.Trim(' ');
+        //    if (columnNameWithoutParenthesis.StartsWith("[") && columnNameWithoutParenthesis.EndsWith("]"))
+        //    {
+        //        columnNameWithoutParenthesis = columnNameWithoutParenthesis.Remove(0, 1);
 
-            return (schemaName: tableAndSchemaName[0], tableName: tableAndSchemaName[1]);
-        }
+        //        var length = columnNameWithoutParenthesis.Length;
+        //        columnNameWithoutParenthesis = columnNameWithoutParenthesis.Remove(length - 1, 1);
+        //    }
 
-        private string RemoveParenthesis(string column)
-        {
-            var columnNameWithoutParenthesis = column.Trim(' ');
-            if (columnNameWithoutParenthesis.StartsWith("[") && columnNameWithoutParenthesis.EndsWith("]"))
-            {
-                columnNameWithoutParenthesis = columnNameWithoutParenthesis.Remove(0, 1);
+        //    return columnNameWithoutParenthesis;
+        //}
 
-                var length = columnNameWithoutParenthesis.Length;
-                columnNameWithoutParenthesis = columnNameWithoutParenthesis.Remove(length - 1, 1);
-            }
-
-            return columnNameWithoutParenthesis;
-        }
-
-        private class TableInfo : ITableInfo
+        protected class TableInfo : ITableInfo
         {
             public string DbConnectionString { get; set; }
             public string DbName { get; set; }
@@ -111,7 +101,7 @@ namespace ApplicationCore.TableInfo.Abstract
             public List<ColumnAndTypeAndValue> ConstantColumnsAndValues { get; set; }
             public string WhereClause { get; set; }
             public string FullTableName => $"{DbName}.{SchemaName}.{TableName}";
-            public List<ColumnPair> PairedColumnsInside { get; set; }
+            public List<List<string>> PairedColumnsInside { get; set; }
             public ColumnPair SourceDestPairedColumnsOutside { get; set; }
             public List<MappedColumnPair> mappedColumnPairsOutside { get; set; }
         }
