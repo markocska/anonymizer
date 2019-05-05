@@ -9,11 +9,11 @@ namespace ApplicationCore.TableInfo.Interfaces
         string DbName { get; set; }
         string SchemaName { get; set; }
         string TableName { get; set; }
-        Dictionary<string, string> ScrambledColumns { get; set; }
-        List<ColumnAndTypeAndValue> ConstantColumnsAndValues { get; set; }
+        Dictionary<string, string> PrimaryKeysAndTypes { get; set; }
+        Dictionary<string, string> ScrambledColumnsAndTypes { get; set; }
+        List<ColumnAndTypeAndValue> ConstantColumnsAndTypesAndValues { get; set; }
         List<List<string>> PairedColumnsInside { get; set; }
-        ColumnPair SourceDestPairedColumnsOutside { get; set; }
-        List<MappedColumnPair> mappedColumnPairsOutside { get; set; }
+        List<MappedTable> MappedTablesOutside { get; set; }
         string WhereClause { get; set; }
         string FullTableName { get; }
     }

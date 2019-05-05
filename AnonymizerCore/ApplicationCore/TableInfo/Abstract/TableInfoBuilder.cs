@@ -3,18 +3,16 @@ using ApplicationCore.DatabaseServices.ColumnTypes;
 using ApplicationCore.TableInfo.Common;
 using ApplicationCore.TableInfo.Exceptions;
 using ApplicationCore.TableInfo.Interfaces;
-using ApplicationCore.Validators;
 using ApplicationCore.Validators.ConfigValidators;
-using System;
+using Serilog;
 using System.Collections.Generic;
-using System.Data.SqlClient;
 using System.Linq;
-using System.Text;
 
 namespace ApplicationCore.TableInfo.Abstract
 {
     public abstract class TableInfoBuilder : ITableInfoBuilder
     {
+        private ILogger _logger;
         private IConfigValidator _configValidator;
         private IColumnTypeManager _columnTypeManager;
         public TableConfig TableConfig { get; }
@@ -55,20 +53,42 @@ namespace ApplicationCore.TableInfo.Abstract
                     WhereClause = ""
                 };
 
-            var scrambledColumns = _columnTypeManager.GetColumnNamesAndTypes(tableInfo, TableConfig.ScrambledColumns.Select(c => c.Name).ToList());
+            Dictionary<string, string> scrambledColumns;
+            try
+            {
+                scrambledColumns = _columnTypeManager.GetColumnNamesAndTypes(tableInfo, TableConfig.ScrambledColumns.Select(c => c.Name).ToList());
+            }
+            catch(ColumnTypesException ex)
+            {
+                _logger.Error($"Error while getting scrambled column types for table {TableConfig.NameWithSchema}. " +
+                    $"Connection string: {DatabaseConfig.ConnectionString}. Error message: {ex.Message}. ", ex);
+                throw new TableInfoException(TableConfig.NameWithSchema, DatabaseConfig.ConnectionString, "Error while creating the table.");
+            }
 
-            var constantColumnsAndTypes = _columnTypeManager.GetColumnNamesAndTypes(tableInfo, TableConfig.ConstantColumns.Select(c => c.Name).ToList());
+            Dictionary<string, string> constantColumnsAndTypes;
+            try
+            {
+                constantColumnsAndTypes = _columnTypeManager.GetColumnNamesAndTypes(tableInfo, TableConfig.ConstantColumns.Select(c => c.Name).ToList());
+            }
+            catch (ColumnTypesException ex)
+            {
+                _logger.Error($"Error while getting constant column types for table {TableConfig.NameWithSchema}. " +
+                    $"Connection string: {DatabaseConfig.ConnectionString}. Error message: {ex.Message}. ", ex);
+                throw new TableInfoException(TableConfig.NameWithSchema, DatabaseConfig.ConnectionString, "Error while creating the table.");
+            }
 
             var constantColumnsAndValues = new List<ColumnAndTypeAndValue>();
             foreach (var column in TableConfig.ConstantColumns)
             {
-                constantColumnsAndValues.Add(new ColumnAndTypeAndValue {Name = column.Name, Type = constantColumnsAndTypes[column.Name], Value = column.Value });
+                constantColumnsAndValues.Add(new ColumnAndTypeAndValue { Name = column.Name, Type = constantColumnsAndTypes[column.Name], Value = column.Value });
             }
 
-            tableInfo.ConstantColumnsAndValues = constantColumnsAndValues;
-            tableInfo.ScrambledColumns = scrambledColumns;
+            tableInfo.ConstantColumnsAndTypesAndValues = constantColumnsAndValues;
+            tableInfo.ScrambledColumnsAndTypes = scrambledColumns;
 
             tableInfo.PairedColumnsInside = TableConfig.PairedColumnsInsideTable;
+
+            tableInfo.MappedTablesOutside = ParseMappedTablesOutsideFromConfig();
 
             return tableInfo;
         }
@@ -91,19 +111,67 @@ namespace ApplicationCore.TableInfo.Abstract
         //    return columnNameWithoutParenthesis;
         //}
 
+        private List<MappedTable> ParseMappedTablesOutsideFromConfig()
+        {
+            var mappedTablesOutside = new List<MappedTable>();
+            for (int i = 0; i < TableConfig.PairedColumnsOutsideTable.Count; i++)
+            {
+                var mappedTableOutsideConfig = TableConfig.PairedColumnsOutsideTable[i];
+                var mappedTable = new MappedTable();
+
+                mappedTable.SourceDestPairedColumnsOutside = mappedTableOutsideConfig.ColumnMapping.Select(m => new ColumnPair(m[0], m[1])).ToList();
+
+                var columnMapping = new List<MappedColumnPair>();
+                for (int j = 0; j < mappedTableOutsideConfig.SourceDestMapping.Count; j++)
+                {
+                    var columnMappingConfig = mappedTableOutsideConfig.SourceDestMapping[j];
+                    if (j == 0)
+                    {
+                        columnMapping.Add(new MappedColumnPair
+                        {
+                            SourceConnectionString = DatabaseConfig.ConnectionString,
+                            SourceTableNameWithSchema = TableConfig.NameWithSchema,
+                            DestinationConnectionString = columnMappingConfig.DestinationConnectionString,
+                            DestinationTableNameWithSchema = columnMappingConfig.DestinationTableNameWithSchema,
+                            MappedColumns = columnMappingConfig.ForeignKeyMapping.Select(m => new ColumnPair(m[0], m[1])).ToList()
+                        });
+                    }
+                    else
+                    {
+                        var previousColumnMappingConfig = mappedTableOutsideConfig.SourceDestMapping[j - 1];
+                        columnMapping.Add(new MappedColumnPair
+                        {
+                            SourceConnectionString = previousColumnMappingConfig.DestinationConnectionString,
+                            SourceTableNameWithSchema = previousColumnMappingConfig.DestinationTableNameWithSchema,
+                            DestinationConnectionString = columnMappingConfig.DestinationConnectionString,
+                            DestinationTableNameWithSchema = columnMappingConfig.DestinationTableNameWithSchema,
+                            MappedColumns = columnMappingConfig.ForeignKeyMapping.Select(m => new ColumnPair(m[0], m[1])).ToList()
+                        });
+                    }
+                }
+
+                mappedTable.MappedColumnPairsOutside = columnMapping;
+
+                mappedTablesOutside.Add(mappedTable);
+
+            }
+
+            return mappedTablesOutside;
+        }
+
         protected class TableInfo : ITableInfo
         {
             public string DbConnectionString { get; set; }
             public string DbName { get; set; }
             public string SchemaName { get; set; }
             public string TableName { get; set; }
-            public Dictionary<string, string> ScrambledColumns { get; set; }
-            public List<ColumnAndTypeAndValue> ConstantColumnsAndValues { get; set; }
+            public Dictionary<string, string> PrimaryKeysAndTypes { get; set; }
+            public Dictionary<string, string> ScrambledColumnsAndTypes { get; set; }
+            public List<ColumnAndTypeAndValue> ConstantColumnsAndTypesAndValues { get; set; }
             public string WhereClause { get; set; }
             public string FullTableName => $"{DbName}.{SchemaName}.{TableName}";
             public List<List<string>> PairedColumnsInside { get; set; }
-            public ColumnPair SourceDestPairedColumnsOutside { get; set; }
-            public List<MappedColumnPair> mappedColumnPairsOutside { get; set; }
+            public List<MappedTable> MappedTablesOutside { get; set; }
         }
     }
 }

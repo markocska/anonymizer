@@ -6,10 +6,10 @@ namespace ApplicationCore.TableInfo.Common
 {
     public class MappedColumnPair
     {
-        public string SourceConnectionString { get; }
-        public string SourceTableNameWithSchema { get; }
-        public string DestinationConnectionString { get; }
-        public string DestinationTableNameWithSchema { get; }
-        public ColumnPair MappedColumns { get; }
+        public string SourceConnectionString { get; set; }
+        public string SourceTableNameWithSchema { get; set; }
+        public string DestinationConnectionString { get; set; }
+        public string DestinationTableNameWithSchema { get; set; }
+        public List<ColumnPair> MappedColumns { get; set; }
     }
 }

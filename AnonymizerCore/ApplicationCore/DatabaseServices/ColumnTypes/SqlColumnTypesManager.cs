@@ -16,7 +16,16 @@ namespace ApplicationCore.DatabaseServices.ColumnTypes
         {
             var columnTypesTemplate = new GetColumnTypes(tableInfo.DbName, tableInfo.SchemaName, tableInfo.TableName, columnNames);
             var columnTypesQuery = columnTypesTemplate.TransformText();
-            var columnTypesTable = SqlHelper.ExecuteQuery(tableInfo.DbConnectionString, new List<SqlParameter>(), columnTypesQuery);
+
+            DataTable columnTypesTable;
+            try
+            {
+                columnTypesTable = SqlHelper.ExecuteQuery(tableInfo.DbConnectionString, new List<SqlParameter>(), columnTypesQuery);
+            }
+            catch (Exception ex)
+            {
+                throw new ColumnTypesException("An error happened while trying to get column types.", ex);
+            }
 
             var columnsAndTypes = new Dictionary<string, string>();
             foreach (var rowObject in columnTypesTable.Rows)
