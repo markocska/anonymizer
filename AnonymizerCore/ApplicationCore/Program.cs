@@ -1,12 +1,14 @@
 ﻿using ApplicationCore.Config;
 using ApplicationCore.DatabaseServices.ColumnTypes;
 using ApplicationCore.DatabaseServices.PrimaryKeys;
+using ApplicationCore.Factories;
 using ApplicationCore.Logging;
 using ApplicationCore.SqlScripts.SqlServer;
 using ApplicationCore.TableInfo;
 using ApplicationCore.TableInfo.Interfaces;
 using ApplicationCore.Validators.ConfigValidators;
 using ApplicationCore.Validators.ParameterValidators;
+using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -27,9 +29,13 @@ namespace ApplicationCore
             var config = File.ReadAllText(".\\tablesConfig.json");
             var databasesConfig = JsonConvert.DeserializeObject<DatabasesConfig>(config);
 
-            //var serviceProvider = new ServiceCollection()
-            //    .AddSingleton<IConfigValidator, SqlConfigValidator>()
-            //    .BuildServiceProvider();
+            var serviceProvider = new ServiceCollection()
+                .AddSingleton<IConfigValidator, SqlConfigValidator>()
+                .AddSingleton<IParameterValidator, SqlParameterValidator>()
+                .AddSingleton<IColumnTypeManager, SqlColumnTypesManager>()
+                .AddSingleton<IPrimaryKeyManager, SqlPrimaryKeyManager>()
+                .AddSingleton<ITableInfoCollectionFactory, SqlTableInfoCollectionFactory>()
+                .BuildServiceProvider();
             //var myTemplate = new PrimaryKeyValidationTemplate(new List<string> { "cucu", "lucu", "mucu"}, new List<string> { "pucu", "cucu"},
             //    "marko","rusz","ize");
 
@@ -37,37 +43,9 @@ namespace ApplicationCore
             //Console.WriteLine(pagecontent);
             //Console.ReadKey();
 
-            var validTableConfigs = new List<(DatabaseConfig databaseConfig, TableConfig tableConfig)>();
-            //Console.WriteLine(pageContent);
-            var parameterValidator = new SqlParameterValidator();
-            var sqlConfigValidator = new SqlConfigValidator();
-            foreach (var dbConfig in databasesConfig.Databases)
-            {
-                if (!sqlConfigValidator.IsDbConfigValid(dbConfig))
-                {
-                    continue;
-                }
 
-                foreach (var tableConfig in dbConfig.Tables)
-                {
-                    if (sqlConfigValidator.IsTableConfigValid(dbConfig, tableConfig))
-                    {
-                        if (parameterValidator.AreTheParamsValid(dbConfig.ConnectionString, tableConfig))
-                        {
-                            validTableConfigs.Add((databaseConfig: dbConfig, tableConfig: tableConfig));
-                        }
-                    }
-                }
-            }
-
-            var tableInfos = new List<ITableInfo>();
-            var columnTypeManager = new SqlColumnTypesManager();
-            var primaryKeyManager = new SqlPrimaryKeyManager();
-            foreach (var (dbConfig,tableConfig) in validTableConfigs)
-            {
-                var tableInfoBuilder = new SqlTableInfoBuilder(dbConfig, tableConfig, sqlConfigValidator, columnTypeManager, primaryKeyManager);
-                tableInfos.Add(tableInfoBuilder.Build());
-            }
+            var tableInfoCollectionFactory = serviceProvider.GetService<ITableInfoCollectionFactory>();
+            var validTables = tableInfoCollectionFactory.CreateTableListFromConfig(databasesConfig); 
 
 
             Console.ReadKey();
