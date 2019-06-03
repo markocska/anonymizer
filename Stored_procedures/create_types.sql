@@ -1,4 +1,4 @@
-USE [Anonymizer]
+USE People
 GO
 /****** Object:  StoredProcedure [dbo].[sp_SimpleAnonymizer]    Script Date: 2019. 01. 17. 10:35:57 ******/
 SET ANSI_NULLS ON
@@ -19,7 +19,7 @@ go
 
 if type_id('dbo.AnonymizerColumnList') is null
 	begin
-		create type dbo.dbo.AnonymizerColumnList
+		create type dbo.AnonymizerColumnList
 		as table
 		(
 			column_name nvarchar(128)

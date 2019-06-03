@@ -53,7 +53,7 @@ namespace ApplicationCore.Validators.Abstract
 
                 if (allColumns[column].Unique)
                 {
-                    _logger.Error($"The column {column} doesn't exist in the table {logInfo.TableNameWithSchema}. " +
+                    _logger.Error($"The column {column} is part of a unique constraint in table {logInfo.TableNameWithSchema}. " +
                         $"Connection string: {logInfo.ConnectionString}. ", logInfo);
                     isThereAUniqueConstraintConflict = true;
                 }

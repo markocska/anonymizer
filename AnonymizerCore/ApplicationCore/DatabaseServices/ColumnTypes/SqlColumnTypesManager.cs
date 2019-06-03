@@ -18,7 +18,7 @@ namespace ApplicationCore.DatabaseServices.ColumnTypes
             var columnTypesTemplate = new GetColumnTypes(tableInfo.DbName, tableInfo.SchemaName, tableInfo.TableName, columnNames);
             var columnTypesQuery = columnTypesTemplate.TransformText();
 
-            Console.WriteLine(columnTypesQuery);
+            //Console.WriteLine(columnTypesQuery);
             DataTable columnTypesTable;
             try
             {

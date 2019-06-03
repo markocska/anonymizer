@@ -1,4 +1,4 @@
-USE [Anonymizer]
+USE [People]
 GO
 /****** Object:  StoredProcedure [dbo].[sp_SimpleAnonymizer]    Script Date: 2019. 01. 17. 10:35:57 ******/
 SET ANSI_NULLS ON
@@ -40,7 +40,9 @@ select @sql_to_get_indexes =
 			= @sql_to_en_dis_non_clust_indexes + 'alter index ' + i.index_name +  ' on ' + @full_table_name +
 			case @enable when 1 then ' rebuild;' else ' disable;' end + char(13) + char(10)
 										from @non_clustered_indexes i
-	exec (@sql_to_en_dis_non_clust_indexes) 
+
+	print (@sql_to_en_dis_non_clust_indexes);
+	exec (@sql_to_en_dis_non_clust_indexes);
 
 
 end;

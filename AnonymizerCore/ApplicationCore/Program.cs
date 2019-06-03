@@ -1,5 +1,6 @@
 ﻿using ApplicationCore.Config;
 using ApplicationCore.DatabaseServices.ColumnTypes;
+using ApplicationCore.DatabaseServices.Indexes;
 using ApplicationCore.DatabaseServices.PrimaryKeys;
 using ApplicationCore.Factories;
 using ApplicationCore.Logging;
@@ -31,17 +32,16 @@ namespace ApplicationCore
             var databasesConfig = JsonConvert.DeserializeObject<DatabasesConfig>(config);
 
             var serviceProvider = SqlServiceProvider.GetSqlServiceProvider();
-            //var myTemplate = new PrimaryKeyValidationTemplate(new List<string> { "cucu", "lucu", "mucu"}, new List<string> { "pucu", "cucu"},
-            //    "marko","rusz","ize");
-
-            //string pagecontent = new GetColumnTypes("cucu", "mucu", "lucu", new List<string>()).TransformText();
-            //Console.WriteLine(pagecontent);
-            //Console.ReadKey();
 
 
             var tableInfoCollectionFactory = serviceProvider.GetService<ITableInfoCollectionFactory>();
-            var validTables = tableInfoCollectionFactory.CreateTableListFromConfig(databasesConfig); 
+            var validTables = tableInfoCollectionFactory.CreateTableListFromConfig(databasesConfig);
 
+            var indexService = new SqlIndexService();
+            foreach (var table in validTables)
+            {
+                //indexService.GetEnabledIndexNames(table);
+            }
 
             Console.ReadKey();
         }

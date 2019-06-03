@@ -1,4 +1,4 @@
-USE [Anonymizer]
+USE [People]
 GO
 /****** Object:  StoredProcedure [dbo].[sp_SimpleAnonymizer]    Script Date: 2019. 01. 17. 10:35:57 ******/
 SET ANSI_NULLS ON
@@ -9,7 +9,7 @@ GO
 
 alter function [dbo].[func_get_column_types]
 (
-@columns as dbo.ColumnList readonly,
+@columns as dbo.AnonymizerColumnList readonly,
 @db as nvarchar(128),
 @schema as nvarchar(128),
 @table as nvarchar(128)
