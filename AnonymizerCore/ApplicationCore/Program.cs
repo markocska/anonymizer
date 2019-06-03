@@ -40,7 +40,7 @@ namespace ApplicationCore
             var indexService = new SqlIndexService();
             foreach (var table in validTables)
             {
-                //indexService.GetEnabledIndexNames(table);
+                indexService.TurnOnIndexes(table);
             }
 
             Console.ReadKey();

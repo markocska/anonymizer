@@ -51,6 +51,10 @@
       <Generator>TextTemplatingFilePreprocessor</Generator>
       <LastGenOutput>GetIndexes.cs</LastGenOutput>
     </None>
+    <None Update="SqlScripts\SqlServer\TurnOnOffIndexes.tt">
+      <Generator>TextTemplatingFilePreprocessor</Generator>
+      <LastGenOutput>TurnOnOffIndexes.cs</LastGenOutput>
+    </None>
     <None Update="tablesConfig.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
@@ -68,6 +72,11 @@
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
       <DependentUpon>GetIndexes.tt</DependentUpon>
+    </Compile>
+    <Compile Update="SqlScripts\SqlServer\TurnOnOffIndexes.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>TurnOnOffIndexes.tt</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup Condition="$(VisualStudioVersion) == '15.0'">

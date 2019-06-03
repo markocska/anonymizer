@@ -7,6 +7,7 @@ namespace ApplicationCore.DatabaseServices.Indexes
 {
     public interface IIndexService
     {
-        void TurnOffNonUniqueIndexes(ITableInfo tableInfo);
+        void TurnOffIndexes(ITableInfo tableInfo);
+        void TurnOnIndexes(ITableInfo tableInfo);
     }
 }
