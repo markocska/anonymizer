@@ -3,6 +3,7 @@ using ApplicationCore.DatabaseServices.ColumnTypes;
 using ApplicationCore.DatabaseServices.PrimaryKeys;
 using ApplicationCore.Factories;
 using ApplicationCore.Logging;
+using ApplicationCore.ServiceProviders;
 using ApplicationCore.SqlScripts.SqlServer;
 using ApplicationCore.TableInfo;
 using ApplicationCore.TableInfo.Interfaces;
@@ -29,13 +30,7 @@ namespace ApplicationCore
             var config = File.ReadAllText(".\\tablesConfig.json");
             var databasesConfig = JsonConvert.DeserializeObject<DatabasesConfig>(config);
 
-            var serviceProvider = new ServiceCollection()
-                .AddSingleton<IConfigValidator, SqlConfigValidator>()
-                .AddSingleton<IParameterValidator, SqlParameterValidator>()
-                .AddSingleton<IColumnTypeManager, SqlColumnTypesManager>()
-                .AddSingleton<IPrimaryKeyManager, SqlPrimaryKeyManager>()
-                .AddSingleton<ITableInfoCollectionFactory, SqlTableInfoCollectionFactory>()
-                .BuildServiceProvider();
+            var serviceProvider = SqlServiceProvider.GetSqlServiceProvider();
             //var myTemplate = new PrimaryKeyValidationTemplate(new List<string> { "cucu", "lucu", "mucu"}, new List<string> { "pucu", "cucu"},
             //    "marko","rusz","ize");
 
