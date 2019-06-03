@@ -34,7 +34,7 @@ namespace ApplicationCore.Validators.Abstract
                     doAllColumnsExist = false;
                 }
             }
-
+            
             return doAllColumnsExist;
         }
 

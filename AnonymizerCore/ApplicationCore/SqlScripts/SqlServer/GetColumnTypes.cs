@@ -56,17 +56,34 @@ SET QUOTED_IDENTIFIER ON
             
             #line default
             #line hidden
-            this.Write(@" ;'
-	
-	set @sql_to_get_type = 
-	'select	name, system_type_name
-		FROM ' + @db + '.sys.dm_exec_describe_first_result_set(''' + @sql_to_describe + ' '', NULL, 1)
-		where name in ' + @columns_in_clause;
-
-    insert into @columns_with_types exec (@sql_to_get_type);
-
-	select * from @columns_with_types;
-");
+            this.Write(" ;\'\r\n\t\r\n\tset @sql_to_get_type = \r\n\t\'select\tname, system_type_name\r\n\t\tFROM ");
+            
+            #line 19 "E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\ApplicationCore\SqlScripts\SqlServer\GetColumnTypes.tt"
+ Write($"{Database}"); 
+            
+            #line default
+            #line hidden
+            this.Write(".sys.dm_exec_describe_first_result_set(\'\'\' + @sql_to_describe + \' \'\', NULL, 1)\r\n\t" +
+                    "\twhere name in (");
+            
+            #line 20 "E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\ApplicationCore\SqlScripts\SqlServer\GetColumnTypes.tt"
+ 
+                            for(int i=0;i<Columns.Count;i++) 
+                            {   
+                                var columnName= Columns[i];
+                                Write($"''{columnName}''");
+        
+                                if (i != (Columns.Count-1)) 
+                                {
+                                    Write($", ");        
+                                }
+                            }
+                        
+            
+            #line default
+            #line hidden
+            this.Write(" )\'\r\n\r\n\r\n\r\n    insert into @columns_with_types exec (@sql_to_get_type);\r\n\r\n\tselec" +
+                    "t * from @columns_with_types;\r\n");
             return this.GenerationEnvironment.ToString();
         }
     }

@@ -1,5 +1,6 @@
 ﻿using ApplicationCore.Config;
 using ApplicationCore.Logging;
+using ApplicationCore.Utilities;
 using ApplicationCore.Validators.Abstract;
 using System;
 using System.Collections.Generic;
@@ -43,44 +44,14 @@ namespace ApplicationCore.Validators.ParameterValidators
             var loggingInfo = new LoggingInfo { ConnectionString = connectionString, TableNameWithSchema = tableConfig.NameWithSchema };
 
             var constantColumns = tableConfig.ConstantColumns?.Select(c => c.Name)
-                .Select(c =>
-                {
-                    if (c.StartsWith('['))
-                    {
-                        return c.TrimStart('[').TrimEnd(']');
-                    }
-                    else
-                    {
-                        return c;
-                    }
-                }) ?? new List<string>();
+                .Select(c => ParameterNameHelper.RemoveParenthesises(c)) ?? new List<string>();
 
             var scrambledColumns = tableConfig.ScrambledColumns?.Select(c => c.Name)
-                .Select(c =>
-                {
-                    if (c.StartsWith('['))
-                    {
-                        return c.TrimStart('[').TrimEnd(']');
-                    }
-                    else
-                    {
-                        return c;
-                    }
-                }) ?? new List<string>();
+                .Select(c => ParameterNameHelper.RemoveParenthesises(c)) ?? new List<string>();
 
             var pairedColumns = tableConfig.PairedColumnsInsideTable?
                 .Select(cl =>
-                    cl.Select(c =>
-                    {
-                        if (c.StartsWith('['))
-                        {
-                            return c.TrimStart('[').TrimEnd(']');
-                        }
-                        else
-                        {
-                            return c;
-                        }
-                    }).ToList()).ToList() ?? new List<List<string>>();
+                    cl.Select(c => ParameterNameHelper.RemoveParenthesises(c)).ToList()).ToList() ?? new List<List<string>>();
 
             var allColumns = constantColumns.Concat(scrambledColumns);
 

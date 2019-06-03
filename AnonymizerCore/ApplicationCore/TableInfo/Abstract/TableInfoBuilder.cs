@@ -1,10 +1,13 @@
 ﻿using ApplicationCore.Config;
 using ApplicationCore.DatabaseServices.ColumnTypes;
+using ApplicationCore.DatabaseServices.PrimaryKeys;
 using ApplicationCore.TableInfo.Common;
 using ApplicationCore.TableInfo.Exceptions;
 using ApplicationCore.TableInfo.Interfaces;
+using ApplicationCore.Utilities;
 using ApplicationCore.Validators.ConfigValidators;
 using Serilog;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -12,18 +15,22 @@ namespace ApplicationCore.TableInfo.Abstract
 {
     public abstract class TableInfoBuilder : ITableInfoBuilder
     {
-        private ILogger _logger;
+        protected ILogger _logger;
         private IConfigValidator _configValidator;
         private IColumnTypeManager _columnTypeManager;
-        public TableConfig TableConfig { get; }
-        public DatabaseConfig DatabaseConfig { get; }
+        private IPrimaryKeyManager _primaryKeyManager;
+        public TableConfig TableConfig { get; private set; }
+        public DatabaseConfig DatabaseConfig { get; private set; }
 
-        public TableInfoBuilder(DatabaseConfig dbConfig, TableConfig tableConfig, IConfigValidator configValidator, IColumnTypeManager columnTypeManager)
+        public TableInfoBuilder(DatabaseConfig dbConfig, TableConfig tableConfig, IConfigValidator configValidator, IColumnTypeManager columnTypeManager,
+            IPrimaryKeyManager primaryKeyManager)
         {
             TableConfig = tableConfig;
             DatabaseConfig = dbConfig;
             _configValidator = configValidator;
             _columnTypeManager = columnTypeManager;
+            _primaryKeyManager = primaryKeyManager;
+            _logger = Serilog.Log.Logger.ForContext<TableInfoBuilder>();
         }
 
         public ITableInfo Build()
@@ -41,6 +48,7 @@ namespace ApplicationCore.TableInfo.Abstract
                     $"Error while creating the TableInfo object.");
             }
 
+            TableConfig = NormalizeTableConfigParameters(TableConfig);
             var dbName = ParseDataSource(DatabaseConfig.ConnectionString);
 
             var tableInfo =
@@ -53,6 +61,7 @@ namespace ApplicationCore.TableInfo.Abstract
                     WhereClause = ""
                 };
 
+
             Dictionary<string, string> scrambledColumns;
             try
             {
@@ -64,6 +73,8 @@ namespace ApplicationCore.TableInfo.Abstract
                     $"Connection string: {DatabaseConfig.ConnectionString}. Error message: {ex.Message}. ", ex);
                 throw new TableInfoException(TableConfig.NameWithSchema, DatabaseConfig.ConnectionString, "Error while creating the table.");
             }
+
+            tableInfo.ScrambledColumnsAndTypes = scrambledColumns;
 
             Dictionary<string, string> constantColumnsAndTypes;
             try
@@ -84,11 +95,24 @@ namespace ApplicationCore.TableInfo.Abstract
             }
 
             tableInfo.ConstantColumnsAndTypesAndValues = constantColumnsAndValues;
-            tableInfo.ScrambledColumnsAndTypes = scrambledColumns;
 
             tableInfo.PairedColumnsInside = TableConfig.PairedColumnsInsideTable;
 
             tableInfo.MappedTablesOutside = ParseMappedTablesOutsideFromConfig();
+
+            var primaryKeysAndTypes = new Dictionary<string, string>();
+            try
+            {
+                var primaryKeys = _primaryKeyManager.GetPrimaryKeys(DatabaseConfig.ConnectionString, TableConfig.NameWithSchema);
+                primaryKeysAndTypes = _columnTypeManager.GetColumnNamesAndTypes(tableInfo, primaryKeys);
+                tableInfo.PrimaryKeysAndTypes = primaryKeysAndTypes;
+            }
+            catch (Exception ex)
+            {
+                _logger.Error($"An error happened while trying to get primary keys and their types {ex.Message}", ex);
+                throw new TableInfoException(TableConfig.NameWithSchema, DatabaseConfig.ConnectionString, "Error while creating table");
+            }
+
 
             return tableInfo;
         }
@@ -96,6 +120,8 @@ namespace ApplicationCore.TableInfo.Abstract
         protected abstract string ParseDataSource(string connectionString);
 
         protected abstract (string schemaName, string tableName) ParseSchemaAndTableName(string schemaAndTableName);
+
+        protected abstract TableConfig NormalizeTableConfigParameters(TableConfig tableConfig);
 
         //private string RemoveParenthesis(string column)
         //{

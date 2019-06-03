@@ -6,6 +6,7 @@ using System.Text;
 using ApplicationCore.SqlScripts.SqlServer;
 using ApplicationCore.TableInfo;
 using ApplicationCore.TableInfo.Interfaces;
+using ApplicationCore.Utilities;
 using ApplicationCore.Utilities.QueryHelpersSqlpH;
 
 namespace ApplicationCore.DatabaseServices.ColumnTypes
@@ -17,6 +18,7 @@ namespace ApplicationCore.DatabaseServices.ColumnTypes
             var columnTypesTemplate = new GetColumnTypes(tableInfo.DbName, tableInfo.SchemaName, tableInfo.TableName, columnNames);
             var columnTypesQuery = columnTypesTemplate.TransformText();
 
+            Console.WriteLine(columnTypesQuery);
             DataTable columnTypesTable;
             try
             {

@@ -1,19 +1,21 @@
 ﻿using ApplicationCore.Config;
 using ApplicationCore.DatabaseServices.ColumnTypes;
+using ApplicationCore.DatabaseServices.PrimaryKeys;
 using ApplicationCore.TableInfo.Abstract;
+using ApplicationCore.Utilities;
 using ApplicationCore.Validators.ConfigValidators;
-using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
-using System.Text;
+using System.Linq;
 
 namespace ApplicationCore.TableInfo
 {
     public class SqlTableInfoBuilder : TableInfoBuilder
     {
 
-        public SqlTableInfoBuilder(DatabaseConfig dbConfig, TableConfig tableConfig, IConfigValidator configValidator, IColumnTypeManager columnTypeManager):
-            base(dbConfig, tableConfig, configValidator, columnTypeManager)
+        public SqlTableInfoBuilder(DatabaseConfig dbConfig, TableConfig tableConfig, IConfigValidator configValidator, IColumnTypeManager columnTypeManager,
+            IPrimaryKeyManager primaryKeyManager) :
+            base(dbConfig, tableConfig, configValidator, columnTypeManager, primaryKeyManager)
         {
 
         }
@@ -22,14 +24,51 @@ namespace ApplicationCore.TableInfo
         {
             var connectionStringBuilder = new SqlConnectionStringBuilder(DatabaseConfig.ConnectionString);
 
-            return connectionStringBuilder.InitialCatalog;
+            return ParameterNameHelper.AddParenthesises(connectionStringBuilder.InitialCatalog);
         }
 
         protected override (string schemaName, string tableName) ParseSchemaAndTableName(string schemaAndTableName)
         {
             var tableAndSchemaName = schemaAndTableName.Split('.');
 
-            return (schemaName: tableAndSchemaName[0], tableName: tableAndSchemaName[1]);
+            return (schemaName: ParameterNameHelper.AddParenthesises(tableAndSchemaName[0]), tableName: ParameterNameHelper.AddParenthesises(tableAndSchemaName[1]));
+        }
+
+        protected override TableConfig NormalizeTableConfigParameters(TableConfig tableConfig)
+        {
+            var normalizedTableConfig = new TableConfig();
+
+
+            normalizedTableConfig.ConstantColumns = tableConfig.ConstantColumns?.Select(c =>
+            new ConstantColumnConfig { Name = ParameterNameHelper.RemoveParenthesises(c.Name), Value = c.Value }).ToList() 
+                ?? new List<ConstantColumnConfig>();
+
+            normalizedTableConfig.ScrambledColumns = tableConfig.ScrambledColumns?.Select(c =>
+            new ScrambledColumnConfig { Name = ParameterNameHelper.RemoveParenthesises(c.Name) }).ToList()
+                ?? new List<ScrambledColumnConfig>();
+
+            normalizedTableConfig.PairedColumnsInsideTable = tableConfig.PairedColumnsInsideTable?
+                .Select(l => ParameterNameHelper.RemoveParenthesisesFromStringList(l)).ToList()
+                ?? new List<List<string>>();
+
+            normalizedTableConfig.PairedColumnsOutsideTable = tableConfig.PairedColumnsOutsideTable?
+                .Select(p =>
+                    new PairedColumnsOutsideTableConfig
+                    {
+                        ColumnMapping = p.ColumnMapping.Select(l => ParameterNameHelper.RemoveParenthesisesFromStringList(l)).ToList(),
+                        SourceDestMapping = p.SourceDestMapping.Select(s =>
+                            new SourceDestMappingStepConfig
+                            {
+                                DestinationConnectionString = s.DestinationConnectionString,
+                                DestinationTableNameWithSchema = ParameterNameHelper.RemoveParenthesisFromTableNameWithSchema(s.DestinationTableNameWithSchema),
+                                ForeignKeyMapping = s.ForeignKeyMapping.Select(l => ParameterNameHelper.RemoveParenthesisesFromStringList(l)).ToList()
+                            }).ToList()
+                    }).ToList()
+                    ?? new List<PairedColumnsOutsideTableConfig>();
+
+            normalizedTableConfig.NameWithSchema = ParameterNameHelper.AddParenthesisFromTableNameWithSchema(tableConfig.NameWithSchema);
+
+            return normalizedTableConfig;
         }
     }
 }

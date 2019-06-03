@@ -16,8 +16,21 @@ SET QUOTED_IDENTIFIER ON
 	
 	set @sql_to_get_type = 
 	'select	name, system_type_name
-		FROM ' + @db + '.sys.dm_exec_describe_first_result_set(''' + @sql_to_describe + ' '', NULL, 1)
-		where name in ' + @columns_in_clause;
+		FROM <# Write($"{Database}"); #>.sys.dm_exec_describe_first_result_set(''' + @sql_to_describe + ' '', NULL, 1)
+		where name in (<# 
+                            for(int i=0;i<Columns.Count;i++) 
+                            {   
+                                var columnName= Columns[i];
+                                Write($"''{columnName}''");
+        
+                                if (i != (Columns.Count-1)) 
+                                {
+                                    Write($", ");        
+                                }
+                            }
+                        #> )'
+
+
 
     insert into @columns_with_types exec (@sql_to_get_type);
 
