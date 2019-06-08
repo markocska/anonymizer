@@ -2,6 +2,7 @@
 using ApplicationCore.DatabaseServices.ColumnTypes;
 using ApplicationCore.DatabaseServices.Indexes;
 using ApplicationCore.DatabaseServices.PrimaryKeys;
+using ApplicationCore.DatabaseServices.Scrambling;
 using ApplicationCore.Factories;
 using ApplicationCore.Logging;
 using ApplicationCore.ServiceProviders;
@@ -37,10 +38,11 @@ namespace ApplicationCore
             var tableInfoCollectionFactory = serviceProvider.GetService<ITableInfoCollectionFactory>();
             var validTables = tableInfoCollectionFactory.CreateTableListFromConfig(databasesConfig);
 
-            var indexService = new SqlIndexService();
+            var scramblingService = new SqlScramblingService();
             foreach (var table in validTables)
             {
-                indexService.TurnOnIndexes(table);
+                var scramblingScript = scramblingService.GenerateScramblingScript(table);
+                Console.WriteLine(scramblingScript);
             }
 
             Console.ReadKey();
