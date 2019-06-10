@@ -9,6 +9,8 @@ namespace ApplicationCore.SqlScripts.SqlServer
     {
         private ITableInfo TableInfo { get; set; }
 
+        private int _scrambleTableNumber = 0;
+
         public ScrambleTable(ITableInfo tableInfo)
         {
             TableInfo = tableInfo;

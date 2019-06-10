@@ -41,34 +41,13 @@ namespace ApplicationCore.SqlScripts.SqlServer
   for(int i=0;i<TableInfo.PrimaryKeysAndTypes.Count;i++) 
       {
         var columnName = TableInfo.PrimaryKeysAndTypes.Keys.ElementAt(i);
-        Write($"{columnName} {TableInfo.PrimaryKeysAndTypes[columnName]}");
-        
-        if((i == (TableInfo.PrimaryKeysAndTypes.Count-1)) && 
-            (TableInfo.SoloScrambledColumnsAndTypes.Count == 0 ) &&
-            (TableInfo.PairedColumnsInside.Count == 0))
-        { 
-            Write(Environment.NewLine); 
-        }
-        else 
-        {
-            Write(", ");
-        }                        
+        Write($"{columnName} {TableInfo.PrimaryKeysAndTypes[columnName]}, ");                      
       }
  
       for(int i=0;i<TableInfo.SoloScrambledColumnsAndTypes.Count;i++) 
       {
         var columnName = TableInfo.SoloScrambledColumnsAndTypes.Keys.ElementAt(i);
-        Write($"{columnName} {TableInfo.SoloScrambledColumnsAndTypes[columnName]}");
-        
-        if((i == (TableInfo.SoloScrambledColumnsAndTypes.Count-1)) && 
-            (TableInfo.PairedColumnsInside.Count == 0))
-        { 
-           Write(Environment.NewLine); 
-        }
-        else 
-        {
-            Write(", ");
-        }                 
+        Write($"{columnName} {TableInfo.SoloScrambledColumnsAndTypes[columnName]}, ");              
       }
     
      for(int i=0;i<TableInfo.PairedColumnsInside.Count;i++) 
@@ -77,23 +56,93 @@ namespace ApplicationCore.SqlScripts.SqlServer
         for(int j = 0; j<pairedColumns.Count;j++) 
         {
             var columnName = pairedColumns.Keys.ElementAt(j);
-            Write($"{columnName} {pairedColumns[columnName]}");
-        
-            if((i == (TableInfo.PairedColumnsInside.Count-1)) && (j == (pairedColumns.Count-1))) 
-            { 
-                Write(Environment.NewLine); 
-            }
-            else 
-            {
-                Write(", ");
-            }  
+            Write($"{columnName} {pairedColumns[columnName]}, ");
         }   
       }
     
             
             #line default
             #line hidden
-            this.Write(" \r\n);\r\n");
+            this.Write(" \r\n    rownum int\r\n);\r\n\r\n");
+            
+            #line 36 "E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\ApplicationCore\SqlScripts\SqlServer\ScrambleTable.tt"
+   
+    for(int i = 0; i < TableInfo.SoloScrambledColumnsAndTypes.Count; i++, _scrambleTableNumber++) 
+    {
+        var columnName = TableInfo.SoloScrambledColumnsAndTypes.Keys.ElementAt(i);
+
+            
+            #line default
+            #line hidden
+            this.Write("    create table #column");
+            
+            #line 41 "E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\ApplicationCore\SqlScripts\SqlServer\ScrambleTable.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(_scrambleTableNumber));
+            
+            #line default
+            #line hidden
+            this.Write("\r\n    (   \r\n      random int,   \r\n      ");
+            
+            #line 44 "E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\ApplicationCore\SqlScripts\SqlServer\ScrambleTable.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(columnName));
+            
+            #line default
+            #line hidden
+            this.Write(" ");
+            
+            #line 44 "E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\ApplicationCore\SqlScripts\SqlServer\ScrambleTable.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(TableInfo.SoloScrambledColumnsAndTypes[columnName]));
+            
+            #line default
+            #line hidden
+            this.Write("     \r\n    );\r\n");
+            
+            #line 46 "E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\ApplicationCore\SqlScripts\SqlServer\ScrambleTable.tt"
+
+    }
+
+            
+            #line default
+            #line hidden
+            this.Write("\r\n\r\n");
+            
+            #line 51 "E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\ApplicationCore\SqlScripts\SqlServer\ScrambleTable.tt"
+   
+    for(int i = 0; i < TableInfo.PairedColumnsInside.Count; i++, _scrambleTableNumber++) 
+    {
+        var pairedColumns = TableInfo.PairedColumnsInside[i];
+
+            
+            #line default
+            #line hidden
+            this.Write("    create table #column");
+            
+            #line 56 "E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\ApplicationCore\SqlScripts\SqlServer\ScrambleTable.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(_scrambleTableNumber));
+            
+            #line default
+            #line hidden
+            this.Write("\r\n    (       \r\n    ");
+            
+            #line 58 "E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\ApplicationCore\SqlScripts\SqlServer\ScrambleTable.tt"
+  
+    foreach(var columnName in pairedColumns.Keys) 
+    { 
+     Write($"{columnName} {pairedColumns[columnName]}, ");
+    } 
+    
+            
+            #line default
+            #line hidden
+            this.Write("    \r\n      random int             \r\n    );\r\n");
+            
+            #line 66 "E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\ApplicationCore\SqlScripts\SqlServer\ScrambleTable.tt"
+
+    }
+
+            
+            #line default
+            #line hidden
             return this.GenerationEnvironment.ToString();
         }
     }

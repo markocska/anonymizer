@@ -11,34 +11,13 @@ create table #prim_keys_and_columns
   <#  for(int i=0;i<TableInfo.PrimaryKeysAndTypes.Count;i++) 
       {
         var columnName = TableInfo.PrimaryKeysAndTypes.Keys.ElementAt(i);
-        Write($"{columnName} {TableInfo.PrimaryKeysAndTypes[columnName]}");
-        
-        if((i == (TableInfo.PrimaryKeysAndTypes.Count-1)) && 
-            (TableInfo.SoloScrambledColumnsAndTypes.Count == 0 ) &&
-            (TableInfo.PairedColumnsInside.Count == 0))
-        { 
-            Write(Environment.NewLine); 
-        }
-        else 
-        {
-            Write(", ");
-        }                        
+        Write($"{columnName} {TableInfo.PrimaryKeysAndTypes[columnName]}, ");                      
       }
  
       for(int i=0;i<TableInfo.SoloScrambledColumnsAndTypes.Count;i++) 
       {
         var columnName = TableInfo.SoloScrambledColumnsAndTypes.Keys.ElementAt(i);
-        Write($"{columnName} {TableInfo.SoloScrambledColumnsAndTypes[columnName]}");
-        
-        if((i == (TableInfo.SoloScrambledColumnsAndTypes.Count-1)) && 
-            (TableInfo.PairedColumnsInside.Count == 0))
-        { 
-           Write(Environment.NewLine); 
-        }
-        else 
-        {
-            Write(", ");
-        }                 
+        Write($"{columnName} {TableInfo.SoloScrambledColumnsAndTypes[columnName]}, ");              
       }
     
      for(int i=0;i<TableInfo.PairedColumnsInside.Count;i++) 
@@ -47,17 +26,43 @@ create table #prim_keys_and_columns
         for(int j = 0; j<pairedColumns.Count;j++) 
         {
             var columnName = pairedColumns.Keys.ElementAt(j);
-            Write($"{columnName} {pairedColumns[columnName]}");
-        
-            if((i == (TableInfo.PairedColumnsInside.Count-1)) && (j == (pairedColumns.Count-1))) 
-            { 
-                Write(Environment.NewLine); 
-            }
-            else 
-            {
-                Write(", ");
-            }  
+            Write($"{columnName} {pairedColumns[columnName]}, ");
         }   
       }
     #> 
+    rownum int
 );
+
+<#   
+    for(int i = 0; i < TableInfo.SoloScrambledColumnsAndTypes.Count; i++, _scrambleTableNumber++) 
+    {
+        var columnName = TableInfo.SoloScrambledColumnsAndTypes.Keys.ElementAt(i);
+#>
+    create table #column<#=_scrambleTableNumber #>
+    (   
+      random int,   
+      <#= columnName #> <#=TableInfo.SoloScrambledColumnsAndTypes[columnName] #>     
+    );
+<#
+    }
+#>
+
+
+<#   
+    for(int i = 0; i < TableInfo.PairedColumnsInside.Count; i++, _scrambleTableNumber++) 
+    {
+        var pairedColumns = TableInfo.PairedColumnsInside[i];
+#>
+    create table #column<#=_scrambleTableNumber #>
+    (       
+    <#  
+    foreach(var columnName in pairedColumns.Keys) 
+    { 
+     Write($"{columnName} {pairedColumns[columnName]}, ");
+    } 
+    #>    
+      random int             
+    );
+<#
+    }
+#>
