@@ -10,9 +10,9 @@ namespace ApplicationCore.TableInfo.Interfaces
         string SchemaName { get; set; }
         string TableName { get; set; }
         Dictionary<string, string> PrimaryKeysAndTypes { get; set; }
-        Dictionary<string, string> ScrambledColumnsAndTypes { get; set; }
+        Dictionary<string, string> SoloScrambledColumnsAndTypes { get; set; }
         List<ColumnAndTypeAndValue> ConstantColumnsAndTypesAndValues { get; set; }
-        List<List<string>> PairedColumnsInside { get; set; }
+        List<Dictionary<string, string>> PairedColumnsInside { get; set; }
         List<MappedTable> MappedTablesOutside { get; set; }
         string WhereClause { get; set; }
         string FullTableName { get; }

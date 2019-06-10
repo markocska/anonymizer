@@ -74,7 +74,7 @@ namespace ApplicationCore.TableInfo.Abstract
                 throw new TableInfoException(TableConfig.NameWithSchema, DatabaseConfig.ConnectionString, "Error while creating the table.");
             }
 
-            tableInfo.ScrambledColumnsAndTypes = scrambledColumns;
+            tableInfo.SoloScrambledColumnsAndTypes = scrambledColumns;
 
             Dictionary<string, string> constantColumnsAndTypes;
             try
@@ -96,7 +96,7 @@ namespace ApplicationCore.TableInfo.Abstract
 
             tableInfo.ConstantColumnsAndTypesAndValues = constantColumnsAndValues;
 
-            tableInfo.PairedColumnsInside = TableConfig.PairedColumnsInsideTable;
+            tableInfo.PairedColumnsInside = ParseMappedColumnsInside(tableInfo);
 
             tableInfo.MappedTablesOutside = ParseMappedTablesOutsideFromConfig();
 
@@ -185,6 +185,24 @@ namespace ApplicationCore.TableInfo.Abstract
             return mappedTablesOutside;
         }
 
+        private List<Dictionary<string,string>> ParseMappedColumnsInside(ITableInfo tableInfo)
+        {
+            var pairedColumnsWithTypesList = new List<Dictionary<string, string>>();
+            foreach(var pairedColumns in TableConfig.PairedColumnsInsideTable)
+            {
+                var pairedColumnsWithTypes = new Dictionary<string, string>();
+
+                foreach (var column in pairedColumns)
+                {
+                    pairedColumnsWithTypes.Add(column,tableInfo.SoloScrambledColumnsAndTypes[column]);
+                    tableInfo.SoloScrambledColumnsAndTypes.Remove(column);
+                }
+                pairedColumnsWithTypesList.Add(pairedColumnsWithTypes);
+            }
+
+            return pairedColumnsWithTypesList;
+        }
+
         protected class TableInfo : ITableInfo
         {
             public string DbConnectionString { get; set; }
@@ -192,11 +210,11 @@ namespace ApplicationCore.TableInfo.Abstract
             public string SchemaName { get; set; }
             public string TableName { get; set; }
             public Dictionary<string, string> PrimaryKeysAndTypes { get; set; }
-            public Dictionary<string, string> ScrambledColumnsAndTypes { get; set; }
+            public Dictionary<string, string> SoloScrambledColumnsAndTypes { get; set; }
             public List<ColumnAndTypeAndValue> ConstantColumnsAndTypesAndValues { get; set; }
             public string WhereClause { get; set; }
             public string FullTableName => $"{DbName}.{SchemaName}.{TableName}";
-            public List<List<string>> PairedColumnsInside { get; set; }
+            public List<Dictionary<string,string>> PairedColumnsInside { get; set; }
             public List<MappedTable> MappedTablesOutside { get; set; }
         }
     }

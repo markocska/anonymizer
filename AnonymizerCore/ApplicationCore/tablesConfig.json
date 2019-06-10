@@ -18,8 +18,7 @@
             }
           ],
           "pairedColumnsInsideTable": [
-            [ "[first name]", "[last name]" ],
-            [ "[demail]", "[net worth]" ]
+            [ "[first name]", "[last name]" ]
           ],
           "pairedColumnsOutsideTable": [
             { 
@@ -52,7 +51,8 @@
           "nameWithSchema": "dbo.employees",
           "scrambledColumns": [
             { "name": "[location]" },
-            { "name": "[shift]" }
+            { "name": "[shift]" },
+            { "name": "[base rate]"}
           ],
           "constantColumns": [
             {
@@ -61,7 +61,7 @@
             }
           ],
           "pairedColumnsInsideTable": [
-            [ "shift", "location", "base rate" ]
+            [ "shift", "location" ]
           ]
           //"pairedColumnsOutsideTable": [
           //  {
