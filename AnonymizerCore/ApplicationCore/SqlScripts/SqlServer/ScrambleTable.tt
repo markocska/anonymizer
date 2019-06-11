@@ -38,11 +38,11 @@ create table #prim_keys_and_columns
     {
         var columnName = TableInfo.SoloScrambledColumnsAndTypes.Keys.ElementAt(i);
 #>
-    create table #column<#=_scrambleTableNumber #>
-    (   
-      random int,   
-      <#= columnName #> <#=TableInfo.SoloScrambledColumnsAndTypes[columnName] #>     
-    );
+create table #column<#=_scrambleTableNumber #>
+(   
+  random int,   
+  <#= columnName #> <#=TableInfo.SoloScrambledColumnsAndTypes[columnName] #>     
+);
 <#
     }
 #>
@@ -53,16 +53,50 @@ create table #prim_keys_and_columns
     {
         var pairedColumns = TableInfo.PairedColumnsInside[i];
 #>
-    create table #column<#=_scrambleTableNumber #>
-    (       
-    <#  
+create table #column<#=_scrambleTableNumber #>
+( 
+ <#  
     foreach(var columnName in pairedColumns.Keys) 
     { 
      Write($"{columnName} {pairedColumns[columnName]}, ");
     } 
     #>    
-      random int             
-    );
+ random int             
+);
 <#
     }
 #>
+
+insert into #prim_keys_and_columns with (tablock)
+    select <# 
+    foreach(var columnName in TableInfo.PrimaryKeysAndTypes.Keys) 
+    {
+        Write($"{columnName}, ");
+    }
+
+    foreach(var columnName in TableInfo.SoloScrambledColumnsAndTypes.Keys) 
+    {
+        Write($"{columnName}, ");
+    }
+
+    foreach(var pairedColumns in TableInfo.PairedColumnsInside) 
+    {   
+        foreach(var columnName in pairedColumns.Keys)
+        {
+            Write($"{columnName}, ");
+        }
+    }    
+#> row_number() over (order by 
+    <#
+    for(int i = 0; i < TableInfo.PrimaryKeysAndTypes.Count; i++)
+    {   
+        var columnName= TableInfo.PrimaryKeysAndTypes.Keys.ElementAt(i);
+        Write($"{columnName}");
+
+        if (i != (TableInfo.PrimaryKeysAndTypes.Count - 1))
+        {
+            Write(", ");
+        }
+    }
+    #> )
+    from <#= TableInfo.FullTableName #>;
