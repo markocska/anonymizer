@@ -100,3 +100,51 @@ insert into #prim_keys_and_columns with (tablock)
     }
     #> )
     from <#= TableInfo.FullTableName #>;
+
+
+<#    _scrambleTableNumber = 0;
+    for(int i = 0; i < TableInfo.SoloScrambledColumnsAndTypes.Count; i++, _scrambleTableNumber++) 
+    {
+        var columnName = TableInfo.SoloScrambledColumnsAndTypes.Keys.ElementAt(i);
+#>
+insert into #column<#=_scrambleTableNumber #> with (tablock)
+    select row_number() over (order by x), <#= columnName #> from 
+    (select CHECKSUM(NewId()) x, <#= columnName #> from #prim_keys_and_columns) a;
+<#
+    }
+#>
+
+
+<#   
+    for(int i = 0; i < TableInfo.PairedColumnsInside.Count; i++, _scrambleTableNumber++) 
+    {
+        var pairedColumns = TableInfo.PairedColumnsInside[i];
+#>
+insert into #column<#=_scrambleTableNumber #> with (tablock)
+    select row_number() over (order by x), <#  
+        for(int j = 0; j < pairedColumns.Count; j++) 
+        { 
+            var columnName = pairedColumns.Keys.ElementAt(j);
+            Write($"{columnName}");
+            
+            if (j != (pairedColumns.Count-1))
+            {
+                Write(", ");
+            }
+        } 
+    #>    
+    from (select CHECKSUM(NewId()) x, <#  
+        for(int j = 0; j < pairedColumns.Count; j++) 
+        { 
+            var columnName = pairedColumns.Keys.ElementAt(j);
+            Write($"{columnName}");
+            
+            if (j != (pairedColumns.Count-1))
+            {
+                Write(", ");
+            }
+        } 
+    #> from #prim_keys_and_columns) a;             
+<#
+    }
+#>
