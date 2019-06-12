@@ -41,13 +41,13 @@ namespace ApplicationCore.SqlScripts.SqlServer
   for(int i=0;i<TableInfo.PrimaryKeysAndTypes.Count;i++) 
       {
         var columnName = TableInfo.PrimaryKeysAndTypes.Keys.ElementAt(i);
-        Write($"{columnName} {TableInfo.PrimaryKeysAndTypes[columnName]}, ");                      
+        Write($"[{columnName}] {TableInfo.PrimaryKeysAndTypes[columnName]}, ");                      
       }
  
       for(int i=0;i<TableInfo.SoloScrambledColumnsAndTypes.Count;i++) 
       {
         var columnName = TableInfo.SoloScrambledColumnsAndTypes.Keys.ElementAt(i);
-        Write($"{columnName} {TableInfo.SoloScrambledColumnsAndTypes[columnName]}, ");              
+        Write($"[{columnName}] {TableInfo.SoloScrambledColumnsAndTypes[columnName]}, ");              
       }
     
      for(int i=0;i<TableInfo.PairedColumnsInside.Count;i++) 
@@ -56,7 +56,7 @@ namespace ApplicationCore.SqlScripts.SqlServer
         for(int j = 0; j<pairedColumns.Count;j++) 
         {
             var columnName = pairedColumns.Keys.ElementAt(j);
-            Write($"{columnName} {pairedColumns[columnName]}, ");
+            Write($"[{columnName}] {pairedColumns[columnName]}, ");
         }   
       }
     
@@ -81,14 +81,14 @@ namespace ApplicationCore.SqlScripts.SqlServer
             
             #line default
             #line hidden
-            this.Write("\r\n(   \r\n  random int,   \r\n  ");
+            this.Write("\r\n(   \r\n  random int,   \r\n  [");
             
             #line 44 "E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\ApplicationCore\SqlScripts\SqlServer\ScrambleTable.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(columnName));
             
             #line default
             #line hidden
-            this.Write(" ");
+            this.Write("] ");
             
             #line 44 "E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\ApplicationCore\SqlScripts\SqlServer\ScrambleTable.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(TableInfo.SoloScrambledColumnsAndTypes[columnName]));
@@ -122,21 +122,27 @@ namespace ApplicationCore.SqlScripts.SqlServer
             
             #line default
             #line hidden
-            this.Write("\r\n( \r\n ");
+            this.Write("\r\n(  \r\n  random int, \r\n ");
             
-            #line 58 "E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\ApplicationCore\SqlScripts\SqlServer\ScrambleTable.tt"
+            #line 59 "E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\ApplicationCore\SqlScripts\SqlServer\ScrambleTable.tt"
   
-    foreach(var columnName in pairedColumns.Keys) 
+    for(int j =0; j < pairedColumns.Keys.Count; j++) 
     { 
-     Write($"{columnName} {pairedColumns[columnName]}, ");
+     var columnName = pairedColumns.Keys.ElementAt(j);
+     Write($"[{columnName}] {pairedColumns[columnName]}");
+
+     if (j != pairedColumns.Keys.Count-1)
+     {
+       Write(", ");
+     }
     } 
     
             
             #line default
             #line hidden
-            this.Write("    \r\n random int             \r\n);\r\n");
+            this.Write("               \r\n);\r\n");
             
-            #line 66 "E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\ApplicationCore\SqlScripts\SqlServer\ScrambleTable.tt"
+            #line 72 "E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\ApplicationCore\SqlScripts\SqlServer\ScrambleTable.tt"
 
     }
 
@@ -145,23 +151,23 @@ namespace ApplicationCore.SqlScripts.SqlServer
             #line hidden
             this.Write("\r\ninsert into #prim_keys_and_columns with (tablock)\r\n    select ");
             
-            #line 71 "E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\ApplicationCore\SqlScripts\SqlServer\ScrambleTable.tt"
+            #line 77 "E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\ApplicationCore\SqlScripts\SqlServer\ScrambleTable.tt"
  
     foreach(var columnName in TableInfo.PrimaryKeysAndTypes.Keys) 
     {
-        Write($"{columnName}, ");
+        Write($"[{columnName}], ");
     }
 
     foreach(var columnName in TableInfo.SoloScrambledColumnsAndTypes.Keys) 
     {
-        Write($"{columnName}, ");
+        Write($"[{columnName}], ");
     }
 
     foreach(var pairedColumns in TableInfo.PairedColumnsInside) 
     {   
         foreach(var columnName in pairedColumns.Keys)
         {
-            Write($"{columnName}, ");
+            Write($"[{columnName}], ");
         }
     }    
 
@@ -170,12 +176,12 @@ namespace ApplicationCore.SqlScripts.SqlServer
             #line hidden
             this.Write(" row_number() over (order by \r\n    ");
             
-            #line 90 "E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\ApplicationCore\SqlScripts\SqlServer\ScrambleTable.tt"
+            #line 96 "E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\ApplicationCore\SqlScripts\SqlServer\ScrambleTable.tt"
 
     for(int i = 0; i < TableInfo.PrimaryKeysAndTypes.Count; i++)
     {   
         var columnName= TableInfo.PrimaryKeysAndTypes.Keys.ElementAt(i);
-        Write($"{columnName}");
+        Write($"[{columnName}]");
 
         if (i != (TableInfo.PrimaryKeysAndTypes.Count - 1))
         {
@@ -188,14 +194,14 @@ namespace ApplicationCore.SqlScripts.SqlServer
             #line hidden
             this.Write(" )\r\n    from ");
             
-            #line 102 "E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\ApplicationCore\SqlScripts\SqlServer\ScrambleTable.tt"
+            #line 108 "E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\ApplicationCore\SqlScripts\SqlServer\ScrambleTable.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(TableInfo.FullTableName));
             
             #line default
             #line hidden
             this.Write(";\r\n\r\n\r\n");
             
-            #line 105 "E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\ApplicationCore\SqlScripts\SqlServer\ScrambleTable.tt"
+            #line 111 "E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\ApplicationCore\SqlScripts\SqlServer\ScrambleTable.tt"
     _scrambleTableNumber = 0;
     for(int i = 0; i < TableInfo.SoloScrambledColumnsAndTypes.Count; i++, _scrambleTableNumber++) 
     {
@@ -206,28 +212,28 @@ namespace ApplicationCore.SqlScripts.SqlServer
             #line hidden
             this.Write("insert into #column");
             
-            #line 110 "E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\ApplicationCore\SqlScripts\SqlServer\ScrambleTable.tt"
+            #line 116 "E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\ApplicationCore\SqlScripts\SqlServer\ScrambleTable.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(_scrambleTableNumber));
             
             #line default
             #line hidden
-            this.Write(" with (tablock)\r\n    select row_number() over (order by x), ");
+            this.Write(" with (tablock)\r\n    select row_number() over (order by x), [");
             
-            #line 111 "E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\ApplicationCore\SqlScripts\SqlServer\ScrambleTable.tt"
+            #line 117 "E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\ApplicationCore\SqlScripts\SqlServer\ScrambleTable.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(columnName));
             
             #line default
             #line hidden
-            this.Write(" from \r\n    (select CHECKSUM(NewId()) x, ");
+            this.Write("] from \r\n    (select CHECKSUM(NewId()) x, [");
             
-            #line 112 "E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\ApplicationCore\SqlScripts\SqlServer\ScrambleTable.tt"
+            #line 118 "E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\ApplicationCore\SqlScripts\SqlServer\ScrambleTable.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(columnName));
             
             #line default
             #line hidden
-            this.Write(" from #prim_keys_and_columns) a;\r\n");
+            this.Write("] from #prim_keys_and_columns) a;\r\n");
             
-            #line 113 "E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\ApplicationCore\SqlScripts\SqlServer\ScrambleTable.tt"
+            #line 119 "E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\ApplicationCore\SqlScripts\SqlServer\ScrambleTable.tt"
 
     }
 
@@ -236,7 +242,7 @@ namespace ApplicationCore.SqlScripts.SqlServer
             #line hidden
             this.Write("\r\n\r\n");
             
-            #line 118 "E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\ApplicationCore\SqlScripts\SqlServer\ScrambleTable.tt"
+            #line 124 "E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\ApplicationCore\SqlScripts\SqlServer\ScrambleTable.tt"
    
     for(int i = 0; i < TableInfo.PairedColumnsInside.Count; i++, _scrambleTableNumber++) 
     {
@@ -247,19 +253,19 @@ namespace ApplicationCore.SqlScripts.SqlServer
             #line hidden
             this.Write("insert into #column");
             
-            #line 123 "E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\ApplicationCore\SqlScripts\SqlServer\ScrambleTable.tt"
+            #line 129 "E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\ApplicationCore\SqlScripts\SqlServer\ScrambleTable.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(_scrambleTableNumber));
             
             #line default
             #line hidden
             this.Write(" with (tablock)\r\n    select row_number() over (order by x), ");
             
-            #line 124 "E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\ApplicationCore\SqlScripts\SqlServer\ScrambleTable.tt"
+            #line 130 "E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\ApplicationCore\SqlScripts\SqlServer\ScrambleTable.tt"
   
         for(int j = 0; j < pairedColumns.Count; j++) 
         { 
             var columnName = pairedColumns.Keys.ElementAt(j);
-            Write($"{columnName}");
+            Write($"[{columnName}]");
             
             if (j != (pairedColumns.Count-1))
             {
@@ -272,12 +278,12 @@ namespace ApplicationCore.SqlScripts.SqlServer
             #line hidden
             this.Write("    \r\n    from (select CHECKSUM(NewId()) x, ");
             
-            #line 136 "E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\ApplicationCore\SqlScripts\SqlServer\ScrambleTable.tt"
+            #line 142 "E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\ApplicationCore\SqlScripts\SqlServer\ScrambleTable.tt"
   
         for(int j = 0; j < pairedColumns.Count; j++) 
         { 
             var columnName = pairedColumns.Keys.ElementAt(j);
-            Write($"{columnName}");
+            Write($"[{columnName}]");
             
             if (j != (pairedColumns.Count-1))
             {
@@ -290,7 +296,7 @@ namespace ApplicationCore.SqlScripts.SqlServer
             #line hidden
             this.Write(" from #prim_keys_and_columns) a;             \r\n");
             
-            #line 148 "E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\ApplicationCore\SqlScripts\SqlServer\ScrambleTable.tt"
+            #line 154 "E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\ApplicationCore\SqlScripts\SqlServer\ScrambleTable.tt"
 
     }
 
@@ -299,12 +305,12 @@ namespace ApplicationCore.SqlScripts.SqlServer
             #line hidden
             this.Write("\r\n\r\ncreate index idx_primarykey on #prim_keys_and_columns(  ");
             
-            #line 153 "E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\ApplicationCore\SqlScripts\SqlServer\ScrambleTable.tt"
+            #line 159 "E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\ApplicationCore\SqlScripts\SqlServer\ScrambleTable.tt"
 
     for(int i = 0; i < TableInfo.PrimaryKeysAndTypes.Count; i++)
     {   
         var columnName= TableInfo.PrimaryKeysAndTypes.Keys.ElementAt(i);
-        Write($"{columnName}");
+        Write($"[{columnName}]");
 
         if (i != (TableInfo.PrimaryKeysAndTypes.Count - 1))
         {
@@ -317,7 +323,7 @@ namespace ApplicationCore.SqlScripts.SqlServer
             #line hidden
             this.Write(" );\r\n\r\n");
             
-            #line 166 "E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\ApplicationCore\SqlScripts\SqlServer\ScrambleTable.tt"
+            #line 172 "E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\ApplicationCore\SqlScripts\SqlServer\ScrambleTable.tt"
 
     for(int i = 0; i < _scrambleTableNumber; i++)
     {
@@ -330,26 +336,26 @@ namespace ApplicationCore.SqlScripts.SqlServer
             #line hidden
             this.Write("\r\nalter table ");
             
-            #line 174 "E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\ApplicationCore\SqlScripts\SqlServer\ScrambleTable.tt"
+            #line 180 "E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\ApplicationCore\SqlScripts\SqlServer\ScrambleTable.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(TableInfo.FullTableName));
             
             #line default
             #line hidden
             this.Write(" nocheck constraint all;\r\n\r\nupdate ");
             
-            #line 176 "E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\ApplicationCore\SqlScripts\SqlServer\ScrambleTable.tt"
+            #line 182 "E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\ApplicationCore\SqlScripts\SqlServer\ScrambleTable.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(TableInfo.FullTableName));
             
             #line default
             #line hidden
             this.Write(" with (tablock) \r\nset ");
             
-            #line 177 "E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\ApplicationCore\SqlScripts\SqlServer\ScrambleTable.tt"
+            #line 183 "E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\ApplicationCore\SqlScripts\SqlServer\ScrambleTable.tt"
 
     for(int i = 0; i < TableInfo.SoloScrambledColumnsAndTypes.Count; i++)
     {   
         var columnName= TableInfo.SoloScrambledColumnsAndTypes.Keys.ElementAt(i);
-        Write($"{columnName} = x.{columnName}");
+        Write($"[{columnName}] = x.[{columnName}]");
 
         if ((i == (TableInfo.SoloScrambledColumnsAndTypes.Count - 1)) &&
             (TableInfo.PairedColumnsInside.Count == 0) && 
@@ -367,7 +373,7 @@ namespace ApplicationCore.SqlScripts.SqlServer
         for(int j = 0; j < pairedColumns.Count;j++) 
         {
             var columnName = pairedColumns.Keys.ElementAt(j);
-            Write($"{columnName} = x.{columnName}");
+            Write($"[{columnName}] = x.[{columnName}]");
 
             if ((j == (pairedColumns.Count - 1)) && (i == TableInfo.PairedColumnsInside.Count - 1) &&
                 (TableInfo.ConstantColumnsAndTypesAndValues.Count == 0) )
@@ -382,13 +388,125 @@ namespace ApplicationCore.SqlScripts.SqlServer
     for(int i=0;i<TableInfo.ConstantColumnsAndTypesAndValues.Count;i++) 
     {
         var column = TableInfo.ConstantColumnsAndTypesAndValues[i];
-        Write($"{column.Name} = cast('{column.Value}' as {column.Type})");                      
+        Write($"[{column.Name}] = cast('{column.Value}' as {column.Type})");                      
     }
     
             
             #line default
             #line hidden
-            this.Write(" from\r\n(\r\n    select \r\n)");
+            this.Write(" from\r\n(\r\n    select ");
+            
+            #line 224 "E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\ApplicationCore\SqlScripts\SqlServer\ScrambleTable.tt"
+    var scrambleTableNumberIter= 0;
+    for(int i = 0; i < TableInfo.PrimaryKeysAndTypes.Count; i++)
+    {   
+        var columnName= TableInfo.PrimaryKeysAndTypes.Keys.ElementAt(i);
+        Write($"[{columnName}], ");
+    }
+    
+    for(int i = 0; i < TableInfo.SoloScrambledColumnsAndTypes.Count; i++, scrambleTableNumberIter++)
+    {   
+        var columnName= TableInfo.SoloScrambledColumnsAndTypes.Keys.ElementAt(i);
+        Write($"#column{scrambleTableNumberIter}.[{columnName}]");
+
+        if ((i == (TableInfo.SoloScrambledColumnsAndTypes.Count - 1)) &&
+            (TableInfo.PairedColumnsInside.Count == 0))
+        {}
+        else 
+        { 
+            Write(", ");
+        }      
+    }
+
+    for(int i=0;i<TableInfo.PairedColumnsInside.Count;i++, scrambleTableNumberIter++) 
+    {
+        var pairedColumns = TableInfo.PairedColumnsInside[i];
+        for(int j = 0; j < pairedColumns.Count;j++) 
+        {
+            var columnName = pairedColumns.Keys.ElementAt(j);
+            Write($"#column{scrambleTableNumberIter}.[{columnName}]");
+
+            if ((j == (pairedColumns.Count - 1)) && (i == TableInfo.PairedColumnsInside.Count - 1))
+                {}
+            else 
+            { 
+                Write(", ");
+            } 
+        }   
+    }
+    
+            
+            #line default
+            #line hidden
+            this.Write(" from #prim_keys_and_columns\r\n    ");
+            
+            #line 262 "E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\ApplicationCore\SqlScripts\SqlServer\ScrambleTable.tt"
+ scrambleTableNumberIter = 0;
+    for(int i = 0; i < TableInfo.SoloScrambledColumnsAndTypes.Count; i++, scrambleTableNumberIter++)
+    {   
+        Write($"join #column{scrambleTableNumberIter} on #prim_keys_and_columns.rownum = #column{scrambleTableNumberIter}.random");
+        Write(Environment.NewLine);     
+    }
+
+    for(int i=0;i<TableInfo.PairedColumnsInside.Count;i++, scrambleTableNumberIter++) 
+    {
+       Write($"join #column{scrambleTableNumberIter} on #prim_keys_and_columns.rownum = #column{scrambleTableNumberIter}.random");  
+       Write(Environment.NewLine);
+    }
+    
+            
+            #line default
+            #line hidden
+            this.Write(") x\r\nwhere ");
+            
+            #line 276 "E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\ApplicationCore\SqlScripts\SqlServer\ScrambleTable.tt"
+ for(int i = 0; i < TableInfo.PrimaryKeysAndTypes.Count; i++)
+    {   
+        var columnName = TableInfo.PrimaryKeysAndTypes.Keys.ElementAt(i);
+        Write($"{TableInfo.FullTableName}.[{columnName}] = x.[{columnName}]");
+
+        if (i != (TableInfo.PrimaryKeysAndTypes.Count - 1))
+        {
+            Write(", ");
+        }
+    } 
+            
+            #line default
+            #line hidden
+            this.Write(" ;\r\n\r\ndrop table #prim_keys_and_columns;\r\n");
+            
+            #line 288 "E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\ApplicationCore\SqlScripts\SqlServer\ScrambleTable.tt"
+ scrambleTableNumberIter = 0;
+    for(int i = 0; i < TableInfo.SoloScrambledColumnsAndTypes.Count; i++, scrambleTableNumberIter++)
+    {   
+        Write($"drop table #column{scrambleTableNumberIter};");
+        Write(Environment.NewLine);     
+    }
+
+    for(int i=0;i<TableInfo.PairedColumnsInside.Count;i++, scrambleTableNumberIter++) 
+    {
+       Write($"drop table #column{scrambleTableNumberIter};");  
+       Write(Environment.NewLine);
+    }
+    
+            
+            #line default
+            #line hidden
+            this.Write("\r\nalter table ");
+            
+            #line 302 "E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\ApplicationCore\SqlScripts\SqlServer\ScrambleTable.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(TableInfo.FullTableName));
+            
+            #line default
+            #line hidden
+            this.Write(" enable trigger all;\r\nalter table ");
+            
+            #line 303 "E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\ApplicationCore\SqlScripts\SqlServer\ScrambleTable.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(TableInfo.FullTableName));
+            
+            #line default
+            #line hidden
+            this.Write(" check constraint all;");
             return this.GenerationEnvironment.ToString();
         }
     }

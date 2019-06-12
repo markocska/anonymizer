@@ -11,13 +11,13 @@ create table #prim_keys_and_columns
   <#  for(int i=0;i<TableInfo.PrimaryKeysAndTypes.Count;i++) 
       {
         var columnName = TableInfo.PrimaryKeysAndTypes.Keys.ElementAt(i);
-        Write($"{columnName} {TableInfo.PrimaryKeysAndTypes[columnName]}, ");                      
+        Write($"[{columnName}] {TableInfo.PrimaryKeysAndTypes[columnName]}, ");                      
       }
  
       for(int i=0;i<TableInfo.SoloScrambledColumnsAndTypes.Count;i++) 
       {
         var columnName = TableInfo.SoloScrambledColumnsAndTypes.Keys.ElementAt(i);
-        Write($"{columnName} {TableInfo.SoloScrambledColumnsAndTypes[columnName]}, ");              
+        Write($"[{columnName}] {TableInfo.SoloScrambledColumnsAndTypes[columnName]}, ");              
       }
     
      for(int i=0;i<TableInfo.PairedColumnsInside.Count;i++) 
@@ -26,7 +26,7 @@ create table #prim_keys_and_columns
         for(int j = 0; j<pairedColumns.Count;j++) 
         {
             var columnName = pairedColumns.Keys.ElementAt(j);
-            Write($"{columnName} {pairedColumns[columnName]}, ");
+            Write($"[{columnName}] {pairedColumns[columnName]}, ");
         }   
       }
     #> 
@@ -41,7 +41,7 @@ create table #prim_keys_and_columns
 create table #column<#=_scrambleTableNumber #>
 (   
   random int,   
-  <#= columnName #> <#=TableInfo.SoloScrambledColumnsAndTypes[columnName] #>     
+  [<#= columnName #>] <#=TableInfo.SoloScrambledColumnsAndTypes[columnName] #>     
 );
 <#
     }
@@ -54,14 +54,20 @@ create table #column<#=_scrambleTableNumber #>
         var pairedColumns = TableInfo.PairedColumnsInside[i];
 #>
 create table #column<#=_scrambleTableNumber #>
-( 
+(  
+  random int, 
  <#  
-    foreach(var columnName in pairedColumns.Keys) 
+    for(int j =0; j < pairedColumns.Keys.Count; j++) 
     { 
-     Write($"{columnName} {pairedColumns[columnName]}, ");
+     var columnName = pairedColumns.Keys.ElementAt(j);
+     Write($"[{columnName}] {pairedColumns[columnName]}");
+
+     if (j != pairedColumns.Keys.Count-1)
+     {
+       Write(", ");
+     }
     } 
-    #>    
- random int             
+    #>               
 );
 <#
     }
@@ -71,19 +77,19 @@ insert into #prim_keys_and_columns with (tablock)
     select <# 
     foreach(var columnName in TableInfo.PrimaryKeysAndTypes.Keys) 
     {
-        Write($"{columnName}, ");
+        Write($"[{columnName}], ");
     }
 
     foreach(var columnName in TableInfo.SoloScrambledColumnsAndTypes.Keys) 
     {
-        Write($"{columnName}, ");
+        Write($"[{columnName}], ");
     }
 
     foreach(var pairedColumns in TableInfo.PairedColumnsInside) 
     {   
         foreach(var columnName in pairedColumns.Keys)
         {
-            Write($"{columnName}, ");
+            Write($"[{columnName}], ");
         }
     }    
 #> row_number() over (order by 
@@ -91,7 +97,7 @@ insert into #prim_keys_and_columns with (tablock)
     for(int i = 0; i < TableInfo.PrimaryKeysAndTypes.Count; i++)
     {   
         var columnName= TableInfo.PrimaryKeysAndTypes.Keys.ElementAt(i);
-        Write($"{columnName}");
+        Write($"[{columnName}]");
 
         if (i != (TableInfo.PrimaryKeysAndTypes.Count - 1))
         {
@@ -108,8 +114,8 @@ insert into #prim_keys_and_columns with (tablock)
         var columnName = TableInfo.SoloScrambledColumnsAndTypes.Keys.ElementAt(i);
 #>
 insert into #column<#=_scrambleTableNumber #> with (tablock)
-    select row_number() over (order by x), <#= columnName #> from 
-    (select CHECKSUM(NewId()) x, <#= columnName #> from #prim_keys_and_columns) a;
+    select row_number() over (order by x), [<#= columnName #>] from 
+    (select CHECKSUM(NewId()) x, [<#= columnName #>] from #prim_keys_and_columns) a;
 <#
     }
 #>
@@ -125,7 +131,7 @@ insert into #column<#=_scrambleTableNumber #> with (tablock)
         for(int j = 0; j < pairedColumns.Count; j++) 
         { 
             var columnName = pairedColumns.Keys.ElementAt(j);
-            Write($"{columnName}");
+            Write($"[{columnName}]");
             
             if (j != (pairedColumns.Count-1))
             {
@@ -137,7 +143,7 @@ insert into #column<#=_scrambleTableNumber #> with (tablock)
         for(int j = 0; j < pairedColumns.Count; j++) 
         { 
             var columnName = pairedColumns.Keys.ElementAt(j);
-            Write($"{columnName}");
+            Write($"[{columnName}]");
             
             if (j != (pairedColumns.Count-1))
             {
@@ -154,7 +160,7 @@ create index idx_primarykey on #prim_keys_and_columns(  <#
     for(int i = 0; i < TableInfo.PrimaryKeysAndTypes.Count; i++)
     {   
         var columnName= TableInfo.PrimaryKeysAndTypes.Keys.ElementAt(i);
-        Write($"{columnName}");
+        Write($"[{columnName}]");
 
         if (i != (TableInfo.PrimaryKeysAndTypes.Count - 1))
         {
@@ -178,7 +184,7 @@ set <#
     for(int i = 0; i < TableInfo.SoloScrambledColumnsAndTypes.Count; i++)
     {   
         var columnName= TableInfo.SoloScrambledColumnsAndTypes.Keys.ElementAt(i);
-        Write($"{columnName} = x.{columnName}");
+        Write($"[{columnName}] = x.[{columnName}]");
 
         if ((i == (TableInfo.SoloScrambledColumnsAndTypes.Count - 1)) &&
             (TableInfo.PairedColumnsInside.Count == 0) && 
@@ -196,7 +202,7 @@ set <#
         for(int j = 0; j < pairedColumns.Count;j++) 
         {
             var columnName = pairedColumns.Keys.ElementAt(j);
-            Write($"{columnName} = x.{columnName}");
+            Write($"[{columnName}] = x.[{columnName}]");
 
             if ((j == (pairedColumns.Count - 1)) && (i == TableInfo.PairedColumnsInside.Count - 1) &&
                 (TableInfo.ConstantColumnsAndTypesAndValues.Count == 0) )
@@ -211,9 +217,87 @@ set <#
     for(int i=0;i<TableInfo.ConstantColumnsAndTypesAndValues.Count;i++) 
     {
         var column = TableInfo.ConstantColumnsAndTypesAndValues[i];
-        Write($"{column.Name} = cast('{column.Value}' as {column.Type})");                      
+        Write($"[{column.Name}] = cast('{column.Value}' as {column.Type})");                      
     }
     #> from
 (
-    select 
-)
+    select <#    var scrambleTableNumberIter= 0;
+    for(int i = 0; i < TableInfo.PrimaryKeysAndTypes.Count; i++)
+    {   
+        var columnName= TableInfo.PrimaryKeysAndTypes.Keys.ElementAt(i);
+        Write($"[{columnName}], ");
+    }
+    
+    for(int i = 0; i < TableInfo.SoloScrambledColumnsAndTypes.Count; i++, scrambleTableNumberIter++)
+    {   
+        var columnName= TableInfo.SoloScrambledColumnsAndTypes.Keys.ElementAt(i);
+        Write($"#column{scrambleTableNumberIter}.[{columnName}]");
+
+        if ((i == (TableInfo.SoloScrambledColumnsAndTypes.Count - 1)) &&
+            (TableInfo.PairedColumnsInside.Count == 0))
+        {}
+        else 
+        { 
+            Write(", ");
+        }      
+    }
+
+    for(int i=0;i<TableInfo.PairedColumnsInside.Count;i++, scrambleTableNumberIter++) 
+    {
+        var pairedColumns = TableInfo.PairedColumnsInside[i];
+        for(int j = 0; j < pairedColumns.Count;j++) 
+        {
+            var columnName = pairedColumns.Keys.ElementAt(j);
+            Write($"#column{scrambleTableNumberIter}.[{columnName}]");
+
+            if ((j == (pairedColumns.Count - 1)) && (i == TableInfo.PairedColumnsInside.Count - 1))
+                {}
+            else 
+            { 
+                Write(", ");
+            } 
+        }   
+    }
+    #> from #prim_keys_and_columns
+    <# scrambleTableNumberIter = 0;
+    for(int i = 0; i < TableInfo.SoloScrambledColumnsAndTypes.Count; i++, scrambleTableNumberIter++)
+    {   
+        Write($"join #column{scrambleTableNumberIter} on #prim_keys_and_columns.rownum = #column{scrambleTableNumberIter}.random");
+        Write(Environment.NewLine);     
+    }
+
+    for(int i=0;i<TableInfo.PairedColumnsInside.Count;i++, scrambleTableNumberIter++) 
+    {
+       Write($"join #column{scrambleTableNumberIter} on #prim_keys_and_columns.rownum = #column{scrambleTableNumberIter}.random");  
+       Write(Environment.NewLine);
+    }
+    #>
+) x
+where <# for(int i = 0; i < TableInfo.PrimaryKeysAndTypes.Count; i++)
+    {   
+        var columnName = TableInfo.PrimaryKeysAndTypes.Keys.ElementAt(i);
+        Write($"{TableInfo.FullTableName}.[{columnName}] = x.[{columnName}]");
+
+        if (i != (TableInfo.PrimaryKeysAndTypes.Count - 1))
+        {
+            Write(", ");
+        }
+    } #> ;
+
+drop table #prim_keys_and_columns;
+<# scrambleTableNumberIter = 0;
+    for(int i = 0; i < TableInfo.SoloScrambledColumnsAndTypes.Count; i++, scrambleTableNumberIter++)
+    {   
+        Write($"drop table #column{scrambleTableNumberIter};");
+        Write(Environment.NewLine);     
+    }
+
+    for(int i=0;i<TableInfo.PairedColumnsInside.Count;i++, scrambleTableNumberIter++) 
+    {
+       Write($"drop table #column{scrambleTableNumberIter};");  
+       Write(Environment.NewLine);
+    }
+    #>
+
+alter table <#= TableInfo.FullTableName #> enable trigger all;
+alter table <#= TableInfo.FullTableName #> check constraint all;
