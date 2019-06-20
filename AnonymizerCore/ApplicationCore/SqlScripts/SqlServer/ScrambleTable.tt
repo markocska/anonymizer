@@ -303,3 +303,55 @@ alter table <#= TableInfo.FullTableName #> enable trigger all;
 alter table <#= TableInfo.FullTableName #> check constraint all;
 
 
+
+<# 
+    foreach(var mappedTable in TableInfo.MappedTablesOutside)
+    { 
+        var lastMappingStep = mappedTable.MappedColumnPairsOutside.Last();
+    #>
+update <# 
+            Write($"{lastMappingStep.DestinationInstance}"); 
+            if (lastMappingStep.DestinationInstance != "" && lastMappingStep.DestinationInstance != null) 
+            {
+                Write(".");
+            }
+            Write($"{lastMappingStep.DestinationTableNameWithSchema} "); 
+        #>
+
+set <# 
+        foreach(var mappedColumn in mappedTable.SourceDestPairedColumnsOutside)
+        {
+            Write($"{mappedColumn.FirstColumn} = a{mappedTable.MappedColumnPairsOutside.Count}.{mappedColumn.SecondColumn},");
+        }    
+    #> 
+from <#= lastMappingStep.DestinationInstance #>.<#= lastMappingStep.DestinationTableNameWithSchema#> a0
+    <#  for(int i = 0; i < mappedTable.MappedColumnPairsOutside.Count;i++) 
+        {
+            var mappingStep = mappedTable.MappedColumnPairsOutside[i]; #>
+join <#
+        Write($"{mappingStep.DestinationInstance}");
+        if (mappingStep.DestinationInstance != "" && mappingStep.DestinationTableNameWithSchema != null) 
+        {
+            Write(".");
+        }
+        Write($"{mappingStep.DestinationTableNameWithSchema}"); #> as a<#=i+1 #> on <#
+        
+        for(int j = 0; j < mappingStep.MappedColumns.Count;j++)
+        {
+            var mappedColumns = mappingStep.MappedColumns[j];
+            Write($"a{i}.{mappedColumns.FirstColumn}=a{i+1}.{mappedColumns.SecondColumn} ");
+            if (j != (mappingStep.MappedColumns.Count - 1))
+            {
+                Write("and ");
+            }
+            else 
+            {
+                Write(Environment.NewLine);
+            }
+        }
+            #>
+     <#   }
+    #>
+    
+   <# }
+#> ; 

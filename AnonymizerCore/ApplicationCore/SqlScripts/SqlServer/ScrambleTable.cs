@@ -506,7 +506,125 @@ namespace ApplicationCore.SqlScripts.SqlServer
             
             #line default
             #line hidden
-            this.Write(" check constraint all;\r\n\r\n\r\n");
+            this.Write(" check constraint all;\r\n\r\n\r\n\r\n");
+            
+            #line 307 "E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\ApplicationCore\SqlScripts\SqlServer\ScrambleTable.tt"
+ 
+    foreach(var mappedTable in TableInfo.MappedTablesOutside)
+    { 
+        var lastMappingStep = mappedTable.MappedColumnPairsOutside.Last();
+    
+            
+            #line default
+            #line hidden
+            this.Write("update ");
+            
+            #line 312 "E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\ApplicationCore\SqlScripts\SqlServer\ScrambleTable.tt"
+ 
+            Write($"{lastMappingStep.DestinationInstance}"); 
+            if (lastMappingStep.DestinationInstance != "" && lastMappingStep.DestinationInstance != null) 
+            {
+                Write(".");
+            }
+            Write($"{lastMappingStep.DestinationTableNameWithSchema} "); 
+        
+            
+            #line default
+            #line hidden
+            this.Write("\r\nset ");
+            
+            #line 321 "E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\ApplicationCore\SqlScripts\SqlServer\ScrambleTable.tt"
+ 
+        foreach(var mappedColumn in mappedTable.SourceDestPairedColumnsOutside)
+        {
+            Write($"{mappedColumn.FirstColumn} = a{mappedTable.MappedColumnPairsOutside.Count}.{mappedColumn.SecondColumn},");
+        }    
+    
+            
+            #line default
+            #line hidden
+            this.Write(" \r\nfrom ");
+            
+            #line 327 "E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\ApplicationCore\SqlScripts\SqlServer\ScrambleTable.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(lastMappingStep.DestinationInstance));
+            
+            #line default
+            #line hidden
+            this.Write(".");
+            
+            #line 327 "E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\ApplicationCore\SqlScripts\SqlServer\ScrambleTable.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(lastMappingStep.DestinationTableNameWithSchema));
+            
+            #line default
+            #line hidden
+            this.Write(" a0\r\n    ");
+            
+            #line 328 "E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\ApplicationCore\SqlScripts\SqlServer\ScrambleTable.tt"
+  for(int i = 0; i < mappedTable.MappedColumnPairsOutside.Count;i++) 
+        {
+            var mappingStep = mappedTable.MappedColumnPairsOutside[i]; 
+            
+            #line default
+            #line hidden
+            this.Write("join ");
+            
+            #line 331 "E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\ApplicationCore\SqlScripts\SqlServer\ScrambleTable.tt"
+
+        Write($"{mappingStep.DestinationInstance}");
+        if (mappingStep.DestinationInstance != "" && mappingStep.DestinationTableNameWithSchema != null) 
+        {
+            Write(".");
+        }
+        Write($"{mappingStep.DestinationTableNameWithSchema}"); 
+            
+            #line default
+            #line hidden
+            this.Write(" as a");
+            
+            #line 337 "E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\ApplicationCore\SqlScripts\SqlServer\ScrambleTable.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(i+1));
+            
+            #line default
+            #line hidden
+            this.Write(" on ");
+            
+            #line 337 "E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\ApplicationCore\SqlScripts\SqlServer\ScrambleTable.tt"
+
+        
+        for(int j = 0; j < mappingStep.MappedColumns.Count;j++)
+        {
+            var mappedColumns = mappingStep.MappedColumns[j];
+            Write($"a{i}.{mappedColumns.FirstColumn}=a{i+1}.{mappedColumns.SecondColumn} ");
+            if (j != (mappingStep.MappedColumns.Count - 1))
+            {
+                Write("and ");
+            }
+            else 
+            {
+                Write(Environment.NewLine);
+            }
+        }
+            
+            
+            #line default
+            #line hidden
+            this.Write("     ");
+            
+            #line 353 "E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\ApplicationCore\SqlScripts\SqlServer\ScrambleTable.tt"
+   }
+    
+            
+            #line default
+            #line hidden
+            this.Write("    \r\n   ");
+            
+            #line 356 "E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\ApplicationCore\SqlScripts\SqlServer\ScrambleTable.tt"
+ }
+
+            
+            #line default
+            #line hidden
+            this.Write(" ; ");
             return this.GenerationEnvironment.ToString();
         }
     }
