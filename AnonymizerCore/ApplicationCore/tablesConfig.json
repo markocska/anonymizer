@@ -6,7 +6,7 @@
       "connectionString": "data source=MARKO-PC\\SQLEXPRESS;initial catalog=People;integrated security=True;",
       "tables": [
         {
-          "nameWithSchema": "dbo.[big table]",
+          "fullTableName": "People.dbo.[big table]",
           "scrambledColumns": [
             { "name": "first name" },
             { "name": "[last name]" }
@@ -29,7 +29,7 @@
               "sourceDestMapping": [
                 {
                   "destinationConnectionString": "data source=MARKO-PC\\SQLEXPRESS;initial catalog=People;integrated security=True;",
-                  "destinationTableNameWithSchema": "dbo.cucuka",
+                  "destinationFullTableName": "People.dbo.cucuka",
                   "foreignKeyMapping": [
                     [ "demail", "baba" ],
                     [ "id", "name" ]
@@ -37,7 +37,7 @@
                 },
                 {
                   "destinationConnectionString": "data source=MARKO-PC\\SQLEXPRESS;initial catalog=People;integrated security=True;",
-                  "destinationTableNameWithSchema": "dbo.employees",
+                  "destinationFullTableName": "People.dbo.employees",
                   "foreignKeyMapping": [
                     [ "baba", "base rate" ],
                     [ "id", "shift" ]
@@ -48,7 +48,7 @@
           ]
         },
         {
-          "nameWithSchema": "dbo.employees",
+          "fullTableName": "People.dbo.employees",
           "scrambledColumns": [
             { "name": "[location]" },
             { "name": "[shift]" },
@@ -68,11 +68,12 @@
           //    "scrambledColumnInSourceTable": "job_type",
           //    "scrambledColumnInTargetTable": "job",
           //    "connectionString": "data source=huvdev1;initial catalog=Target_ifuat;integrated security=True;",
-          //    "tableNameWithSchema": "dbo.t_employee",
+          //    "fullTableName": "dbo.t_employee",
           //    "sourceDestMapping": [
           //      {
           //        "connectionString": "data source=huvdev1;initial catalog=Target_ifuat;integrated security=True;",
-          //        "tableNameWithSchema": "dbo.t_employee_job",
+          //        "fullTableName": "dbo.t_employee_job",
+          //        "linkedServer":"hudev2",
           //        "foreignKeyMapping": [
           //          [ "job_f" ],
           //          [ "job_id" ]
@@ -80,7 +81,8 @@
           //      },
           //      {
           //        "connectionString": "data source=huvdev1;initial catalog=Target_ifuat;integrated security=True;",
-          //        "tableNameWithSchema": "dbo.t_job",
+          //        "fullTableName": "dbo.t_job",
+          //        "linkedServer": "hudev3",
           //        "foreignKeyMappings": [
           //          [ "job_id" ],
           //          [ "id" ]

@@ -506,7 +506,7 @@ namespace ApplicationCore.SqlScripts.SqlServer
             
             #line default
             #line hidden
-            this.Write(" check constraint all;");
+            this.Write(" check constraint all;\r\n\r\n\r\n");
             return this.GenerationEnvironment.ToString();
         }
     }

@@ -31,7 +31,7 @@ namespace ApplicationCore.TableInfo
         {
             var tableAndSchemaName = schemaAndTableName.Split('.');
 
-            return (schemaName: ParameterNameHelper.AddParenthesises(tableAndSchemaName[0]), tableName: ParameterNameHelper.AddParenthesises(tableAndSchemaName[1]));
+            return (schemaName: ParameterNameHelper.AddParenthesises(tableAndSchemaName[1]), tableName: ParameterNameHelper.AddParenthesises(tableAndSchemaName[2]));
         }
 
         protected override TableConfig NormalizeTableConfigParameters(TableConfig tableConfig)
@@ -60,13 +60,13 @@ namespace ApplicationCore.TableInfo
                             new SourceDestMappingStepConfig
                             {
                                 DestinationConnectionString = s.DestinationConnectionString,
-                                DestinationTableNameWithSchema = ParameterNameHelper.RemoveParenthesisFromTableNameWithSchema(s.DestinationTableNameWithSchema),
+                                DestinationFullTableName = ParameterNameHelper.RemoveParenthesisFromTableNameWithSchema(s.DestinationFullTableName),
                                 ForeignKeyMapping = s.ForeignKeyMapping.Select(l => ParameterNameHelper.RemoveParenthesisesFromStringList(l)).ToList()
                             }).ToList()
                     }).ToList()
                     ?? new List<PairedColumnsOutsideTableConfig>();
 
-            normalizedTableConfig.NameWithSchema = ParameterNameHelper.AddParenthesisFromTableNameWithSchema(tableConfig.NameWithSchema);
+            normalizedTableConfig.FullTableName = ParameterNameHelper.AddParenthesisToFullTableName(tableConfig.FullTableName);
 
             return normalizedTableConfig;
         }

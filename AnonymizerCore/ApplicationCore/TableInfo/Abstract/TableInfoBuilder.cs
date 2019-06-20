@@ -38,13 +38,13 @@ namespace ApplicationCore.TableInfo.Abstract
 
             if (!_configValidator.IsDbConfigValid(DatabaseConfig))
             {
-                throw new TableInfoException(TableConfig.NameWithSchema, DatabaseConfig.ConnectionString,
+                throw new TableInfoException(TableConfig.FullTableName, DatabaseConfig.ConnectionString,
                     $"Error while creating the TableInfo object.");
             }
 
             if (!_configValidator.IsTableConfigValid(DatabaseConfig, TableConfig))
             {
-                throw new TableInfoException(TableConfig.NameWithSchema, DatabaseConfig.ConnectionString,
+                throw new TableInfoException(TableConfig.FullTableName, DatabaseConfig.ConnectionString,
                     $"Error while creating the TableInfo object.");
             }
 
@@ -56,8 +56,8 @@ namespace ApplicationCore.TableInfo.Abstract
                 {
                     DbConnectionString = DatabaseConfig.ConnectionString,
                     DbName = dbName,
-                    SchemaName = ParseSchemaAndTableName(TableConfig.NameWithSchema).schemaName,
-                    TableName = ParseSchemaAndTableName(TableConfig.NameWithSchema).tableName,
+                    SchemaName = ParseSchemaAndTableName(TableConfig.FullTableName).schemaName,
+                    TableName = ParseSchemaAndTableName(TableConfig.FullTableName).tableName,
                     WhereClause = ""
                 };
 
@@ -69,9 +69,9 @@ namespace ApplicationCore.TableInfo.Abstract
             }
             catch(ColumnTypesException ex)
             {
-                _logger.Error($"Error while getting scrambled column types for table {TableConfig.NameWithSchema}. " +
+                _logger.Error($"Error while getting scrambled column types for table {TableConfig.FullTableName}. " +
                     $"Connection string: {DatabaseConfig.ConnectionString}. Error message: {ex.Message}. ", ex);
-                throw new TableInfoException(TableConfig.NameWithSchema, DatabaseConfig.ConnectionString, "Error while creating the table.");
+                throw new TableInfoException(TableConfig.FullTableName, DatabaseConfig.ConnectionString, "Error while creating the table.");
             }
 
             tableInfo.SoloScrambledColumnsAndTypes = scrambledColumns;
@@ -83,9 +83,9 @@ namespace ApplicationCore.TableInfo.Abstract
             }
             catch (ColumnTypesException ex)
             {
-                _logger.Error($"Error while getting constant column types for table {TableConfig.NameWithSchema}. " +
+                _logger.Error($"Error while getting constant column types for table {TableConfig.FullTableName}. " +
                     $"Connection string: {DatabaseConfig.ConnectionString}. Error message: {ex.Message}. ", ex);
-                throw new TableInfoException(TableConfig.NameWithSchema, DatabaseConfig.ConnectionString, "Error while creating the table.");
+                throw new TableInfoException(TableConfig.FullTableName, DatabaseConfig.ConnectionString, "Error while creating the table.");
             }
 
             var constantColumnsAndValues = new List<ColumnAndTypeAndValue>();
@@ -103,14 +103,14 @@ namespace ApplicationCore.TableInfo.Abstract
             var primaryKeysAndTypes = new Dictionary<string, string>();
             try
             {
-                var primaryKeys = _primaryKeyManager.GetPrimaryKeys(DatabaseConfig.ConnectionString, TableConfig.NameWithSchema);
+                var primaryKeys = _primaryKeyManager.GetPrimaryKeys(DatabaseConfig.ConnectionString, TableConfig.FullTableName);
                 primaryKeysAndTypes = _columnTypeManager.GetColumnNamesAndTypes(tableInfo, primaryKeys);
                 tableInfo.PrimaryKeysAndTypes = primaryKeysAndTypes;
             }
             catch (Exception ex)
             {
                 _logger.Error($"An error happened while trying to get primary keys and their types {ex.Message}", ex);
-                throw new TableInfoException(TableConfig.NameWithSchema, DatabaseConfig.ConnectionString, "Error while creating table");
+                throw new TableInfoException(TableConfig.FullTableName, DatabaseConfig.ConnectionString, "Error while creating table");
             }
 
 
@@ -144,7 +144,7 @@ namespace ApplicationCore.TableInfo.Abstract
             {
                 var mappedTableOutsideConfig = TableConfig.PairedColumnsOutsideTable[i];
                 var mappedTable = new MappedTable();
-
+                // columns that will have to same value in the source and dest. table 
                 mappedTable.SourceDestPairedColumnsOutside = mappedTableOutsideConfig.ColumnMapping.Select(m => new ColumnPair(m[0], m[1])).ToList();
 
                 var columnMapping = new List<MappedColumnPair>();
@@ -156,9 +156,10 @@ namespace ApplicationCore.TableInfo.Abstract
                         columnMapping.Add(new MappedColumnPair
                         {
                             SourceConnectionString = DatabaseConfig.ConnectionString,
-                            SourceTableNameWithSchema = TableConfig.NameWithSchema,
+                            SourceTableNameWithSchema = TableConfig.FullTableName,
                             DestinationConnectionString = columnMappingConfig.DestinationConnectionString,
-                            DestinationTableNameWithSchema = columnMappingConfig.DestinationTableNameWithSchema,
+                            DestinationTableNameWithSchema = columnMappingConfig.DestinationFullTableName,
+                            DestinationInstance = columnMappingConfig.DestinationLinkedInstance,
                             MappedColumns = columnMappingConfig.ForeignKeyMapping.Select(m => new ColumnPair(m[0], m[1])).ToList()
                         });
                     }
@@ -168,9 +169,11 @@ namespace ApplicationCore.TableInfo.Abstract
                         columnMapping.Add(new MappedColumnPair
                         {
                             SourceConnectionString = previousColumnMappingConfig.DestinationConnectionString,
-                            SourceTableNameWithSchema = previousColumnMappingConfig.DestinationTableNameWithSchema,
+                            SourceTableNameWithSchema = previousColumnMappingConfig.DestinationFullTableName,
+                            SourceInstance = previousColumnMappingConfig.DestinationLinkedInstance,
                             DestinationConnectionString = columnMappingConfig.DestinationConnectionString,
-                            DestinationTableNameWithSchema = columnMappingConfig.DestinationTableNameWithSchema,
+                            DestinationTableNameWithSchema = columnMappingConfig.DestinationFullTableName,
+                            DestinationInstance = columnMappingConfig.DestinationLinkedInstance,
                             MappedColumns = columnMappingConfig.ForeignKeyMapping.Select(m => new ColumnPair(m[0], m[1])).ToList()
                         });
                     }

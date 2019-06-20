@@ -10,7 +10,8 @@ namespace ApplicationCore.Config
     public class SourceDestMappingStepConfig
     {
         public string DestinationConnectionString { get; set; }
-        public string DestinationTableNameWithSchema { get; set; }
+        public string DestinationFullTableName { get; set; }
+        public string DestinationLinkedInstance { get; set; }
         public List<List<string>> ForeignKeyMapping { get; set; }
 
         //[OnDeserialized]

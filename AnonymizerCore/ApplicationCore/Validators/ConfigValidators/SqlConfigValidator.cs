@@ -20,14 +20,14 @@ namespace ApplicationCore.Validators.ConfigValidators
             if (dbConfig == null) { throw new ArgumentNullException("The db config parameter can not be null"); }
             if (tableConfig == null) { throw new ArgumentNullException("The table config parameter can not be null"); }
 
-            if (!IsTableNameValid(dbConfig.ConnectionString, tableConfig.NameWithSchema))
+            if (!IsTableNameValid(dbConfig.ConnectionString, tableConfig.FullTableName))
             {
                 return false;
             }
 
             if (tableConfig.ScrambledColumns.Count == 0 && tableConfig.ConstantColumns.Count == 0)
             {
-                _logger.Error($"The following table has no columns to anonymize: {tableConfig.NameWithSchema}",
+                _logger.Error($"The following table has no columns to anonymize: {tableConfig.FullTableName}",
                     tableConfig, dbConfig);
                 return false;
             }
@@ -39,7 +39,7 @@ namespace ApplicationCore.Validators.ConfigValidators
                     if (pairedColumnConfig.ColumnMapping.Any(l => l.Count != 2))
                     {
 
-                        _logger.Error($"Error while checking the paired columns outside of table {tableConfig.NameWithSchema}. " +
+                        _logger.Error($"Error while checking the paired columns outside of table {tableConfig.FullTableName}. " +
                                 $"Connection string: {dbConfig.ConnectionString}. " +
                                 $"The column mapping arrays must consist of 2 columns.");
                         return false;
@@ -49,17 +49,17 @@ namespace ApplicationCore.Validators.ConfigValidators
                     {
                         if (connectedTableConfig.ForeignKeyMapping.Any(l => l.Count != 2))
                         {
-                            _logger.Error($"Error while checking the paired columns outside of table {tableConfig.NameWithSchema}. " +
+                            _logger.Error($"Error while checking the paired columns outside of table {tableConfig.FullTableName}. " +
                                $"Connection string: {dbConfig.ConnectionString}. " +
-                               $"The foreign key mapping arrays must consist of 2 columns for mapped table {connectedTableConfig.DestinationTableNameWithSchema}. " +
+                               $"The foreign key mapping arrays must consist of 2 columns for mapped table {connectedTableConfig.DestinationFullTableName}. " +
                                $"Connection string: {connectedTableConfig.DestinationConnectionString}.");
                             return false;
                         }
 
                         if (!IsConnectionStringValid(connectedTableConfig.DestinationConnectionString) ||
-                            !IsTableNameValid(connectedTableConfig.DestinationConnectionString, connectedTableConfig.DestinationTableNameWithSchema))
+                            !IsTableNameValid(connectedTableConfig.DestinationConnectionString, connectedTableConfig.DestinationFullTableName))
                         {
-                            _logger.Error($"Error while checking the paired columns outside of table {tableConfig.NameWithSchema}. " +
+                            _logger.Error($"Error while checking the paired columns outside of table {tableConfig.FullTableName}. " +
                                 $"Connection string: {dbConfig.ConnectionString}.");
                             return false;
                         }
@@ -74,9 +74,9 @@ namespace ApplicationCore.Validators.ConfigValidators
         {
             var tableAndSchemaName = tableNameWithSchema.Split('.');
 
-            if (tableAndSchemaName.Length != 2)
+            if (tableAndSchemaName.Length != 3)
             {
-                _logger.Error($"The following schema and name config parameter is invalid {tableNameWithSchema}." +
+                _logger.Error($"The following full table config parameter is invalid {tableNameWithSchema}." +
                     $" Connection string: {connectionString}");
                 return false;
             }

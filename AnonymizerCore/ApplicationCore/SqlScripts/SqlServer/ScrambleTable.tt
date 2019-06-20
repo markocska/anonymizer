@@ -301,3 +301,5 @@ drop table #prim_keys_and_columns;
 
 alter table <#= TableInfo.FullTableName #> enable trigger all;
 alter table <#= TableInfo.FullTableName #> check constraint all;
+
+

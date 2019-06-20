@@ -66,7 +66,7 @@ namespace ApplicationCore.Utilities
             return tableNameWithSchema.Replace("[", "").Replace("]", "");
         }
 
-        public static string AddParenthesisFromTableNameWithSchema(string tableNameWithSchema)
+        public static string AddParenthesisToFullTableName(string tableNameWithSchema)
         {
             if (tableNameWithSchema.Contains('[') && tableNameWithSchema.Contains(']'))
             {

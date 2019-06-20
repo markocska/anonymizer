@@ -29,19 +29,19 @@ namespace ApplicationCore.Validators.ParameterValidators
             DataTable schemaTable;
             try
             {
-                schemaTable = GetTableSchema(connectionString, tableConfig.NameWithSchema);
+                schemaTable = GetTableSchema(connectionString, tableConfig.FullTableName);
             }
             catch (SqlException ex)
             {
-                _logger.Error($"Error while checking the parameters of table: {tableConfig.NameWithSchema}. " +
+                _logger.Error($"Error while checking the parameters of table: {tableConfig.FullTableName}. " +
                        $"Connection string: {connectionString}. " +
-                       $"The mapped database {connectionString} or table {tableConfig.NameWithSchema} doesn't exist or it is unreachable. " +
+                       $"The mapped database {connectionString} or table {tableConfig.FullTableName} doesn't exist or it is unreachable. " +
                        $"Error message: {ex.Message}");
                 return false;
             }
 
 
-            var loggingInfo = new LoggingInfo { ConnectionString = connectionString, TableNameWithSchema = tableConfig.NameWithSchema };
+            var loggingInfo = new LoggingInfo { ConnectionString = connectionString, TableNameWithSchema = tableConfig.FullTableName };
 
             var constantColumns = tableConfig.ConstantColumns?.Select(c => c.Name)
                 .Select(c => ParameterNameHelper.RemoveParenthesises(c)) ?? new List<string>();
@@ -67,11 +67,11 @@ namespace ApplicationCore.Validators.ParameterValidators
 
         }
 
-        protected override DataTable GetTableSchema(string connectionString, string nameWithSchema)
+        protected override DataTable GetTableSchema(string connectionString, string fullTableName)
         {
             using (var sqlConnection = new SqlConnection(connectionString))
-            using (var adapter = new SqlDataAdapter("select * from " + nameWithSchema + ";", sqlConnection))
-            using (var tableMetadata = new DataTable(nameWithSchema))
+            using (var adapter = new SqlDataAdapter("select * from " + fullTableName + ";", sqlConnection))
+            using (var tableMetadata = new DataTable(fullTableName))
             {
                 return adapter
                        .FillSchema(tableMetadata, SchemaType.Mapped);

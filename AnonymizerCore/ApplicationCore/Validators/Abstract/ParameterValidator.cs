@@ -165,7 +165,7 @@ namespace ApplicationCore.Validators.Abstract
                 //Checking the source table's columns
                 if (!DoAllSourceTableFrnKeyMapColsExist(connectionString, tableConfig, pairedColumnsOutsideConfig))
                 {
-                    _logger.Error($"Error while checking the paired columns outside of table {tableConfig.NameWithSchema}. " +
+                    _logger.Error($"Error while checking the paired columns outside of table {tableConfig.FullTableName}. " +
                         $"Connection string: {connectionString}.");
                     doAllPairedColumnsOutsideExist = false;
                 }
@@ -173,7 +173,7 @@ namespace ApplicationCore.Validators.Abstract
                 //Checking the dest table's columns
                 if (!DoAllDestTableFrnKeyMapColsExist(pairedColumnsOutsideConfig))
                 {
-                    _logger.Error($"Error while checking the paired columns outside of table {tableConfig.NameWithSchema}. " +
+                    _logger.Error($"Error while checking the paired columns outside of table {tableConfig.FullTableName}. " +
                         $"Connection string: {connectionString}.");
                     doAllPairedColumnsOutsideExist = false;
                 }
@@ -186,13 +186,13 @@ namespace ApplicationCore.Validators.Abstract
                     DataTable schemaTable;
                     try
                     {
-                        schemaTable = GetTableSchema(mappingTable.DestinationConnectionString, mappingTable.DestinationTableNameWithSchema);
+                        schemaTable = GetTableSchema(mappingTable.DestinationConnectionString, mappingTable.DestinationFullTableName);
                     }
                     catch (SqlException ex)
                     {
-                        _logger.Error($"Error while checking the paired columns outside of table: {tableConfig.NameWithSchema}. " +
+                        _logger.Error($"Error while checking the paired columns outside of table: {tableConfig.FullTableName}. " +
                        $"Connection string: {connectionString}. " +
-                       $"The mapped database {mappingTable.DestinationConnectionString} or table {mappingTable.DestinationTableNameWithSchema} doesn't exist or it is unreachable. " +
+                       $"The mapped database {mappingTable.DestinationConnectionString} or table {mappingTable.DestinationFullTableName} doesn't exist or it is unreachable. " +
                        $"Error message: {ex.Message}.");
                         doAllPairedColumnsOutsideExist = false;
                         continue;
@@ -201,10 +201,10 @@ namespace ApplicationCore.Validators.Abstract
                     var columns = mappingTable.ForeignKeyMapping.GetSubListElementsOfIndex(1)
                         .Concat(nextMappingTable.ForeignKeyMapping.GetSubListElementsOfIndex(0));
                     if (!DoAllColumnsExist(schemaTable, new LoggingInfo {ConnectionString = mappingTable.DestinationConnectionString,
-                        TableNameWithSchema = mappingTable.DestinationTableNameWithSchema }, columns))
+                        TableNameWithSchema = mappingTable.DestinationFullTableName}, columns))
                     {
                         doAllPairedColumnsOutsideExist = false;
-                        _logger.Error($"Error while checking the paired columns outside of table: {tableConfig.NameWithSchema}. " +
+                        _logger.Error($"Error while checking the paired columns outside of table: {tableConfig.FullTableName}. " +
                             $"Connection string: {connectionString}. ");
                     }
 
@@ -220,12 +220,12 @@ namespace ApplicationCore.Validators.Abstract
                    .Concat(pairedColumnsOutsideConfig.SourceDestMapping.First().ForeignKeyMapping
                        .GetSubListElementsOfIndex(0));
 
-            var sourceSchemaTable = GetTableSchema(connectionString, tableConfig.NameWithSchema);
+            var sourceSchemaTable = GetTableSchema(connectionString, tableConfig.FullTableName);
 
-            if (!DoAllColumnsExist(sourceSchemaTable, new LoggingInfo {ConnectionString = connectionString, TableNameWithSchema = tableConfig.NameWithSchema },
+            if (!DoAllColumnsExist(sourceSchemaTable, new LoggingInfo {ConnectionString = connectionString, TableNameWithSchema = tableConfig.FullTableName },
                 columnsInSourceTable))
             {
-                _logger.Error($"Error while checking the columns of table: {tableConfig.NameWithSchema}. " +
+                _logger.Error($"Error while checking the columns of table: {tableConfig.FullTableName}. " +
                         $"Connection string: {connectionString}. ");
                 return false;
             }
@@ -236,7 +236,7 @@ namespace ApplicationCore.Validators.Abstract
         private bool DoAllDestTableFrnKeyMapColsExist(PairedColumnsOutsideTableConfig pairedColumnsOutsideConfig)
         {
             string connectionString = pairedColumnsOutsideConfig.SourceDestMapping.Last().DestinationConnectionString;
-            string tableNameWithSchema = pairedColumnsOutsideConfig.SourceDestMapping.Last().DestinationTableNameWithSchema;
+            string fullTableName = pairedColumnsOutsideConfig.SourceDestMapping.Last().DestinationFullTableName;
 
             var columnsInSourceTable = pairedColumnsOutsideConfig.ColumnMapping.GetSubListElementsOfIndex(1)
                    .Concat(pairedColumnsOutsideConfig.SourceDestMapping.Last().ForeignKeyMapping
@@ -246,19 +246,19 @@ namespace ApplicationCore.Validators.Abstract
 
             try
             {
-                destSchemaTable = GetTableSchema(connectionString, tableNameWithSchema);
+                destSchemaTable = GetTableSchema(connectionString, fullTableName);
             }
             catch (SqlException ex)
             {
-                _logger.Error($"The mapped database {connectionString} or table {tableNameWithSchema} doesn't exist or it is unreachable. " +
+                _logger.Error($"The mapped database {connectionString} or table {fullTableName} doesn't exist or it is unreachable. " +
                         $"Error message: {ex.Message}");
                 return false;
             }
 
-            if (!DoAllColumnsExist(destSchemaTable, new LoggingInfo {ConnectionString = connectionString, TableNameWithSchema = tableNameWithSchema },
+            if (!DoAllColumnsExist(destSchemaTable, new LoggingInfo {ConnectionString = connectionString, TableNameWithSchema = fullTableName },
                 columnsInSourceTable))
             {
-                _logger.Error($"Error while checking the columns of table: {tableNameWithSchema}. " +
+                _logger.Error($"Error while checking the columns of table: {fullTableName}. " +
                         $"Connection string: {connectionString}. ");
                 return false;
             }

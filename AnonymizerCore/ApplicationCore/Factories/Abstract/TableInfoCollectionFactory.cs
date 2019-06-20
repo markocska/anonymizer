@@ -76,7 +76,7 @@ namespace ApplicationCore.Factories
                 }
                 catch (Exception ex)
                 {
-                    _logger.Error($"An error happened while getting table information for table {tableConfig.NameWithSchema}. " +
+                    _logger.Error($"An error happened while getting table information for table {tableConfig.FullTableName}. " +
                         $"DbConnectionString: {dbConfig.ConnectionString}. Error message: {ex.Message}");
                 }
             }
