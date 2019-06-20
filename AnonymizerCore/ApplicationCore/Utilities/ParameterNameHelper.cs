@@ -27,7 +27,9 @@ namespace ApplicationCore.Utilities
         }
 
         public static string AddParenthesises(string str)
-        {
+        {   
+            if (str == "" || str == null) { return str; }
+
             if (!str.StartsWith('[') && !str.EndsWith(']'))
             {
                 return "[" + str + "]";
@@ -61,7 +63,7 @@ namespace ApplicationCore.Utilities
             return tableInfo;
         }
 
-        public static string RemoveParenthesisFromTableNameWithSchema(string tableNameWithSchema)
+        public static string RemoveParenthesisFromFullTableName(string tableNameWithSchema)
         {
             return tableNameWithSchema.Replace("[", "").Replace("]", "");
         }

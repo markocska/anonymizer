@@ -30,6 +30,7 @@
                 {
                   "destinationConnectionString": "data source=MARKO-PC\\SQLEXPRESS;initial catalog=People;integrated security=True;",
                   "destinationFullTableName": "People.dbo.cucuka",
+                  "destinationLinkedInstance": "",
                   "foreignKeyMapping": [
                     [ "demail", "baba" ],
                     [ "id", "name" ]
@@ -38,6 +39,7 @@
                 {
                   "destinationConnectionString": "data source=MARKO-PC\\SQLEXPRESS;initial catalog=People;integrated security=True;",
                   "destinationFullTableName": "People.dbo.employees",
+                  "destinationLinkedInstance": "pucu",
                   "foreignKeyMapping": [
                     [ "baba", "base rate" ],
                     [ "id", "shift" ]

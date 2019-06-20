@@ -58,9 +58,10 @@ namespace ApplicationCore.TableInfo
                         ColumnMapping = p.ColumnMapping.Select(l => ParameterNameHelper.RemoveParenthesisesFromStringList(l)).ToList(),
                         SourceDestMapping = p.SourceDestMapping.Select(s =>
                             new SourceDestMappingStepConfig
-                            {
+                            {   
+                                DestinationLinkedInstance = ParameterNameHelper.AddParenthesises(s.DestinationLinkedInstance),
                                 DestinationConnectionString = s.DestinationConnectionString,
-                                DestinationFullTableName = ParameterNameHelper.RemoveParenthesisFromTableNameWithSchema(s.DestinationFullTableName),
+                                DestinationFullTableName = ParameterNameHelper.RemoveParenthesisFromFullTableName(s.DestinationFullTableName),
                                 ForeignKeyMapping = s.ForeignKeyMapping.Select(l => ParameterNameHelper.RemoveParenthesisesFromStringList(l)).ToList()
                             }).ToList()
                     }).ToList()
