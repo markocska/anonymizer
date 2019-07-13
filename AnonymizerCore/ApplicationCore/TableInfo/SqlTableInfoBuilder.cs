@@ -55,14 +55,14 @@ namespace ApplicationCore.TableInfo
                 .Select(p =>
                     new PairedColumnsOutsideTableConfig
                     {
-                        ColumnMapping = p.ColumnMapping.Select(l => ParameterNameHelper.RemoveParenthesisesFromStringList(l)).ToList(),
+                        ColumnMapping = p.ColumnMapping.Select(l => ParameterNameHelper.AddParenthesisesToStrList(l)).ToList(),
                         SourceDestMapping = p.SourceDestMapping.Select(s =>
                             new SourceDestMappingStepConfig
                             {   
                                 DestinationLinkedInstance = ParameterNameHelper.AddParenthesises(s.DestinationLinkedInstance),
                                 DestinationConnectionString = s.DestinationConnectionString,
-                                DestinationFullTableName = ParameterNameHelper.RemoveParenthesisFromFullTableName(s.DestinationFullTableName),
-                                ForeignKeyMapping = s.ForeignKeyMapping.Select(l => ParameterNameHelper.RemoveParenthesisesFromStringList(l)).ToList()
+                                DestinationFullTableName = ParameterNameHelper.AddParenthesisToFullTableName(s.DestinationFullTableName),
+                                ForeignKeyMapping = s.ForeignKeyMapping.Select(l => ParameterNameHelper.AddParenthesisesToStrList(l)).ToList()
                             }).ToList()
                     }).ToList()
                     ?? new List<PairedColumnsOutsideTableConfig>();

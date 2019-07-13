@@ -303,55 +303,64 @@ alter table <#= TableInfo.FullTableName #> enable trigger all;
 alter table <#= TableInfo.FullTableName #> check constraint all;
 
 
-
 <# 
     foreach(var mappedTable in TableInfo.MappedTablesOutside)
     { 
         var lastMappingStep = mappedTable.MappedColumnPairsOutside.Last();
     #>
-update <# 
-            Write($"{lastMappingStep.DestinationInstance}"); 
-            if (lastMappingStep.DestinationInstance != "" && lastMappingStep.DestinationInstance != null) 
-            {
-                Write(".");
-            }
-            Write($"{lastMappingStep.DestinationTableNameWithSchema} "); 
-        #>
-
+update  <#= lastMappingStep.DestinationTableNameWithSchema #>
 set <# 
-        foreach(var mappedColumn in mappedTable.SourceDestPairedColumnsOutside)
+        for(int i = 0; i < mappedTable.SourceDestPairedColumnsOutside.Count; i++)
         {
-            Write($"{mappedColumn.FirstColumn} = a{mappedTable.MappedColumnPairsOutside.Count}.{mappedColumn.SecondColumn},");
+            var mappedColumn = mappedTable.SourceDestPairedColumnsOutside[i];
+            Write($"{mappedColumn.SecondColumn} = source.{mappedColumn.FirstColumn}");
+
+            if (i != (mappedTable.SourceDestPairedColumnsOutside.Count -1)) 
+            {
+                Write($", {Environment.NewLine} ");
+            }
         }    
     #> 
-from <#= lastMappingStep.DestinationInstance #>.<#= lastMappingStep.DestinationTableNameWithSchema#> a0
-    <#  for(int i = 0; i < mappedTable.MappedColumnPairsOutside.Count;i++) 
-        {
-            var mappingStep = mappedTable.MappedColumnPairsOutside[i]; #>
-join <#
-        Write($"{mappingStep.DestinationInstance}");
-        if (mappingStep.DestinationInstance != "" && mappingStep.DestinationTableNameWithSchema != null) 
-        {
-            Write(".");
-        }
-        Write($"{mappingStep.DestinationTableNameWithSchema}"); #> as a<#=i+1 #> on <#
-        
-        for(int j = 0; j < mappingStep.MappedColumns.Count;j++)
-        {
-            var mappedColumns = mappingStep.MappedColumns[j];
-            Write($"a{i}.{mappedColumns.FirstColumn}=a{i+1}.{mappedColumns.SecondColumn} ");
-            if (j != (mappingStep.MappedColumns.Count - 1))
+from <#= lastMappingStep.DestinationTableNameWithSchema #> dest
+     <#
+        for(int i = (mappedTable.MappedColumnPairsOutside.Count - 1 - 1); i >= 0;i--)
+        {   
+            var mappingStep = mappedTable.MappedColumnPairsOutside[i];
+            if (i == (mappedTable.MappedColumnPairsOutside.Count - 1 - 1))
             {
-                Write("and ");
+                Write($"join {mappingStep.DestinationTableNameWithSchema} a{i} on ");
+                for(int j = 0; j < lastMappingStep.MappedColumns.Count;j++)
+                {   
+                    var columnPair = lastMappingStep.MappedColumns[j];
+                    Write($"a{i}.{columnPair.FirstColumn} = dest.{columnPair.SecondColumn}");
+                    if (j != (lastMappingStep.MappedColumns.Count - 1))
+                    {
+                        Write($"and ");
+                    }
+                    else 
+                    {
+                        Write(Environment.NewLine);
+                    }
+                }
             }
-            else 
+            if(i == 0) 
             {
-                Write(Environment.NewLine);
+                Write($"join {TableInfo.FullTableName} source on ");
+                 for(int j = 0; j < mappingStep.MappedColumns.Count;j++)
+                {   
+                    var columnPair = mappingStep.MappedColumns[j];
+                    Write($"a{i}.{columnPair.SecondColumn} = source.{columnPair.FirstColumn}");
+                    if (j != (mappingStep.MappedColumns.Count - 1))
+                    {
+                        Write($"and ");
+                    }
+                    else 
+                    {
+                        Write(Environment.NewLine);
+                    }
+                }
             }
         }
-            #>
-     <#   }
-    #>
-    
+     #>
    <# }
-#> ; 
+#>

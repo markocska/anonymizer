@@ -76,3 +76,11 @@ from dbo.[cucuka] c
 	join dbo.Franchisees as l on e.id = l.ID
 	join dbo.[big table] as b on b.id = l.ID;
 
+	use People;
+update NAV.dbo.Citizens
+set first_name = source.[first name], last_name = source.[last name]
+from Nav.dbo.Citizens dest
+	join nav.dbo.EmployeesCitizens a2 on dest.citizenId = a2.citizenId
+	join People.dbo.employees source on a2.employeeId = source.id;
+	
+

@@ -6,43 +6,42 @@
       "connectionString": "data source=MARKO-PC\\SQLEXPRESS;initial catalog=People;integrated security=True;",
       "tables": [
         {
-          "fullTableName": "People.dbo.[big table]",
+          "fullTableName": "People.dbo.[employees]",
           "scrambledColumns": [
             { "name": "first name" },
-            { "name": "[last name]" }
+            { "name": "[last name]" },
+            { "name": "location" }
           ],
           "constantColumns": [
             {
-              "name": "demail",
-              "value": "2"
+              "name": "constant",
+              "value": "this is a constant"
             }
           ],
           "pairedColumnsInsideTable": [
-            [ "[first name]", "[last name]" ]
+            [ "[last name]", "location" ]
           ],
           "pairedColumnsOutsideTable": [
             { 
               "columnMapping": [
-                [ "first name", "first name" ],
-                [ "last name", "last name" ]
+                [ "first name", "first_name" ],
+                [ "last name", "last_name" ]
               ],
               "sourceDestMapping": [
                 {
-                  "destinationConnectionString": "data source=MARKO-PC\\SQLEXPRESS;initial catalog=People;integrated security=True;",
-                  "destinationFullTableName": "People.dbo.cucuka",
+                  "destinationConnectionString": "data source=MARKO-PC\\SQLEXPRESS;initial catalog=NAV;integrated security=True;",
+                  "destinationFullTableName": "NAV.dbo.EmployeesCitizens",
                   "destinationLinkedInstance": "",
                   "foreignKeyMapping": [
-                    [ "demail", "baba" ],
-                    [ "id", "name" ]
+                    [ "id", "employeeId" ]
                   ]
                 },
                 {
-                  "destinationConnectionString": "data source=MARKO-PC\\SQLEXPRESS;initial catalog=People;integrated security=True;",
-                  "destinationFullTableName": "People.dbo.employees",
-                  "destinationLinkedInstance": "pucu",
+                  "destinationConnectionString": "data source=MARKO-PC\\SQLEXPRESS;initial catalog=NAV;integrated security=True;",
+                  "destinationFullTableName": "NAV.dbo.citizens",
+                  "destinationLinkedInstance": "",
                   "foreignKeyMapping": [
-                    [ "baba", "base rate" ],
-                    [ "id", "shift" ]
+                    [ "citizenId", "citizenId" ]
                   ]
                 }
               ]
