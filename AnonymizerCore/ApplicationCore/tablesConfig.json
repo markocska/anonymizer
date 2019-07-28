@@ -22,7 +22,7 @@
             [ "[last name]", "location" ]
           ],
           "pairedColumnsOutsideTable": [
-            { 
+            {
               "columnMapping": [
                 [ "first name", "first_name" ],
                 [ "last name", "last_name" ]
@@ -49,11 +49,62 @@
           ]
         },
         {
+          "fullTableName": "People.dbo.[employees]",
+          "scrambledColumns": [
+            { "name": "first name" },
+            { "name": "[last name]" },
+            { "name": "location" }
+          ],
+          "constantColumns": [
+            {
+              "name": "constant",
+              "value": "this is a constant"
+            }
+          ],
+          "pairedColumnsInsideTable": [
+            [ "[last name]", "location" ]
+          ],
+          "pairedColumnsOutsideTable": [
+            {
+              "columnMapping": [
+                [ "first name", "first_name" ],
+                [ "last name", "last_name" ]
+              ],
+              "sourceDestMapping": [
+                {
+                  "destinationConnectionString": "data source=MARKO-PC\\SQLEXPRESS;initial catalog=NAV;integrated security=True;",
+                  "destinationFullTableName": "NAV.dbo.EmployeesCitizens",
+                  "destinationLinkedInstance": "",
+                  "foreignKeyMapping": [
+                    [ "id", "employeeId" ]
+                  ]
+                },
+                {
+                  "destinationConnectionString": "data source=MARKO-PC\\SQLEXPRESS;initial catalog=NAV;integrated security=True;",
+                  "destinationFullTableName": "NAV.dbo.CitizensEUCitizens",
+                  "destinationLinkedInstance": "",
+                  "foreignKeyMapping": [
+                    [ "citizenId", "euCitizenId" ]
+                  ]
+                },
+                {
+                  "destinationConnectionString": "data source=MARKO-PC\\SQLEXPRESS;initial catalog=NAV;integrated security=True;",
+                  "destinationFullTableName": "NAV.dbo.EUCitizens",
+                  "destinationLinkedInstance": "",
+                  "foreignKeyMapping": [
+                    [ "euCitizenId", "Id" ]
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
           "fullTableName": "People.dbo.employees",
           "scrambledColumns": [
             { "name": "[location]" },
             { "name": "[shift]" },
-            { "name": "[base rate]"}
+            { "name": "[base rate]" }
           ],
           "constantColumns": [
             {

@@ -70,11 +70,11 @@ drop table #column2 ; ALTER TABLE [People].[dbo].[big table] ENABLE TRIGGER ALL;
 
 use People;
 update dbo.cucuka
-set [name] = b.[first name], baba = b.[last name]
-from dbo.[cucuka] c
-	join dbo.employees as e on c.id = e.id
-	join dbo.Franchisees as l on e.id = l.ID
-	join dbo.[big table] as b on b.id = l.ID;
+set [name] = source.[first name], baba = source.[last name]
+from dbo.[cucuka] dest
+	join dbo.employees as a1 on dest.id = a1.id
+	join dbo.Franchisees as a0 on a1.id = a0.ID
+	join dbo.[big table] as source on source.id = a0.ID;
 
 	use People;
 update NAV.dbo.Citizens
@@ -84,3 +84,69 @@ from Nav.dbo.Citizens dest
 	join People.dbo.employees source on a2.employeeId = source.id;
 	
 
+update  [NAV].[dbo].[citizens]
+set [first_name] = source.[first name],
+ [last_name] = source.[last name]
+from [NAV].[dbo].[citizens] dest
+     join [NAV].[dbo].[EmployeesCitizens] a0 on a0.[citizenId] = dest.[citizenId]
+join [People].[dbo].[employees] source on a0.[employeeId] = source.[id]
+
+
+update  [NAV].[dbo].[citizens]
+set [first_name] = source.[first name],
+ [last_name] = source.[last name]
+from [NAV].[dbo].[citizens] dest
+     join [NAV].[dbo].[EmployeesCitizens] a0 on a0.[citizenId] = dest.[citizenId]
+join [People].[dbo].[employees] source on a0.[employeeId] = source.[id]
+
+
+update  [NAV].[dbo].[citizens]
+set [first_name] = dest.[first name],
+ [last_name] = dest.[last name]
+from [NAV].[dbo].[citizens] dest
+
+create table CitizensEUCitizens(
+	Id int primary key,
+	CitizenId int,
+	euCitizenId int
+);
+
+alter table EUCitizens
+
+add first_name nvarchar(100), last_name nvarchar(100);
+
+
+update  [NAV].[dbo].[EUCitizens]
+set [first_name] = source.[first name],
+ [last_name] = source.[last name]
+from [NAV].[dbo].[EUCitizens] dest
+     join [NAV].[dbo].[CitizensEUCitizens] a1 on a1.[euCitizenId] = dest.[Id]
+	 join nav.dbo.EmployeesCitizens a0 on a1.citizenId = a0.citizenId
+join [People].[dbo].[employees] source on a0.[employeeId] = source.[id]
+
+update  [NAV].[dbo].[EUCitizens]
+set [first_name] = source.[first name],
+ [last_name] = source.[last name]
+from [NAV].[dbo].[EUCitizens] dest
+     join [NAV].[dbo].[CitizensEUCitizens] a1 on a1.[euCitizenId] = dest.[Id]
+join a1 on a0.[citizenId] = a1.[euCitizenId]
+join [People].[dbo].[employees] source on a0.[employeeId] = source.[id]
+
+
+
+update  [NAV].[dbo].[EUCitizens]
+set [first_name] = source.[first name],
+ [last_name] = source.[last name]
+from [NAV].[dbo].[EUCitizens] dest
+     join [NAV].[dbo].[CitizensEUCitizens] a1 on a1.[euCitizenId] = dest.[Id]
+join [NAV].[dbo].[EmployeesCitizens] a0 on a1.[id] = a0.[employeeId]
+join [People].[dbo].[employees] source on a0.[employeeId] = source.[id]
+
+
+update  [NAV].[dbo].[EUCitizens]
+set [first_name] = source.[first name],
+ [last_name] = source.[last name]
+from [NAV].[dbo].[EUCitizens] dest
+     join [NAV].[dbo].[CitizensEUCitizens] a1 on a1.[euCitizenId] = dest.[Id]
+join [NAV].[dbo].[EmployeesCitizens] a0 on a1.[id] = a0.[employeeId]
+join [People].[dbo].[employees] source on a0.[employeeId] = source.[id]

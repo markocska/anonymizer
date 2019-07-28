@@ -304,6 +304,7 @@ alter table <#= TableInfo.FullTableName #> check constraint all;
 
 
 <# 
+
     foreach(var mappedTable in TableInfo.MappedTablesOutside)
     { 
         var lastMappingStep = mappedTable.MappedColumnPairsOutside.Last();
@@ -323,10 +324,12 @@ set <#
     #> 
 from <#= lastMappingStep.DestinationTableNameWithSchema #> dest
      <#
-        for(int i = (mappedTable.MappedColumnPairsOutside.Count - 1 - 1); i >= 0;i--)
+        int tableMaxIndexInMapping =  mappedTable.MappedColumnPairsOutside.Count - 1;
+        for(int i = (tableMaxIndexInMapping - 1); i >= 0;i--)
         {   
             var mappingStep = mappedTable.MappedColumnPairsOutside[i];
-            if (i == (mappedTable.MappedColumnPairsOutside.Count - 1 - 1))
+
+            if (i == (tableMaxIndexInMapping - 1))
             {
                 Write($"join {mappingStep.DestinationTableNameWithSchema} a{i} on ");
                 for(int j = 0; j < lastMappingStep.MappedColumns.Count;j++)
@@ -343,10 +346,30 @@ from <#= lastMappingStep.DestinationTableNameWithSchema #> dest
                     }
                 }
             }
+            
+            //There is more than just 1 mapping table between.
+            if ((mappedTable.MappedColumnPairsOutside.Count > 2) && (i != (tableMaxIndexInMapping - 1)))
+            {
+                Write($"join {mappingStep.DestinationTableNameWithSchema} a{i} on ");
+                for(int j = 0; j < mappingStep.MappedColumns.Count;j++)
+                {   
+                    var columnPair = mappingStep.MappedColumns[j];
+                    Write($"a{i+1}.{columnPair.FirstColumn} = a{i}.{columnPair.SecondColumn} ");
+                    if (j != (mappingStep.MappedColumns.Count - 1))
+                    {
+                        Write($"and ");
+                    }
+                    else 
+                    {
+                        Write(Environment.NewLine);
+                    }
+                }
+            }
+
             if(i == 0) 
             {
                 Write($"join {TableInfo.FullTableName} source on ");
-                 for(int j = 0; j < mappingStep.MappedColumns.Count;j++)
+                for(int j = 0; j < mappingStep.MappedColumns.Count;j++)
                 {   
                     var columnPair = mappingStep.MappedColumns[j];
                     Write($"a{i}.{columnPair.SecondColumn} = source.{columnPair.FirstColumn}");

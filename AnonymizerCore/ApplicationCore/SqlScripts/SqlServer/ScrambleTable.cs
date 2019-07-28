@@ -510,6 +510,7 @@ namespace ApplicationCore.SqlScripts.SqlServer
             
             #line 306 "E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\ApplicationCore\SqlScripts\SqlServer\ScrambleTable.tt"
  
+
     foreach(var mappedTable in TableInfo.MappedTablesOutside)
     { 
         var lastMappingStep = mappedTable.MappedColumnPairsOutside.Last();
@@ -519,14 +520,14 @@ namespace ApplicationCore.SqlScripts.SqlServer
             #line hidden
             this.Write("update  ");
             
-            #line 311 "E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\ApplicationCore\SqlScripts\SqlServer\ScrambleTable.tt"
+            #line 312 "E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\ApplicationCore\SqlScripts\SqlServer\ScrambleTable.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(lastMappingStep.DestinationTableNameWithSchema));
             
             #line default
             #line hidden
             this.Write("\r\nset ");
             
-            #line 312 "E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\ApplicationCore\SqlScripts\SqlServer\ScrambleTable.tt"
+            #line 313 "E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\ApplicationCore\SqlScripts\SqlServer\ScrambleTable.tt"
  
         for(int i = 0; i < mappedTable.SourceDestPairedColumnsOutside.Count; i++)
         {
@@ -544,19 +545,21 @@ namespace ApplicationCore.SqlScripts.SqlServer
             #line hidden
             this.Write(" \r\nfrom ");
             
-            #line 324 "E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\ApplicationCore\SqlScripts\SqlServer\ScrambleTable.tt"
+            #line 325 "E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\ApplicationCore\SqlScripts\SqlServer\ScrambleTable.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(lastMappingStep.DestinationTableNameWithSchema));
             
             #line default
             #line hidden
             this.Write(" dest\r\n     ");
             
-            #line 325 "E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\ApplicationCore\SqlScripts\SqlServer\ScrambleTable.tt"
+            #line 326 "E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\ApplicationCore\SqlScripts\SqlServer\ScrambleTable.tt"
 
-        for(int i = (mappedTable.MappedColumnPairsOutside.Count - 1 - 1); i >= 0;i--)
+        int tableMaxIndexInMapping =  mappedTable.MappedColumnPairsOutside.Count - 1;
+        for(int i = (tableMaxIndexInMapping - 1); i >= 0;i--)
         {   
             var mappingStep = mappedTable.MappedColumnPairsOutside[i];
-            if (i == (mappedTable.MappedColumnPairsOutside.Count - 1 - 1))
+
+            if (i == (tableMaxIndexInMapping - 1))
             {
                 Write($"join {mappingStep.DestinationTableNameWithSchema} a{i} on ");
                 for(int j = 0; j < lastMappingStep.MappedColumns.Count;j++)
@@ -573,10 +576,30 @@ namespace ApplicationCore.SqlScripts.SqlServer
                     }
                 }
             }
+            
+            //There is more than just 1 mapping table between.
+            if ((mappedTable.MappedColumnPairsOutside.Count > 2) && (i != (tableMaxIndexInMapping - 1)))
+            {
+                Write($"join {mappingStep.DestinationTableNameWithSchema} a{i} on ");
+                for(int j = 0; j < mappingStep.MappedColumns.Count;j++)
+                {   
+                    var columnPair = mappingStep.MappedColumns[j];
+                    Write($"a{i+1}.{columnPair.FirstColumn} = a{i}.{columnPair.SecondColumn} ");
+                    if (j != (mappingStep.MappedColumns.Count - 1))
+                    {
+                        Write($"and ");
+                    }
+                    else 
+                    {
+                        Write(Environment.NewLine);
+                    }
+                }
+            }
+
             if(i == 0) 
             {
                 Write($"join {TableInfo.FullTableName} source on ");
-                 for(int j = 0; j < mappingStep.MappedColumns.Count;j++)
+                for(int j = 0; j < mappingStep.MappedColumns.Count;j++)
                 {   
                     var columnPair = mappingStep.MappedColumns[j];
                     Write($"a{i}.{columnPair.SecondColumn} = source.{columnPair.FirstColumn}");
@@ -597,7 +620,7 @@ namespace ApplicationCore.SqlScripts.SqlServer
             #line hidden
             this.Write("   ");
             
-            #line 365 "E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\ApplicationCore\SqlScripts\SqlServer\ScrambleTable.tt"
+            #line 388 "E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\ApplicationCore\SqlScripts\SqlServer\ScrambleTable.tt"
  }
 
             
