@@ -178,26 +178,16 @@ namespace ApplicationCore.Validators.Abstract
                     doAllPairedColumnsOutsideExist = false;
                 }
 
+                //checking table columns between source and dest
                 for (int i = 0; i < (pairedColumnsOutsideConfig.SourceDestMapping.Count - 1); i++)
                 {
                     var mappingTable = pairedColumnsOutsideConfig.SourceDestMapping[i];
                     var nextMappingTable = pairedColumnsOutsideConfig.SourceDestMapping[i + 1];
 
-                    DataTable schemaTable;
-                    try
-                    {
-                        schemaTable = GetTableSchema(mappingTable.DestinationConnectionString, mappingTable.DestinationFullTableName);
-                    }
-                    catch (SqlException ex)
-                    {
-                        _logger.Error($"Error while checking the paired columns outside of table: {tableConfig.FullTableName}. " +
-                       $"Connection string: {connectionString}. " +
-                       $"The mapped database {mappingTable.DestinationConnectionString} or table {mappingTable.DestinationFullTableName} doesn't exist or it is unreachable. " +
-                       $"Error message: {ex.Message}.");
-                        doAllPairedColumnsOutsideExist = false;
-                        continue;
-                    }
 
+                    doAllPairedColumnsOutsideExist = CheckIfTableExists(connectionString, mappingTable.DestinationConnectionString, mappingTable.DestinationFullTableName);
+
+                    var schemaTable = GetTableSchema(mappingTable.DestinationConnectionString, mappingTable.DestinationFullTableName);
                     var columns = mappingTable.ForeignKeyMapping.GetSubListElementsOfIndex(1)
                         .Concat(nextMappingTable.ForeignKeyMapping.GetSubListElementsOfIndex(0));
                     if (!DoAllColumnsExist(schemaTable, new LoggingInfo {ConnectionString = mappingTable.DestinationConnectionString,
@@ -211,6 +201,23 @@ namespace ApplicationCore.Validators.Abstract
                 }
             }
             return doAllPairedColumnsOutsideExist;
+        }
+
+        private bool CheckIfTableExists(string connectionString, string destinationConnectionString, string destinationFullTableName)
+        {
+            try
+            {
+                var schemaTable = GetTableSchema(destinationConnectionString, destinationFullTableName);
+                return true;
+            }
+            catch (SqlException ex)
+            {
+                _logger.Error($"Error while checking the paired columns outside of table: {destinationConnectionString}. " +
+               $"Connection string: {connectionString}. " +
+               $"The mapped database {destinationConnectionString} or table {destinationFullTableName} doesn't exist or it is unreachable. " +
+               $"Error message: {ex.Message}.");
+                return false;
+            }
         }
 
         private bool DoAllSourceTableFrnKeyMapColsExist(string connectionString, TableConfig tableConfig,

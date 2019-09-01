@@ -46,38 +46,38 @@ namespace ApplicationCore.Factories
                 return new List<ITableInfo>();
             }
 
-            var validTableConfigs = new List<(DatabaseConfig databaseConfig, TableConfig tableConfig)>();
             foreach (var dbConfig in databasesConfig.Databases)
             {
                 if (!_configValidator.IsDbConfigValid(dbConfig))
                 {
-                    continue;
+                    databasesConfig.Databases.Remove(dbConfig);
                 }
 
                 foreach (var tableConfig in dbConfig.Tables)
                 {
-                    if (_configValidator.IsTableConfigValid(dbConfig, tableConfig))
+                    if (!_configValidator.IsTableConfigValid(dbConfig, tableConfig) ||
+                        !_parameterValidator.AreTheParamsValid(dbConfig.ConnectionString, tableConfig))
                     {
-                        if (_parameterValidator.AreTheParamsValid(dbConfig.ConnectionString, tableConfig))
-                        {
-                            validTableConfigs.Add((databaseConfig: dbConfig, tableConfig: tableConfig));
-                        }
+                            dbConfig.Tables.Remove(tableConfig);
                     }
                 }
             }
 
             var tableInfos = new List<ITableInfo>();
-            foreach (var (dbConfig, tableConfig) in validTableConfigs)
+            foreach (var dbConfig in databasesConfig.Databases)
             {
-                try
+                foreach (var tableConfig in dbConfig.Tables)
                 {
-                    var tableInfo = CreateTableInfo(dbConfig, tableConfig, _configValidator, _columnTypeManager, _primaryKeyManager);
-                    tableInfos.Add(tableInfo);
-                }
-                catch (Exception ex)
-                {
-                    _logger.Error($"An error happened while getting table information for table {tableConfig.FullTableName}. " +
-                        $"DbConnectionString: {dbConfig.ConnectionString}. Error message: {ex.Message}");
+                    try
+                    {
+                        var tableInfo = CreateTableInfo(dbConfig, tableConfig, _configValidator, _columnTypeManager, _primaryKeyManager);
+                        tableInfos.Add(tableInfo);
+                    }
+                    catch (Exception ex)
+                    {
+                        _logger.Error($"An error happened while getting table information for table {tableConfig.FullTableName}. " +
+                            $"DbConnectionString: {dbConfig.ConnectionString}. Error message: {ex.Message}");
+                    }
                 }
             }
 

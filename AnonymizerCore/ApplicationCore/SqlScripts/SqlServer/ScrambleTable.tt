@@ -304,9 +304,10 @@ alter table <#= TableInfo.FullTableName #> check constraint all;
 
 
 <# 
-
-    foreach(var mappedTable in TableInfo.MappedTablesOutside)
+//if there is more than one mapped table
+    foreach(var mappedTable in TableInfo.MappedTablesOutside.Where(m => m.MappedColumnPairsOutside.Count > 1))
     { 
+
         var lastMappingStep = mappedTable.MappedColumnPairsOutside.Last();
     #>
 update  <#= lastMappingStep.DestinationTableNameWithSchema #>
@@ -379,11 +380,33 @@ from <#= lastMappingStep.DestinationTableNameWithSchema #> dest
                     }
                     else 
                     {
-                        Write(Environment.NewLine);
+                        Write(";" + Environment.NewLine);
                     }
                 }
             }
         }
      #>
-   <# }
+   <# } 
+#>
+
+<#
+    foreach(var mappedTable in TableInfo.MappedTablesOutside.Where(m => m.MappedColumnPairsOutside.Count == 1))
+    {
+        var lastMappingStep = mappedTable.MappedColumnPairsOutside.Last();
+    #>
+update  <#= lastMappingStep.DestinationTableNameWithSchema #>    
+set <# 
+        for(int i = 0; i < mappedTable.SourceDestPairedColumnsOutside.Count; i++)
+        {
+            var mappedColumn = mappedTable.SourceDestPairedColumnsOutside[i];
+            Write($"{mappedColumn.SecondColumn} = source.{mappedColumn.FirstColumn}");
+
+            if (i != (mappedTable.SourceDestPairedColumnsOutside.Count -1)) 
+            {
+                Write($", {Environment.NewLine} ");
+            }
+        }    
+    #> 
+from <#= TableInfo.FullTableName #> source
+  <#  }
 #>

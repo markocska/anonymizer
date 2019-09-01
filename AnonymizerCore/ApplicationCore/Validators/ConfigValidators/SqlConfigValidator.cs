@@ -56,8 +56,7 @@ namespace ApplicationCore.Validators.ConfigValidators
                             return false;
                         }
 
-                        if (!IsConnectionStringValid(connectedTableConfig.DestinationConnectionString) ||
-                            !IsTableNameValid(connectedTableConfig.DestinationConnectionString, connectedTableConfig.DestinationFullTableName))
+                        if (!IsTableNameValid(connectedTableConfig.DestinationConnectionString, connectedTableConfig.DestinationFullTableName))
                         {
                             _logger.Error($"Error while checking the paired columns outside of table {tableConfig.FullTableName}. " +
                                 $"Connection string: {dbConfig.ConnectionString}.");
@@ -88,7 +87,7 @@ namespace ApplicationCore.Validators.ConfigValidators
         {
             if (dbConfig == null)
             {
-                throw new ArgumentNullException("The dbConfigParameter can not be null");
+                throw new ArgumentNullException("The dbConfigParameter can not be null.");
             }
 
             if (!IsConnectionStringValid(dbConfig.ConnectionString))

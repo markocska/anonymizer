@@ -114,35 +114,25 @@
           ],
           "pairedColumnsInsideTable": [
             [ "shift", "location" ]
+          ],
+          "pairedColumnsOutsideTable": [
+            {
+              "columnMapping": [
+                [ "first name", "full name" ],
+                [ "last name", "citizen name" ]
+              ],
+              "sourceDestMapping": [
+                {
+                  "destinationConnectionString": "data source=MARKO-PC\\SQLEXPRESS;initial catalog=NAV;integrated security=True;",
+                  "destinationFullTableName": "NAV.dbo.EmployeesCitizens",
+                  "destinationLinkedInstance": "",
+                  "foreignKeyMapping": [
+                    [ "id", "employeeId" ]
+                  ]
+                }
+              ]
+            }
           ]
-          //"pairedColumnsOutsideTable": [
-          //  {
-          //    "scrambledColumnInSourceTable": "job_type",
-          //    "scrambledColumnInTargetTable": "job",
-          //    "connectionString": "data source=huvdev1;initial catalog=Target_ifuat;integrated security=True;",
-          //    "fullTableName": "dbo.t_employee",
-          //    "sourceDestMapping": [
-          //      {
-          //        "connectionString": "data source=huvdev1;initial catalog=Target_ifuat;integrated security=True;",
-          //        "fullTableName": "dbo.t_employee_job",
-          //        "linkedServer":"hudev2",
-          //        "foreignKeyMapping": [
-          //          [ "job_f" ],
-          //          [ "job_id" ]
-          //        ]
-          //      },
-          //      {
-          //        "connectionString": "data source=huvdev1;initial catalog=Target_ifuat;integrated security=True;",
-          //        "fullTableName": "dbo.t_job",
-          //        "linkedServer": "hudev3",
-          //        "foreignKeyMappings": [
-          //          [ "job_id" ],
-          //          [ "id" ]
-          //        ]
-          //      }
-          //    ]
-          //  }
-          //]
         }
       ]
     }
