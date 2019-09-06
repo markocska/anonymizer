@@ -34,6 +34,7 @@ namespace ApplicationCore.TableInfo
             return (schemaName: ParameterNameHelper.AddParenthesises(tableAndSchemaName[1]), tableName: ParameterNameHelper.AddParenthesises(tableAndSchemaName[2]));
         }
 
+       
         protected override TableConfig NormalizeTableConfigParameters(TableConfig tableConfig)
         {
             var normalizedTableConfig = new TableConfig();

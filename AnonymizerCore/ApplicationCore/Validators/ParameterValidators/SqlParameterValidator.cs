@@ -67,6 +67,11 @@ namespace ApplicationCore.Validators.ParameterValidators
 
         }
 
+        protected override IEnumerable<string> GetNormalizedColumnListCopy(IEnumerable<string> columns)
+        {
+            return ParameterNameHelper.RemoveParenthesisesFromStringList(columns.ToList());
+        }
+
         protected override DataTable GetTableSchema(string connectionString, string fullTableName)
         {
             using (var sqlConnection = new SqlConnection(connectionString))

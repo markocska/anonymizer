@@ -124,24 +124,14 @@ from [NAV].[dbo].[EUCitizens] dest
 	 join nav.dbo.EmployeesCitizens a0 on a1.citizenId = a0.citizenId
 join [People].[dbo].[employees] source on a0.[employeeId] = source.[id]
 
-update  [NAV].[dbo].[EUCitizens]
+
+
+update  [NAV].[dbo].[citizens]
 set [first_name] = source.[first name],
  [last_name] = source.[last name]
-from [NAV].[dbo].[EUCitizens] dest
-     join [NAV].[dbo].[CitizensEUCitizens] a1 on a1.[euCitizenId] = dest.[Id]
-join a1 on a0.[citizenId] = a1.[euCitizenId]
-join [People].[dbo].[employees] source on a0.[employeeId] = source.[id]
-
-
-
-update  [NAV].[dbo].[EUCitizens]
-set [first_name] = source.[first name],
- [last_name] = source.[last name]
-from [NAV].[dbo].[EUCitizens] dest
-     join [NAV].[dbo].[CitizensEUCitizens] a1 on a1.[euCitizenId] = dest.[Id]
-join [NAV].[dbo].[EmployeesCitizens] a0 on a1.[id] = a0.[employeeId]
-join [People].[dbo].[employees] source on a0.[employeeId] = source.[id]
-
+from [NAV].[dbo].[citizens] dest
+     join [NAV].[dbo].[EmployeesCitizens] a0 on a0.[citizenId] = dest.[citizenId]
+join [People].[dbo].[employees] source on a0.[employeeId] = source.[id];
 
 update  [NAV].[dbo].[EUCitizens]
 set [first_name] = source.[first name],
@@ -149,4 +139,9 @@ set [first_name] = source.[first name],
 from [NAV].[dbo].[EUCitizens] dest
      join [NAV].[dbo].[CitizensEUCitizens] a1 on a1.[euCitizenId] = dest.[Id]
 join [NAV].[dbo].[EmployeesCitizens] a0 on a1.[id] = a0.[employeeId]
-join [People].[dbo].[employees] source on a0.[employeeId] = source.[id]
+join [People].[dbo].[employees] source on a0.[employeeId] = source.[id];
+
+update  [NAV].[dbo].[EmployeesCitizens]
+set [full name] = source.[first name],
+ [citizen name] = source.[last name]
+from [People].[dbo].[employees] source

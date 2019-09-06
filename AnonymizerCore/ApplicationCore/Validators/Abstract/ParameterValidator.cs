@@ -96,25 +96,16 @@ namespace ApplicationCore.Validators.Abstract
             }
 
             bool isThereADuplicationConflict = false;
-            foreach (var scrambledColumn in scrambledColumns)
+            var normalizedScrambledColumnsCopy = GetNormalizedColumnListCopy(scrambledColumns);
+            var normalizedConstantColumnsCopy = GetNormalizedColumnListCopy(constantColumns);
+            foreach (var scrambledColumn in normalizedScrambledColumnsCopy)
             {
                 var scrambledColumnCopy = String.Copy(scrambledColumn);
-                foreach (var constantColumn in constantColumns)
+                foreach (var constantColumn in normalizedConstantColumnsCopy)
                 {
-                    var constantColumnCopy = String.Copy(constantColumn);
-
-                    if (constantColumnCopy.StartsWith('[') && !scrambledColumnCopy.StartsWith('['))
+                    if (constantColumn.ToLower() == scrambledColumn.ToLower())
                     {
-                        scrambledColumnCopy = '[' + scrambledColumnCopy + ']';
-                    }
-                    else if (!constantColumnCopy.StartsWith('[') && scrambledColumnCopy.StartsWith('['))
-                    {
-                        constantColumnCopy = '[' + constantColumnCopy + ']';
-                    }
-
-                    if (constantColumnCopy.ToLower() == scrambledColumnCopy.ToLower())
-                    {
-                        _logger.Error($"The column {constantColumnCopy} appears both at the constant and scrambled columns in table " +
+                        _logger.Error($"The column {constantColumn} appears both at the constant and scrambled columns in table " +
                             $"{logInfo.TableNameWithSchema}. Connection string: {logInfo.ConnectionString}", logInfo);
                         isThereADuplicationConflict = true;
                     }
@@ -219,6 +210,8 @@ namespace ApplicationCore.Validators.Abstract
                 return false;
             }
         }
+
+        protected abstract IEnumerable<string> GetNormalizedColumnListCopy(IEnumerable<string> columns);
 
         private bool DoAllSourceTableFrnKeyMapColsExist(string connectionString, TableConfig tableConfig,
             PairedColumnsOutsideTableConfig pairedColumnsOutsideConfig)
