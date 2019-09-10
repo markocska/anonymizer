@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace ApplicationCore.DatabaseServices.Scrambling
+namespace Scrambler.DatabaseServices.Scrambling
 {
     public class ScramblingException : Exception
     {

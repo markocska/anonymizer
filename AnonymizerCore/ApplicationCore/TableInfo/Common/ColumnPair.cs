@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace ApplicationCore.TableInfo.Common
+namespace Scrambler.TableInfo.Common
 {
     public struct ColumnPair
     {

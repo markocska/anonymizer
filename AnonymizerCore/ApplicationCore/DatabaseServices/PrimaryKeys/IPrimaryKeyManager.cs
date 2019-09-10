@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace ApplicationCore.DatabaseServices.PrimaryKeys
+namespace Scrambler.DatabaseServices.PrimaryKeys
 {
     public interface IPrimaryKeyManager
     {

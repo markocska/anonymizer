@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace ApplicationCore.Extensions
+namespace Scrambler.Extensions
 {
     public static class ExtensionMethods
     {

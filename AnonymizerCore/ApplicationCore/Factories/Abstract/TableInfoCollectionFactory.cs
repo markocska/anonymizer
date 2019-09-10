@@ -1,18 +1,18 @@
-﻿using ApplicationCore.Config;
-using ApplicationCore.DatabaseServices.ColumnTypes;
-using ApplicationCore.DatabaseServices.PrimaryKeys;
-using ApplicationCore.TableInfo;
-using ApplicationCore.TableInfo.Abstract;
-using ApplicationCore.TableInfo.Interfaces;
-using ApplicationCore.Validators;
-using ApplicationCore.Validators.ConfigValidators;
-using ApplicationCore.Validators.ParameterValidators;
+﻿using Scrambler.Config;
+using Scrambler.DatabaseServices.ColumnTypes;
+using Scrambler.DatabaseServices.PrimaryKeys;
+using Scrambler.TableInfo;
+using Scrambler.TableInfo.Abstract;
+using Scrambler.TableInfo.Interfaces;
+using Scrambler.Validators;
+using Scrambler.Validators.ConfigValidators;
+using Scrambler.Validators.ParameterValidators;
 using Serilog;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace ApplicationCore.Factories
+namespace Scrambler.Factories
 {
     public abstract class TableInfoCollectionFactory : ITableInfoCollectionFactory
     {

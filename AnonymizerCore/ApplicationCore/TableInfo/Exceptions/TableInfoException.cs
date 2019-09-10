@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace ApplicationCore.TableInfo.Exceptions
+namespace Scrambler.TableInfo.Exceptions
 {
     public class TableInfoException : Exception
     {

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace ApplicationCore.DatabaseServices.ColumnTypes
+namespace Scrambler.DatabaseServices.ColumnTypes
 {
     public class ColumnTypesException : Exception
     {

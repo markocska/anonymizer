@@ -1,9 +1,9 @@
-﻿using ApplicationCore.Config;
+﻿using Scrambler.Config;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace ApplicationCore.Validators.ConfigValidators
+namespace Scrambler.Validators.ConfigValidators
 {
     public interface IConfigValidator
     {

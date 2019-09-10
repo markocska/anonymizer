@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace ApplicationCore.Logging
+namespace Scrambler.Logging
 {
     public class SerilogInitializer
     {

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace ApplicationCore.Config.Abstract
+namespace Scrambler.Config.Abstract
 {
     public abstract class ColumnConfig
     {

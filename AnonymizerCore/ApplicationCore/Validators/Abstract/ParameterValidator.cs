@@ -1,7 +1,7 @@
-﻿using ApplicationCore.Config;
-using ApplicationCore.Extensions;
-using ApplicationCore.Logging;
-using ApplicationCore.Validators.ParameterValidators;
+﻿using Scrambler.Config;
+using Scrambler.Extensions;
+using Scrambler.Logging;
+using Scrambler.Validators.ParameterValidators;
 using Serilog;
 using System;
 using System.Collections.Generic;
@@ -9,7 +9,7 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
 
-namespace ApplicationCore.Validators.Abstract
+namespace Scrambler.Validators.Abstract
 {
     public abstract class ParameterValidator : IParameterValidator
     {

@@ -1,7 +1,7 @@
-﻿using ApplicationCore.TableInfo.Common;
+﻿using Scrambler.TableInfo.Common;
 using System.Collections.Generic;
 
-namespace ApplicationCore.TableInfo.Interfaces
+namespace Scrambler.TableInfo.Interfaces
 {
     public interface ITableInfo
     {

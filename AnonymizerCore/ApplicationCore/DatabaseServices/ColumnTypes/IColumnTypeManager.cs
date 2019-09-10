@@ -1,10 +1,10 @@
-﻿using ApplicationCore.TableInfo;
-using ApplicationCore.TableInfo.Interfaces;
+﻿using Scrambler.TableInfo;
+using Scrambler.TableInfo.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace ApplicationCore.DatabaseServices.ColumnTypes
+namespace Scrambler.DatabaseServices.ColumnTypes
 {
     public interface IColumnTypeManager
     {

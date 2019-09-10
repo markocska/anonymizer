@@ -1,0 +1,25 @@
+﻿using Scrambler.Config;
+using Scrambler.DatabaseServices.ColumnTypes;
+using Scrambler.DatabaseServices.PrimaryKeys;
+using Scrambler.TableInfo;
+using Scrambler.TableInfo.Interfaces;
+using Scrambler.Validators.ConfigValidators;
+using Scrambler.Validators.ParameterValidators;
+
+namespace Scrambler.Factories
+{
+    public class SqlTableInfoCollectionFactory : TableInfoCollectionFactory
+    {
+
+        public SqlTableInfoCollectionFactory(IConfigValidator configValidator, IParameterValidator parameterValidator, IColumnTypeManager columnTypeManager,
+                 IPrimaryKeyManager primaryKeyManager) : base(configValidator, parameterValidator, columnTypeManager, primaryKeyManager)
+        {
+        }
+
+        protected override ITableInfo CreateTableInfo(DatabaseConfig dbConfig, TableConfig tableConfig, IConfigValidator configValidator,
+            IColumnTypeManager columnTypeManager, IPrimaryKeyManager primaryKeyManager)
+        {
+            return new SqlTableInfoBuilder(dbConfig, tableConfig, configValidator, columnTypeManager, primaryKeyManager).Build();
+        }
+    }
+}

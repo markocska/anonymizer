@@ -1,9 +1,9 @@
-﻿using ApplicationCore.TableInfo.Interfaces;
+﻿using Scrambler.TableInfo.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace ApplicationCore.DatabaseServices.Indexes
+namespace Scrambler.DatabaseServices.Indexes
 {
     public interface IIndexService
     {

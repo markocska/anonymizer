@@ -1,8 +1,8 @@
-﻿using ApplicationCore.Config;
-using ApplicationCore.TableInfo;
+﻿using Scrambler.Config;
+using Scrambler.TableInfo;
 using System.Collections.Generic;
 
-namespace ApplicationCore.Validators.ParameterValidators
+namespace Scrambler.Validators.ParameterValidators
 {
     public interface IParameterValidator
     {

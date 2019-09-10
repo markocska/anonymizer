@@ -1,17 +1,17 @@
-﻿using ApplicationCore.Config;
-using ApplicationCore.DatabaseServices.ColumnTypes;
-using ApplicationCore.DatabaseServices.PrimaryKeys;
-using ApplicationCore.TableInfo.Common;
-using ApplicationCore.TableInfo.Exceptions;
-using ApplicationCore.TableInfo.Interfaces;
-using ApplicationCore.Utilities;
-using ApplicationCore.Validators.ConfigValidators;
+﻿using Scrambler.Config;
+using Scrambler.DatabaseServices.ColumnTypes;
+using Scrambler.DatabaseServices.PrimaryKeys;
+using Scrambler.TableInfo.Common;
+using Scrambler.TableInfo.Exceptions;
+using Scrambler.TableInfo.Interfaces;
+using Scrambler.Utilities;
+using Scrambler.Validators.ConfigValidators;
 using Serilog;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace ApplicationCore.TableInfo.Abstract
+namespace Scrambler.TableInfo.Abstract
 {
     public abstract class TableInfoBuilder : ITableInfoBuilder
     {

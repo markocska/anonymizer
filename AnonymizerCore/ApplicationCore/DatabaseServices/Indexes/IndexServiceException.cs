@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace ApplicationCore.DatabaseServices.Indexes
+namespace Scrambler.DatabaseServices.Indexes
 {
     public class IndexServiceException : Exception
     {

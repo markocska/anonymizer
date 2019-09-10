@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
-using ApplicationCore.Config;
-using ApplicationCore.TableInfo.Interfaces;
+using Scrambler.Config;
+using Scrambler.TableInfo.Interfaces;
 
-namespace ApplicationCore.Factories
+namespace Scrambler.Factories
 {
     public interface ITableInfoCollectionFactory
     {

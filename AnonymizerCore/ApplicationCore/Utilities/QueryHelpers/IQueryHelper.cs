@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace ApplicationCore.Utilities.QueryHelpers
+namespace Scrambler.Utilities.QueryHelpers
 {
     public interface IQueryHelper
     {

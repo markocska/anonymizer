@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace ApplicationCore.Config
+namespace Scrambler.Config
 {
     public class TableConfig
     {

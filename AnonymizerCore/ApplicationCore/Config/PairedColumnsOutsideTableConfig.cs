@@ -6,7 +6,7 @@ using System.Linq;
 using System.Runtime.Serialization;
 using System.Text;
 
-namespace ApplicationCore.Config
+namespace Scrambler.Config
 {
     public class PairedColumnsOutsideTableConfig
     {
