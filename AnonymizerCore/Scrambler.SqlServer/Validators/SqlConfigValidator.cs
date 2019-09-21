@@ -1,5 +1,5 @@
-﻿using Scrambler.Config;
-using Serilog;
+﻿using Microsoft.Extensions.Logging;
+using Scrambler.Config;
 using System;
 using System.Data.SqlClient;
 using System.Linq;
@@ -10,9 +10,9 @@ namespace Scrambler.Validators.ConfigValidators
     {
         private readonly ILogger _logger;
 
-        public SqlConfigValidator()
+        public SqlConfigValidator(ILogger<SqlConfigValidator> logger)
         {
-            _logger = Serilog.Log.ForContext(typeof(SqlConfigValidator));
+            _logger = logger;
         }
 
         public bool IsTableConfigValid(DatabaseConfig dbConfig, TableConfig tableConfig)
@@ -27,7 +27,7 @@ namespace Scrambler.Validators.ConfigValidators
 
             if (tableConfig.ScrambledColumns.Count == 0 && tableConfig.ConstantColumns.Count == 0)
             {
-                _logger.Error($"The following table has no columns to anonymize: {tableConfig.FullTableName}",
+                _logger.LogError($"The following table has no columns to anonymize: {tableConfig.FullTableName}",
                     tableConfig, dbConfig);
                 return false;
             }
@@ -39,7 +39,7 @@ namespace Scrambler.Validators.ConfigValidators
                     if (pairedColumnConfig.ColumnMapping.Any(l => l.Count != 2))
                     {
 
-                        _logger.Error($"Error while checking the paired columns outside of table {tableConfig.FullTableName}. " +
+                        _logger.LogError($"Error while checking the paired columns outside of table {tableConfig.FullTableName}. " +
                                 $"Connection string: {dbConfig.ConnectionString}. " +
                                 $"The column mapping arrays must consist of 2 columns.");
                         return false;
@@ -49,7 +49,7 @@ namespace Scrambler.Validators.ConfigValidators
                     {
                         if (connectedTableConfig.ForeignKeyMapping.Any(l => l.Count != 2))
                         {
-                            _logger.Error($"Error while checking the paired columns outside of table {tableConfig.FullTableName}. " +
+                            _logger.LogError($"Error while checking the paired columns outside of table {tableConfig.FullTableName}. " +
                                $"Connection string: {dbConfig.ConnectionString}. " +
                                $"The foreign key mapping arrays must consist of 2 columns for mapped table {connectedTableConfig.DestinationFullTableName}. " +
                                $"Connection string: {connectedTableConfig.DestinationConnectionString}.");
@@ -58,7 +58,7 @@ namespace Scrambler.Validators.ConfigValidators
 
                         if (!IsTableNameValid(connectedTableConfig.DestinationConnectionString, connectedTableConfig.DestinationFullTableName))
                         {
-                            _logger.Error($"Error while checking the paired columns outside of table {tableConfig.FullTableName}. " +
+                            _logger.LogError($"Error while checking the paired columns outside of table {tableConfig.FullTableName}. " +
                                 $"Connection string: {dbConfig.ConnectionString}.");
                             return false;
                         }
@@ -75,7 +75,7 @@ namespace Scrambler.Validators.ConfigValidators
 
             if (tableAndSchemaName.Length != 3)
             {
-                _logger.Error($"The following full table config parameter is invalid {tableNameWithSchema}." +
+                _logger.LogError($"The following full table config parameter is invalid {tableNameWithSchema}." +
                     $" Connection string: {connectionString}");
                 return false;
             }
@@ -97,7 +97,7 @@ namespace Scrambler.Validators.ConfigValidators
 
             if (dbConfig.Tables == null)
             {
-                _logger.Error($"The database with the connection string {dbConfig.ConnectionString} has a Tables property of null.",
+                _logger.LogError($"The database with the connection string {dbConfig.ConnectionString} has a Tables property of null.",
                     dbConfig);
                 return false;
             }
@@ -113,14 +113,14 @@ namespace Scrambler.Validators.ConfigValidators
 
                 if (connectionStringBuilder.InitialCatalog == string.Empty)
                 {
-                    _logger.Error($"The following connection string doesn't contain an initial catalog: {connectionString}.",
+                    _logger.LogError($"The following connection string doesn't contain an initial catalog: {connectionString}.",
                         connectionString);
                     return false;
                 }
 
                 if (connectionStringBuilder.DataSource == string.Empty)
                 {
-                    _logger.Error($"The following connection string doesn't contain a data source {connectionString}.",
+                    _logger.LogError($"The following connection string doesn't contain a data source {connectionString}.",
                         connectionString);
                     return false;
                 }
@@ -128,7 +128,7 @@ namespace Scrambler.Validators.ConfigValidators
             }
             catch (Exception ex)
             {
-                _logger.Error($"The connection string : {connectionString} has an invalid format. " +
+                _logger.LogError($"The connection string : {connectionString} has an invalid format. " +
                     $"Error message: {ex.Message}.", connectionString);
                 return false;
             }

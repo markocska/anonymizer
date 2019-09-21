@@ -1,4 +1,5 @@
-﻿using Scrambler.Config;
+﻿using Microsoft.Extensions.Logging;
+using Scrambler.Config;
 using Scrambler.Logging;
 using Scrambler.Utilities;
 using Scrambler.Validators.Abstract;
@@ -12,9 +13,11 @@ namespace Scrambler.Validators.ParameterValidators
 {
     public class SqlParameterValidator : ParameterValidator
     {
-        public SqlParameterValidator()
+        private readonly ILogger<SqlParameterValidator> _logger;
+
+        public SqlParameterValidator(ILogger<SqlParameterValidator> logger) : base(logger)
         {
-            _logger = Serilog.Log.ForContext<SqlParameterValidator>();
+            _logger = logger;
         }
 
         public override bool AreTheParamsValid(string connectionString, TableConfig tableConfig)
@@ -33,7 +36,7 @@ namespace Scrambler.Validators.ParameterValidators
             }
             catch (SqlException ex)
             {
-                _logger.Error($"Error while checking the parameters of table: {tableConfig.FullTableName}. " +
+                _logger.LogError($"Error while checking the parameters of table: {tableConfig.FullTableName}. " +
                        $"Connection string: {connectionString}. " +
                        $"The mapped database {connectionString} or table {tableConfig.FullTableName} doesn't exist or it is unreachable. " +
                        $"Error message: {ex.Message}");

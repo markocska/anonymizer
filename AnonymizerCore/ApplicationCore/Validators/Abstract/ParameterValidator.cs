@@ -1,8 +1,8 @@
-﻿using Scrambler.Config;
+﻿using Microsoft.Extensions.Logging;
+using Scrambler.Config;
 using Scrambler.Extensions;
 using Scrambler.Logging;
 using Scrambler.Validators.ParameterValidators;
-using Serilog;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -13,7 +13,12 @@ namespace Scrambler.Validators.Abstract
 {
     public abstract class ParameterValidator : IParameterValidator
     {
-        protected ILogger _logger;
+        private ILogger<ParameterValidator> _logger;
+
+        public ParameterValidator(ILogger<ParameterValidator> logger)
+        {
+            _logger = logger;
+        }
 
         public abstract bool AreTheParamsValid(string connectionString, TableConfig tableConfig);
 
@@ -29,7 +34,7 @@ namespace Scrambler.Validators.Abstract
             {
                 if (allColumns[column] == null)
                 {
-                    _logger.Error($"The column {column} doesn't exist in the table {logInfo.TableNameWithSchema}. " +
+                    _logger.LogError($"The column {column} doesn't exist in the table {logInfo.TableNameWithSchema}. " +
                         $"Connection string: {logInfo.ConnectionString}.", logInfo);
                     doAllColumnsExist = false;
                 }
@@ -53,7 +58,7 @@ namespace Scrambler.Validators.Abstract
 
                 if (allColumns[column].Unique)
                 {
-                    _logger.Error($"The column {column} is part of a unique constraint in table {logInfo.TableNameWithSchema}. " +
+                    _logger.LogError($"The column {column} is part of a unique constraint in table {logInfo.TableNameWithSchema}. " +
                         $"Connection string: {logInfo.ConnectionString}. ", logInfo);
                     isThereAUniqueConstraintConflict = true;
                 }
@@ -71,7 +76,7 @@ namespace Scrambler.Validators.Abstract
             {
                 if (columns.Contains(primaryKey))
                 {
-                    _logger.Error($"The following column is part of a primary key: {primaryKey} in the table {logInfo.TableNameWithSchema}." +
+                    _logger.LogError($"The following column is part of a primary key: {primaryKey} in the table {logInfo.TableNameWithSchema}." +
                         $" Connection string: {logInfo.ConnectionString}",
                         logInfo);
                     isThereAPrimaryKeyConflict = true;
@@ -85,7 +90,7 @@ namespace Scrambler.Validators.Abstract
         {
             if (scrambledColumns == null && constantColumns == null)
             {
-                _logger.Error($"There are no constant or scrambled columns in the table to scramble/set. " +
+                _logger.LogError($"There are no constant or scrambled columns in the table to scramble/set. " +
                             $"{logInfo.TableNameWithSchema}. Connection string: {logInfo.ConnectionString}", logInfo);
                 throw new ArgumentNullException("Constant and scrambled column lists can not be both empty.");
             }
@@ -105,7 +110,7 @@ namespace Scrambler.Validators.Abstract
                 {
                     if (constantColumn.ToLower() == scrambledColumn.ToLower())
                     {
-                        _logger.Error($"The column {constantColumn} appears both at the constant and scrambled columns in table " +
+                        _logger.LogError($"The column {constantColumn} appears both at the constant and scrambled columns in table " +
                             $"{logInfo.TableNameWithSchema}. Connection string: {logInfo.ConnectionString}", logInfo);
                         isThereADuplicationConflict = true;
                     }
@@ -132,7 +137,7 @@ namespace Scrambler.Validators.Abstract
             {
                 if (allColumns[column] == null)
                 {
-                    _logger.Error($"The column {column} doesn't exist in the table {logInfo.TableNameWithSchema}. " +
+                    _logger.LogError($"The column {column} doesn't exist in the table {logInfo.TableNameWithSchema}. " +
                         $"Connection string: {logInfo.ConnectionString}.", logInfo);
                     doAllColumnsExist = false;
                 }
@@ -156,7 +161,7 @@ namespace Scrambler.Validators.Abstract
                 //Checking the source table's columns
                 if (!DoAllSourceTableFrnKeyMapColsExist(connectionString, tableConfig, pairedColumnsOutsideConfig))
                 {
-                    _logger.Error($"Error while checking the paired columns outside of table {tableConfig.FullTableName}. " +
+                    _logger.LogError($"Error while checking the paired columns outside of table {tableConfig.FullTableName}. " +
                         $"Connection string: {connectionString}.");
                     doAllPairedColumnsOutsideExist = false;
                 }
@@ -164,7 +169,7 @@ namespace Scrambler.Validators.Abstract
                 //Checking the dest table's columns
                 if (!DoAllDestTableFrnKeyMapColsExist(pairedColumnsOutsideConfig))
                 {
-                    _logger.Error($"Error while checking the paired columns outside of table {tableConfig.FullTableName}. " +
+                    _logger.LogError($"Error while checking the paired columns outside of table {tableConfig.FullTableName}. " +
                         $"Connection string: {connectionString}.");
                     doAllPairedColumnsOutsideExist = false;
                 }
@@ -185,7 +190,7 @@ namespace Scrambler.Validators.Abstract
                         TableNameWithSchema = mappingTable.DestinationFullTableName}, columns))
                     {
                         doAllPairedColumnsOutsideExist = false;
-                        _logger.Error($"Error while checking the paired columns outside of table: {tableConfig.FullTableName}. " +
+                        _logger.LogError($"Error while checking the paired columns outside of table: {tableConfig.FullTableName}. " +
                             $"Connection string: {connectionString}. ");
                     }
 
@@ -203,7 +208,7 @@ namespace Scrambler.Validators.Abstract
             }
             catch (SqlException ex)
             {
-                _logger.Error($"Error while checking the paired columns outside of table: {destinationConnectionString}. " +
+                _logger.LogError($"Error while checking the paired columns outside of table: {destinationConnectionString}. " +
                $"Connection string: {connectionString}. " +
                $"The mapped database {destinationConnectionString} or table {destinationFullTableName} doesn't exist or it is unreachable. " +
                $"Error message: {ex.Message}.");
@@ -225,7 +230,7 @@ namespace Scrambler.Validators.Abstract
             if (!DoAllColumnsExist(sourceSchemaTable, new LoggingInfo {ConnectionString = connectionString, TableNameWithSchema = tableConfig.FullTableName },
                 columnsInSourceTable))
             {
-                _logger.Error($"Error while checking the columns of table: {tableConfig.FullTableName}. " +
+                _logger.LogError($"Error while checking the columns of table: {tableConfig.FullTableName}. " +
                         $"Connection string: {connectionString}. ");
                 return false;
             }
@@ -250,7 +255,7 @@ namespace Scrambler.Validators.Abstract
             }
             catch (SqlException ex)
             {
-                _logger.Error($"The mapped database {connectionString} or table {fullTableName} doesn't exist or it is unreachable. " +
+                _logger.LogError($"The mapped database {connectionString} or table {fullTableName} doesn't exist or it is unreachable. " +
                         $"Error message: {ex.Message}");
                 return false;
             }
@@ -258,7 +263,7 @@ namespace Scrambler.Validators.Abstract
             if (!DoAllColumnsExist(destSchemaTable, new LoggingInfo {ConnectionString = connectionString, TableNameWithSchema = fullTableName },
                 columnsInSourceTable))
             {
-                _logger.Error($"Error while checking the columns of table: {fullTableName}. " +
+                _logger.LogError($"Error while checking the columns of table: {fullTableName}. " +
                         $"Connection string: {connectionString}. ");
                 return false;
             }

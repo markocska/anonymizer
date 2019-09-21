@@ -11,20 +11,26 @@ using Scrambler.Validators.ConfigValidators;
 using Scrambler.Validators.ParameterValidators;
 using Scrambler.DatabaseServices.ColumnTypes;
 using Scrambler.DatabaseServices.PrimaryKeys;
+using Scrambler.Utilities;
+using Microsoft.Extensions.Logging;
+
 
 namespace Scrambler
 {
-    public abstract class ScramblingService<TConfigValidator, TParameterValidator, TColumnTypeManager, TPrimaryKeyManager, TTableInfoCollectionFactory>
+    public abstract class ScramblingService<TConfigValidator, TParameterValidator, TColumnTypeManager, TPrimaryKeyManager, TTableInfoCollectionFactory,
+        TTableScramblingService>
         : IScramblingService
         where TConfigValidator : class, IConfigValidator
         where TParameterValidator : class, IParameterValidator
         where TColumnTypeManager : class, IColumnTypeManager
         where TPrimaryKeyManager : class, IPrimaryKeyManager
         where TTableInfoCollectionFactory : class, ITableInfoCollectionFactory
+        where TTableScramblingService : class, ITableScramblingService
     {
         private readonly ServiceProvider _serviceProvider;
+        private readonly IQueryHelper _queryHelper;
 
-        public ScramblingService()
+        public ScramblingService(IQueryHelper queryHelper, ILogger<IScramblingService> logger)
         {
             var serviceProvider = new ServiceCollection()
                  .AddScoped<IConfigValidator, TConfigValidator>()
@@ -32,9 +38,11 @@ namespace Scrambler
                  .AddScoped<IColumnTypeManager, TColumnTypeManager>()
                  .AddScoped<IPrimaryKeyManager, TPrimaryKeyManager>()
                  .AddScoped<ITableInfoCollectionFactory, TTableInfoCollectionFactory>()
+                 .AddScoped<ITableScramblingService, TTableScramblingService>()
                  .BuildServiceProvider();
 
             _serviceProvider = serviceProvider;
+            _queryHelper = queryHelper;
         }
 
         public void ScrambleFromConfigStr(string configStr)
@@ -58,10 +66,12 @@ namespace Scrambler
 
             var tableScramblingService = _serviceProvider.GetRequiredService<ITableScramblingService>();
             foreach (var table in validTables)
-            {
+            {   
                 var scramblingScript = tableScramblingService.GenerateScramblingScript(table);
+                tableScramblingService.ScrambleTable(table, scramblingScript);
                 Console.WriteLine(scramblingScript);
             }
+
 
         }
 

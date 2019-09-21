@@ -1,5 +1,6 @@
 ﻿using Scrambler.SqlScripts.SqlServer;
 using Scrambler.TableInfo.Interfaces;
+using Scrambler.Utilities;
 using Scrambler.Utilities.QueryHelpers;
 using System;
 using System.Collections.Generic;
@@ -10,6 +11,13 @@ namespace Scrambler.DatabaseServices.Indexes
 {
     public class SqlIndexService : IIndexService
     {
+        private readonly IQueryHelper _queryHelper;
+
+        public SqlIndexService(IQueryHelper queryHelper)
+        {
+            _queryHelper = queryHelper;
+        }
+
         public void TurnOffIndexes(ITableInfo tableInfo)
         {
             EnableDisableIndexes(tableInfo, false);
@@ -39,7 +47,7 @@ namespace Scrambler.DatabaseServices.Indexes
             Console.WriteLine(indexOnOffQuery);
             try
             {
-                SqlHelper.ExecuteNonQuery(tableInfo.DbConnectionString, new List<SqlParameter>(), indexOnOffQuery);
+                _queryHelper.ExecuteNonQueryWithoutParams(tableInfo.DbConnectionString, indexOnOffQuery);
             }
             catch(Exception ex)
             {
@@ -67,7 +75,7 @@ namespace Scrambler.DatabaseServices.Indexes
             DataTable indexNamesTable;
             try
             {
-                indexNamesTable = SqlHelper.ExecuteQuery(tableInfo.DbConnectionString, new List<SqlParameter>(), indexNamesQuery);
+                indexNamesTable = _queryHelper.ExecuteQueryWithoutParams(tableInfo.DbConnectionString, indexNamesQuery);
             }
             catch (Exception ex)
             {

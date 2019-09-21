@@ -1,14 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using Microsoft.Extensions.Logging;
 using Scrambler.SqlScripts.SqlServer;
 using Scrambler.TableInfo.Interfaces;
+using Scrambler.Utilities;
 using Scrambler.Utilities.QueryHelpers;
 
 namespace Scrambler.DatabaseServices.Scrambling
 {
     public class SqlTableScramblingService : TableScramblingService
     {
+
+        public SqlTableScramblingService(ILogger<SqlTableScramblingService> logger, IQueryHelper queryHelper) : base(logger, queryHelper)
+        {
+
+        }
+
         public override string GenerateScramblingScript(ITableInfo tableInfo)
         {
             var scramblingTemplate = new ScrambleTable(tableInfo);
@@ -17,7 +25,7 @@ namespace Scrambler.DatabaseServices.Scrambling
 
         public override string ScrambleTable(ITableInfo tableInfo, string scramblingScript)
         {
-            SqlHelper.ExecuteNonQuery(tableInfo.DbConnectionString, null, scramblingScript);
+            _queryHelper.ExecuteNonQueryWithoutParams(tableInfo.DbConnectionString, scramblingScript);
             return "test";
         }
     }

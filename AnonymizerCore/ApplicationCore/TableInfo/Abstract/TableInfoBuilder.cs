@@ -1,4 +1,5 @@
-﻿using Scrambler.Config;
+﻿using Microsoft.Extensions.Logging;
+using Scrambler.Config;
 using Scrambler.DatabaseServices.ColumnTypes;
 using Scrambler.DatabaseServices.PrimaryKeys;
 using Scrambler.TableInfo.Common;
@@ -6,7 +7,6 @@ using Scrambler.TableInfo.Exceptions;
 using Scrambler.TableInfo.Interfaces;
 using Scrambler.Utilities;
 using Scrambler.Validators.ConfigValidators;
-using Serilog;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,14 +23,14 @@ namespace Scrambler.TableInfo.Abstract
         public DatabaseConfig DatabaseConfig { get; private set; }
 
         public TableInfoBuilder(DatabaseConfig dbConfig, TableConfig tableConfig, IConfigValidator configValidator, IColumnTypeManager columnTypeManager,
-            IPrimaryKeyManager primaryKeyManager)
+            IPrimaryKeyManager primaryKeyManager, ILogger logger)
         {
             TableConfig = tableConfig;
             DatabaseConfig = dbConfig;
             _configValidator = configValidator;
             _columnTypeManager = columnTypeManager;
             _primaryKeyManager = primaryKeyManager;
-            _logger = Serilog.Log.Logger.ForContext<TableInfoBuilder>();
+            _logger = logger;
         }
 
         public ITableInfo Build()
@@ -69,7 +69,7 @@ namespace Scrambler.TableInfo.Abstract
             }
             catch(ColumnTypesException ex)
             {
-                _logger.Error($"Error while getting scrambled column types for table {TableConfig.FullTableName}. " +
+                _logger.LogError($"Error while getting scrambled column types for table {TableConfig.FullTableName}. " +
                     $"Connection string: {DatabaseConfig.ConnectionString}. Error message: {ex.Message}. ", ex);
                 throw new TableInfoException(TableConfig.FullTableName, DatabaseConfig.ConnectionString, "Error while creating the table.");
             }
@@ -83,7 +83,7 @@ namespace Scrambler.TableInfo.Abstract
             }
             catch (ColumnTypesException ex)
             {
-                _logger.Error($"Error while getting constant column types for table {TableConfig.FullTableName}. " +
+                _logger.LogError($"Error while getting constant column types for table {TableConfig.FullTableName}. " +
                     $"Connection string: {DatabaseConfig.ConnectionString}. Error message: {ex.Message}. ", ex);
                 throw new TableInfoException(TableConfig.FullTableName, DatabaseConfig.ConnectionString, "Error while creating the table.");
             }
@@ -109,7 +109,7 @@ namespace Scrambler.TableInfo.Abstract
             }
             catch (Exception ex)
             {
-                _logger.Error($"An error happened while trying to get primary keys and their types {ex.Message}", ex);
+                _logger.LogError($"An error happened while trying to get primary keys and their types {ex.Message}", ex);
                 throw new TableInfoException(TableConfig.FullTableName, DatabaseConfig.ConnectionString, "Error while creating table");
             }
 
@@ -143,9 +143,11 @@ namespace Scrambler.TableInfo.Abstract
             for (int i = 0; i < TableConfig.PairedColumnsOutsideTable.Count; i++)
             {
                 var mappedTableOutsideConfig = TableConfig.PairedColumnsOutsideTable[i];
-                var mappedTable = new MappedTable();
-                // columns that will have to same value in the source and dest. table 
-                mappedTable.SourceDestPairedColumnsOutside = mappedTableOutsideConfig.ColumnMapping.Select(m => new ColumnPair(m[0], m[1])).ToList();
+                var mappedTable = new MappedTable
+                {
+                    // columns that will have to same value in the source and dest. table 
+                    SourceDestPairedColumnsOutside = mappedTableOutsideConfig.ColumnMapping.Select(m => new ColumnPair(m[0], m[1])).ToList()
+                };
 
                 var columnMapping = new List<MappedColumnPair>();
                 for (int j = 0; j < mappedTableOutsideConfig.SourceDestMapping.Count; j++)

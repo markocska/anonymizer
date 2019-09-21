@@ -1,4 +1,5 @@
-﻿using Scrambler.Config;
+﻿using Microsoft.Extensions.Logging;
+using Scrambler.Config;
 using Scrambler.DatabaseServices.ColumnTypes;
 using Scrambler.DatabaseServices.PrimaryKeys;
 using Scrambler.TableInfo;
@@ -7,7 +8,6 @@ using Scrambler.TableInfo.Interfaces;
 using Scrambler.Validators;
 using Scrambler.Validators.ConfigValidators;
 using Scrambler.Validators.ParameterValidators;
-using Serilog;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -16,7 +16,7 @@ namespace Scrambler.Factories
 {
     public abstract class TableInfoCollectionFactory : ITableInfoCollectionFactory
     {
-        private readonly ILogger _logger;
+        protected readonly ILogger _logger;
 
         private readonly IConfigValidator _configValidator;
         private readonly IParameterValidator _parameterValidator;
@@ -24,9 +24,9 @@ namespace Scrambler.Factories
         private readonly IPrimaryKeyManager _primaryKeyManager;
 
         public TableInfoCollectionFactory(IConfigValidator configValidator, IParameterValidator parameterValidator, IColumnTypeManager columnTypeManager,
-            IPrimaryKeyManager primaryKeyManager)
+            IPrimaryKeyManager primaryKeyManager, ILogger<TableInfoCollectionFactory> logger)
         {
-            _logger = Serilog.Log.ForContext(typeof(TableInfoCollectionFactory));
+            _logger = logger;
             _configValidator = configValidator;
             _parameterValidator = parameterValidator;
             _columnTypeManager = columnTypeManager;
@@ -75,7 +75,7 @@ namespace Scrambler.Factories
                     }
                     catch (Exception ex)
                     {
-                        _logger.Error($"An error happened while getting table information for table {tableConfig.FullTableName}. " +
+                        _logger.LogError($"An error happened while getting table information for table {tableConfig.FullTableName}. " +
                             $"DbConnectionString: {dbConfig.ConnectionString}. Error message: {ex.Message}");
                     }
                 }

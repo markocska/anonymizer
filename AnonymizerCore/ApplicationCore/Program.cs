@@ -21,7 +21,7 @@ namespace Scrambler
     {
         static Program()
         {
-            SerilogInitializer.Register();
+
         }
 
         static void Main(string[] args)

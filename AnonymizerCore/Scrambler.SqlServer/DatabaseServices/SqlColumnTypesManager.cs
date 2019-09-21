@@ -14,6 +14,13 @@ namespace Scrambler.DatabaseServices.ColumnTypes
 {
     public class SqlColumnTypesManager : IColumnTypeManager
     {
+        private readonly IQueryHelper _queryHelper;
+
+        public SqlColumnTypesManager(IQueryHelper queryHelper)
+        {
+            _queryHelper = queryHelper;
+        }
+
         public Dictionary<string, string> GetColumnNamesAndTypes(ITableInfo tableInfo, List<string> columnNames)
         {
             var columnTypesTemplate = new GetColumnTypes(tableInfo.DbName, tableInfo.SchemaName, tableInfo.TableName, columnNames);
@@ -23,7 +30,7 @@ namespace Scrambler.DatabaseServices.ColumnTypes
             DataTable columnTypesTable;
             try
             {
-                columnTypesTable = SqlHelper.ExecuteQuery(tableInfo.DbConnectionString, new List<SqlParameter>(), columnTypesQuery);
+                columnTypesTable = _queryHelper.ExecuteQueryWithoutParams(tableInfo.DbConnectionString, columnTypesQuery);
             }
             catch (Exception ex)
             {

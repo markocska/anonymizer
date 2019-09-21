@@ -6,10 +6,10 @@ using System.Text;
 
 namespace Scrambler.Utilities.QueryHelpers
 {
-    public static class SqlHelper
+    public class SqlHelper : IQueryHelper
     {
         #region Synchronous Methods
-        public static void ExecuteNonQuery(string connectionString, List<SqlParameter> cmdParameters, string cmdStr)
+        public void ExecuteNonQueryWithoutParams(string connectionString, string cmdStr)
         {
             using (var conn = new SqlConnection(connectionString))
             {
@@ -19,15 +19,12 @@ namespace Scrambler.Utilities.QueryHelpers
                     CommandTimeout = 0,
                     CommandType = CommandType.Text
                 };
-                if (cmdParameters != null)
-                {
-                    cmd.Parameters.AddRange(cmdParameters.ToArray());
-                }
+
                 cmd.ExecuteNonQuery();
             }
         }
 
-        public static DataTable ExecuteQuery(string connectionString, List<SqlParameter> cmdParameters, string cmdStr)
+        public DataTable ExecuteQueryWithoutParams(string connectionString, string cmdStr)
         {
             DataTable Results = new DataTable();
             using (var conn = new SqlConnection(connectionString))
@@ -38,10 +35,7 @@ namespace Scrambler.Utilities.QueryHelpers
                     CommandTimeout = 0,
                     CommandType = System.Data.CommandType.Text
                 };
-                if (cmdParameters != null)
-                {
-                    cmd.Parameters.AddRange(cmdParameters.ToArray());
-                }
+
                 using (var Reader = cmd.ExecuteReader())
                 {
                     Results.Load(Reader);
