@@ -18,7 +18,7 @@ using Microsoft.Extensions.Logging;
 namespace Scrambler
 {
     public abstract class ScramblingService<TConfigValidator, TParameterValidator, TColumnTypeManager, TPrimaryKeyManager, TTableInfoCollectionFactory,
-        TTableScramblingService>
+        TTableScramblingService, TQueryHelper>
         : IScramblingService
         where TConfigValidator : class, IConfigValidator
         where TParameterValidator : class, IParameterValidator
@@ -26,11 +26,12 @@ namespace Scrambler
         where TPrimaryKeyManager : class, IPrimaryKeyManager
         where TTableInfoCollectionFactory : class, ITableInfoCollectionFactory
         where TTableScramblingService : class, ITableScramblingService
+        where TQueryHelper : class, IQueryHelper
     {
         private readonly ServiceProvider _serviceProvider;
         private readonly IQueryHelper _queryHelper;
 
-        public ScramblingService(IQueryHelper queryHelper, ILogger<IScramblingService> logger)
+        public ScramblingService(IQueryHelper queryHelper, Action<ILoggingBuilder> logConfig)
         {
             var serviceProvider = new ServiceCollection()
                  .AddScoped<IConfigValidator, TConfigValidator>()
@@ -39,6 +40,8 @@ namespace Scrambler
                  .AddScoped<IPrimaryKeyManager, TPrimaryKeyManager>()
                  .AddScoped<ITableInfoCollectionFactory, TTableInfoCollectionFactory>()
                  .AddScoped<ITableScramblingService, TTableScramblingService>()
+                 .AddScoped<IQueryHelper, TQueryHelper>()
+                 .AddLogging(logConfig)
                  .BuildServiceProvider();
 
             _serviceProvider = serviceProvider;
@@ -47,8 +50,7 @@ namespace Scrambler
 
         public void ScrambleFromConfigStr(string configStr)
         {
-            var config = File.ReadAllText(configStr);
-            var databasesConfig = JsonConvert.DeserializeObject<DatabasesConfig>(config);
+            var databasesConfig = JsonConvert.DeserializeObject<DatabasesConfig>(configStr);
 
 
             if (databasesConfig == null)
@@ -68,8 +70,8 @@ namespace Scrambler
             foreach (var table in validTables)
             {   
                 var scramblingScript = tableScramblingService.GenerateScramblingScript(table);
-                tableScramblingService.ScrambleTable(table, scramblingScript);
                 Console.WriteLine(scramblingScript);
+                tableScramblingService.ScrambleTable(table, scramblingScript);               
             }
 
 

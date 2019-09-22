@@ -3,8 +3,8 @@ using Scrambler.DatabaseServices.ColumnTypes;
 using Scrambler.DatabaseServices.PrimaryKeys;
 using Scrambler.DatabaseServices.Scrambling;
 using Scrambler.Factories;
-using Scrambler.ServiceProviders;
 using Scrambler.Utilities;
+using Scrambler.Utilities.QueryHelpers;
 using Scrambler.Validators.ConfigValidators;
 using Scrambler.Validators.ParameterValidators;
 using System;
@@ -15,9 +15,9 @@ namespace Scrambler.SqlServer
 {
     public class SqlScramblingService : 
         ScramblingService<SqlConfigValidator, SqlParameterValidator, SqlColumnTypesManager, SqlPrimaryKeyManager, SqlTableInfoCollectionFactory, 
-            SqlTableScramblingService>
+            SqlTableScramblingService, SqlHelper>
     {
-        public SqlScramblingService(IQueryHelper queryHelper, ILogger<SqlScramblingService> logger): base(queryHelper, logger)
+        public SqlScramblingService(Action<ILoggingBuilder> logConfig) : base(new SqlHelper(), logConfig)
         {
 
         }

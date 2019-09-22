@@ -5,7 +5,9 @@ VisualStudioVersion = 15.0.28307.136
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Scrambler.Core", "ApplicationCore\Scrambler.Core.csproj", "{90EE6926-06EF-4BCD-99E9-BD32986FB01A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Scrambler.SqlServer", "Scrambler.SqlServer\Scrambler.SqlServer.csproj", "{E2471231-0144-45FA-B9D4-5082CEE74C60}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Scrambler.SqlServer", "Scrambler.SqlServer\Scrambler.SqlServer.csproj", "{E2471231-0144-45FA-B9D4-5082CEE74C60}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test", "Test\Test.csproj", "{E53DB5F4-5674-42A0-9210-181377CAA997}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{E2471231-0144-45FA-B9D4-5082CEE74C60}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E2471231-0144-45FA-B9D4-5082CEE74C60}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E2471231-0144-45FA-B9D4-5082CEE74C60}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E53DB5F4-5674-42A0-9210-181377CAA997}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E53DB5F4-5674-42A0-9210-181377CAA997}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E53DB5F4-5674-42A0-9210-181377CAA997}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E53DB5F4-5674-42A0-9210-181377CAA997}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

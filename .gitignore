@@ -10,3 +10,5 @@
 /AnonymizerCore/.vs/AnonymizerCore/v15/Server/sqlite3
 /AnonymizerCore/.vs/AnonymizerCore/v15/*.suo
 /AnonymizerCore/.vs/AnonymizerCore/v15/.suo
+/AnonymizerCore/Test/bin/Debug/netcoreapp2.2
+/AnonymizerCore/Test/obj
