@@ -2,7 +2,7 @@
 using Scrambler.Config;
 using Scrambler.Extensions;
 using Scrambler.Logging;
-using Scrambler.Validators;
+using Scrambler.Validators.ParameterValidators;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -39,7 +39,7 @@ namespace Scrambler.Validators.Abstract
                     doAllColumnsExist = false;
                 }
             }
-
+            
             return doAllColumnsExist;
         }
 
@@ -186,11 +186,8 @@ namespace Scrambler.Validators.Abstract
                     var schemaTable = GetTableSchema(mappingTable.DestinationConnectionString, mappingTable.DestinationFullTableName);
                     var columns = mappingTable.ForeignKeyMapping.GetSubListElementsOfIndex(1)
                         .Concat(nextMappingTable.ForeignKeyMapping.GetSubListElementsOfIndex(0));
-                    if (!DoAllColumnsExist(schemaTable, new LoggingInfo
-                    {
-                        ConnectionString = mappingTable.DestinationConnectionString,
-                        TableNameWithSchema = mappingTable.DestinationFullTableName
-                    }, columns))
+                    if (!DoAllColumnsExist(schemaTable, new LoggingInfo {ConnectionString = mappingTable.DestinationConnectionString,
+                        TableNameWithSchema = mappingTable.DestinationFullTableName}, columns))
                     {
                         doAllPairedColumnsOutsideExist = false;
                         _logger.LogError($"Error while checking the paired columns outside of table: {tableConfig.FullTableName}. " +
@@ -230,7 +227,7 @@ namespace Scrambler.Validators.Abstract
 
             var sourceSchemaTable = GetTableSchema(connectionString, tableConfig.FullTableName);
 
-            if (!DoAllColumnsExist(sourceSchemaTable, new LoggingInfo { ConnectionString = connectionString, TableNameWithSchema = tableConfig.FullTableName },
+            if (!DoAllColumnsExist(sourceSchemaTable, new LoggingInfo {ConnectionString = connectionString, TableNameWithSchema = tableConfig.FullTableName },
                 columnsInSourceTable))
             {
                 _logger.LogError($"Error while checking the columns of table: {tableConfig.FullTableName}. " +
@@ -263,7 +260,7 @@ namespace Scrambler.Validators.Abstract
                 return false;
             }
 
-            if (!DoAllColumnsExist(destSchemaTable, new LoggingInfo { ConnectionString = connectionString, TableNameWithSchema = fullTableName },
+            if (!DoAllColumnsExist(destSchemaTable, new LoggingInfo {ConnectionString = connectionString, TableNameWithSchema = fullTableName },
                 columnsInSourceTable))
             {
                 _logger.LogError($"Error while checking the columns of table: {fullTableName}. " +

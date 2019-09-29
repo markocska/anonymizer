@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Scrambler.Validators
+namespace Scrambler.Validators.ConfigValidators
 {
     public interface IConfigValidator
     {

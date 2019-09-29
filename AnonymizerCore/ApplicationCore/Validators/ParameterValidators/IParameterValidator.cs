@@ -2,7 +2,7 @@
 using Scrambler.TableInfo;
 using System.Collections.Generic;
 
-namespace Scrambler.Validators
+namespace Scrambler.Validators.ParameterValidators
 {
     public interface IParameterValidator
     {

@@ -6,7 +6,7 @@ using Scrambler.TableInfo.Common;
 using Scrambler.TableInfo.Exceptions;
 using Scrambler.TableInfo.Interfaces;
 using Scrambler.Utilities;
-using Scrambler.Validators;
+using Scrambler.Validators.ConfigValidators;
 using System;
 using System.Collections.Generic;
 using System.Linq;

@@ -4,7 +4,7 @@ using Scrambler.DatabaseServices.ColumnTypes;
 using Scrambler.DatabaseServices.PrimaryKeys;
 using Scrambler.TableInfo.Abstract;
 using Scrambler.Utilities;
-using Scrambler.Validators;
+using Scrambler.Validators.ConfigValidators;
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;

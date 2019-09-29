@@ -6,6 +6,8 @@ using Scrambler.TableInfo;
 using Scrambler.TableInfo.Abstract;
 using Scrambler.TableInfo.Interfaces;
 using Scrambler.Validators;
+using Scrambler.Validators.ConfigValidators;
+using Scrambler.Validators.ParameterValidators;
 using System;
 using System.Collections.Generic;
 using System.Text;
