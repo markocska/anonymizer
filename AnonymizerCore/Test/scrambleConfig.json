@@ -18,6 +18,7 @@
               "value": "this is a constant"
             }
           ],
+          "where": "[first name] <> 'George' and [last name] <> 'Peterson'",
           "pairedColumnsInsideTable": [
             [ "[last name]", "location" ]
           ],
