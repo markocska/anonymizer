@@ -4,8 +4,7 @@ using Scrambler.DatabaseServices.ColumnTypes;
 using Scrambler.DatabaseServices.PrimaryKeys;
 using Scrambler.TableInfo;
 using Scrambler.TableInfo.Interfaces;
-using Scrambler.Validators.ConfigValidators;
-using Scrambler.Validators.ParameterValidators;
+using Scrambler.Validators;
 
 namespace Scrambler.Factories
 {
