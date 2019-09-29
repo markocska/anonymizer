@@ -11,4 +11,7 @@
 /AnonymizerCore/.vs/AnonymizerCore/v15/*.suo
 /AnonymizerCore/.vs/AnonymizerCore/v15/.suo
 /AnonymizerCore/Test/bin/Debug/netcoreapp2.2
+/AnonymizerCore/Test/bin/Debug
 /AnonymizerCore/Test/obj
+/AnonymizerCore/Scrambler.SqlServer/bin
+/AnonymizerCore/Scrambler.SqlServer/obj

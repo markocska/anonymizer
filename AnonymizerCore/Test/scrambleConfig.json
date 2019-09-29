@@ -65,6 +65,7 @@
           "pairedColumnsInsideTable": [
             [ "[last name]", "location" ]
           ],
+          "where": "",
           "pairedColumnsOutsideTable": [
             {
               "columnMapping": [
@@ -116,6 +117,7 @@
           "pairedColumnsInsideTable": [
             [ "shift", "location" ]
           ],
+          "where": "",
           "pairedColumnsOutsideTable": [
             {
               "columnMapping": [

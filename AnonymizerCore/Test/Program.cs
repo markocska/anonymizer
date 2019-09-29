@@ -9,7 +9,7 @@ namespace Test
     {
         static void Main(string[] args)
         {
-            var config = File.ReadAllText(".\\tablesConfig.json");
+            var config = File.ReadAllText(".\\scrambleConfig.json");
 
             Action<ILoggingBuilder> logConfig = logBuilder => logBuilder.AddConsole();
 

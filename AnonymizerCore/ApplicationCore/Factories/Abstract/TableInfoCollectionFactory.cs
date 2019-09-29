@@ -6,6 +6,7 @@ using Scrambler.TableInfo;
 using Scrambler.TableInfo.Abstract;
 using Scrambler.TableInfo.Interfaces;
 using Scrambler.Validators;
+using Scrambler.Validators.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -16,19 +17,21 @@ namespace Scrambler.Factories
     {
         protected readonly ILogger _logger;
 
-        private readonly IConfigValidator _configValidator;
-        private readonly IParameterValidator _parameterValidator;
-        private readonly IColumnTypeManager _columnTypeManager;
-        private readonly IPrimaryKeyManager _primaryKeyManager;
+        protected readonly IConfigValidator _configValidator;
+        protected readonly IParameterValidator _parameterValidator;
+        protected readonly IColumnTypeManager _columnTypeManager;
+        protected readonly IPrimaryKeyManager _primaryKeyManager;
+        protected readonly IWhereConditionValidator _whereConditionValidator;
 
         public TableInfoCollectionFactory(IConfigValidator configValidator, IParameterValidator parameterValidator, IColumnTypeManager columnTypeManager,
-            IPrimaryKeyManager primaryKeyManager, ILogger<TableInfoCollectionFactory> logger)
+            IPrimaryKeyManager primaryKeyManager, IWhereConditionValidator whereConditionValidator, ILogger<TableInfoCollectionFactory> logger)
         {
             _logger = logger;
             _configValidator = configValidator;
             _parameterValidator = parameterValidator;
             _columnTypeManager = columnTypeManager;
             _primaryKeyManager = primaryKeyManager;
+            _whereConditionValidator = whereConditionValidator;
         }
 
         public List<ITableInfo> CreateTableListFromConfig(DatabasesConfig databasesConfig)
@@ -68,7 +71,7 @@ namespace Scrambler.Factories
                 {
                     try
                     {
-                        var tableInfo = CreateTableInfo(dbConfig, tableConfig, _configValidator, _columnTypeManager, _primaryKeyManager);
+                        var tableInfo = CreateTableInfo(dbConfig, tableConfig);
                         tableInfos.Add(tableInfo);
                     }
                     catch (Exception ex)
@@ -83,7 +86,6 @@ namespace Scrambler.Factories
 
         }
 
-        protected abstract ITableInfo CreateTableInfo(DatabaseConfig dbConfig, TableConfig tableConfig, IConfigValidator configValidator, 
-            IColumnTypeManager columnTypeManager, IPrimaryKeyManager primaryKeyManager);
+        protected abstract ITableInfo CreateTableInfo(DatabaseConfig dbConfig, TableConfig tableConfig);
     }
 }

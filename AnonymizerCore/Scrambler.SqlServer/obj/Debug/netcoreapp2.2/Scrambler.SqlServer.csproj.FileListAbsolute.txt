@@ -2,7 +2,6 @@ E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\Scrambler.SqlServer\
 E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\Scrambler.SqlServer\obj\Debug\netcoreapp2.2\Scrambler.SqlServer.csproj.CoreCompileInputs.cache
 E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\Scrambler.SqlServer\obj\Debug\netcoreapp2.2\Scrambler.SqlServer.AssemblyInfoInputs.cache
 E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\Scrambler.SqlServer\obj\Debug\netcoreapp2.2\Scrambler.SqlServer.AssemblyInfo.cs
-E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\Scrambler.SqlServer\bin\Debug\netcoreapp2.2\tablesConfig.json
 E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\Scrambler.SqlServer\bin\Debug\netcoreapp2.2\Scrambler.SqlServer.deps.json
 E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\Scrambler.SqlServer\bin\Debug\netcoreapp2.2\Scrambler.SqlServer.dll
 E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\Scrambler.SqlServer\bin\Debug\netcoreapp2.2\Scrambler.SqlServer.pdb

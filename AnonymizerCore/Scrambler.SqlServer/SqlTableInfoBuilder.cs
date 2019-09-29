@@ -38,6 +38,7 @@ namespace Scrambler.TableInfo
        
         protected override TableConfig NormalizeTableConfigParameters(TableConfig tableConfig)
         {
+
             var normalizedTableConfig = new TableConfig
             {
                 ConstantColumns = tableConfig.ConstantColumns?.Select(c =>
@@ -68,7 +69,8 @@ namespace Scrambler.TableInfo
                     }).ToList()
                     ?? new List<PairedColumnsOutsideTableConfig>(),
 
-                FullTableName = ParameterNameHelper.AddParenthesisToFullTableName(tableConfig.FullTableName)
+                FullTableName = ParameterNameHelper.AddParenthesisToFullTableName(tableConfig.FullTableName),
+                Where = tableConfig.Where
             };
 
             return normalizedTableConfig;

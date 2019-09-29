@@ -12,12 +12,12 @@ using Scrambler.DatabaseServices.ColumnTypes;
 using Scrambler.DatabaseServices.PrimaryKeys;
 using Scrambler.Utilities;
 using Microsoft.Extensions.Logging;
-
+using Scrambler.Validators.Interfaces;
 
 namespace Scrambler
 {
     public abstract class ScramblingService<TConfigValidator, TParameterValidator, TColumnTypeManager, TPrimaryKeyManager, TTableInfoCollectionFactory,
-        TTableScramblingService, TQueryHelper>
+        TTableScramblingService,TWhereConditionValidator ,TQueryHelper>
         : IScramblingService
         where TConfigValidator : class, IConfigValidator
         where TParameterValidator : class, IParameterValidator
@@ -25,6 +25,7 @@ namespace Scrambler
         where TPrimaryKeyManager : class, IPrimaryKeyManager
         where TTableInfoCollectionFactory : class, ITableInfoCollectionFactory
         where TTableScramblingService : class, ITableScramblingService
+        where TWhereConditionValidator : class, IWhereConditionValidator
         where TQueryHelper : class, IQueryHelper
     {
         private readonly ServiceProvider _serviceProvider;
@@ -39,6 +40,7 @@ namespace Scrambler
                  .AddScoped<IPrimaryKeyManager, TPrimaryKeyManager>()
                  .AddScoped<ITableInfoCollectionFactory, TTableInfoCollectionFactory>()
                  .AddScoped<ITableScramblingService, TTableScramblingService>()
+                 .AddScoped<IWhereConditionValidator, TWhereConditionValidator>()
                  .AddScoped<IQueryHelper, TQueryHelper>()
                  .AddLogging(logConfig)
                  .BuildServiceProvider();

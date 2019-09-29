@@ -5,6 +5,7 @@ using Scrambler.DatabaseServices.PrimaryKeys;
 using Scrambler.TableInfo;
 using Scrambler.TableInfo.Interfaces;
 using Scrambler.Validators;
+using Scrambler.Validators.Interfaces;
 
 namespace Scrambler.Factories
 {
@@ -12,15 +13,14 @@ namespace Scrambler.Factories
     {
 
         public SqlTableInfoCollectionFactory(IConfigValidator configValidator, IParameterValidator parameterValidator, IColumnTypeManager columnTypeManager,
-                 IPrimaryKeyManager primaryKeyManager, ILogger<SqlTableInfoCollectionFactory> logger) 
-            : base(configValidator, parameterValidator, columnTypeManager, primaryKeyManager, logger)
+                 IPrimaryKeyManager primaryKeyManager, IWhereConditionValidator whereConditionValidator,ILogger<SqlTableInfoCollectionFactory> logger) 
+            : base(configValidator, parameterValidator, columnTypeManager, primaryKeyManager, whereConditionValidator ,logger)
         {
         }
 
-        protected override ITableInfo CreateTableInfo(DatabaseConfig dbConfig, TableConfig tableConfig, IConfigValidator configValidator,
-            IColumnTypeManager columnTypeManager, IPrimaryKeyManager primaryKeyManager)
+        protected override ITableInfo CreateTableInfo(DatabaseConfig dbConfig, TableConfig tableConfig)
         {
-            return new SqlTableInfoBuilder(dbConfig, tableConfig, configValidator, columnTypeManager, primaryKeyManager, _logger).Build();
+            return new SqlTableInfoBuilder(dbConfig, tableConfig, _configValidator, _columnTypeManager, _primaryKeyManager, _logger).Build();
         }
     }
 }

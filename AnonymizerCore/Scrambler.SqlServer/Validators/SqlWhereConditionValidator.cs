@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.Logging;
 using Scrambler.Config;
+using Scrambler.Utilities;
 using Scrambler.Utilities.QueryHelpers;
 using Scrambler.Validators.Abstract;
 using Scrambler.Validators.Interfaces;
@@ -13,9 +14,9 @@ namespace Scrambler.SqlServer.Validators
     public class SqlWhereConditionValidator : IWhereConditionValidator
     {
         private readonly ILogger<SqlWhereConditionValidator> _logger;
-        private readonly SqlHelper _sqlHelper;
+        private readonly IQueryHelper _sqlHelper;
 
-        public SqlWhereConditionValidator(ILogger<SqlWhereConditionValidator> logger, SqlHelper sqlHelper)
+        public SqlWhereConditionValidator(ILogger<SqlWhereConditionValidator> logger, IQueryHelper sqlHelper)
         {
             _logger = logger;
             _sqlHelper = sqlHelper;

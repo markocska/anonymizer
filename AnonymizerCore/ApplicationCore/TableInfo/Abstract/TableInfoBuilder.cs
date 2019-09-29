@@ -58,7 +58,7 @@ namespace Scrambler.TableInfo.Abstract
                     DbName = dbName,
                     SchemaName = ParseSchemaAndTableName(TableConfig.FullTableName).schemaName,
                     TableName = ParseSchemaAndTableName(TableConfig.FullTableName).tableName,
-                    WhereClause = ""
+                    WhereClause = TableConfig.Where
                 };
 
 
@@ -112,7 +112,6 @@ namespace Scrambler.TableInfo.Abstract
                 _logger.LogError($"An error happened while trying to get primary keys and their types {ex.Message}", ex);
                 throw new TableInfoException(TableConfig.FullTableName, DatabaseConfig.ConnectionString, "Error while creating table");
             }
-
 
             return tableInfo;
         }
