@@ -2,14 +2,11 @@
 using Scrambler.Config;
 using Scrambler.DatabaseServices.ColumnTypes;
 using Scrambler.DatabaseServices.PrimaryKeys;
-using Scrambler.TableInfo;
-using Scrambler.TableInfo.Abstract;
 using Scrambler.TableInfo.Interfaces;
 using Scrambler.Validators;
 using Scrambler.Validators.Interfaces;
 using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace Scrambler.Factories
 {
@@ -57,9 +54,10 @@ namespace Scrambler.Factories
                 foreach (var tableConfig in dbConfig.Tables)
                 {
                     if (!_configValidator.IsTableConfigValid(dbConfig, tableConfig) ||
-                        !_parameterValidator.AreTheParamsValid(dbConfig.ConnectionString, tableConfig))
+                        !_parameterValidator.AreTheParamsValid(dbConfig.ConnectionString, tableConfig) ||
+                        !_whereConditionValidator.IsWhereConditionValid(dbConfig.ConnectionString, tableConfig))
                     {
-                            dbConfig.Tables.Remove(tableConfig);
+                        dbConfig.Tables.Remove(tableConfig);
                     }
                 }
             }

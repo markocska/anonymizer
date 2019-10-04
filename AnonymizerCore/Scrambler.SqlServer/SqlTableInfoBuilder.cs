@@ -5,6 +5,7 @@ using Scrambler.DatabaseServices.PrimaryKeys;
 using Scrambler.TableInfo.Abstract;
 using Scrambler.Utilities;
 using Scrambler.Validators;
+using Scrambler.Validators.Interfaces;
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
@@ -14,9 +15,9 @@ namespace Scrambler.TableInfo
     public class SqlTableInfoBuilder : TableInfoBuilder
     {
 
-        public SqlTableInfoBuilder(DatabaseConfig dbConfig, TableConfig tableConfig, IConfigValidator configValidator, IColumnTypeManager columnTypeManager,
-            IPrimaryKeyManager primaryKeyManager, ILogger logger) :
-            base(dbConfig, tableConfig, configValidator, columnTypeManager, primaryKeyManager, logger)
+        public SqlTableInfoBuilder(DatabaseConfig dbConfig, TableConfig tableConfig, IConfigValidator configValidator, IWhereConditionValidator whereConditionValidator,
+            IColumnTypeManager columnTypeManager, IPrimaryKeyManager primaryKeyManager, ILogger logger) :
+            base(dbConfig, tableConfig, configValidator, whereConditionValidator ,columnTypeManager, primaryKeyManager, logger)
         {
 
         }

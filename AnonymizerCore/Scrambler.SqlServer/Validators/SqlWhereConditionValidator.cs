@@ -24,9 +24,14 @@ namespace Scrambler.SqlServer.Validators
 
         public bool IsWhereConditionValid(string connectionString, TableConfig tableConfig)
         {
+            if (string.IsNullOrEmpty(tableConfig.Where))
+            {
+                return true;
+            }
+
             try
             {
-                _sqlHelper.ExecuteQueryWithoutParams(connectionString, $"select * from {tableConfig.FullTableName};");
+                _sqlHelper.ExecuteQueryWithoutParams(connectionString, $"select * from {tableConfig.FullTableName} where {tableConfig.Where};");
                 return true;
             }
             catch(SqlException ex)

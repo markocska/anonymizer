@@ -5,8 +5,8 @@ using Scrambler.DatabaseServices.PrimaryKeys;
 using Scrambler.TableInfo.Common;
 using Scrambler.TableInfo.Exceptions;
 using Scrambler.TableInfo.Interfaces;
-using Scrambler.Utilities;
 using Scrambler.Validators;
+using Scrambler.Validators.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,17 +17,19 @@ namespace Scrambler.TableInfo.Abstract
     {
         protected ILogger _logger;
         private IConfigValidator _configValidator;
+        private IWhereConditionValidator _whereConditionValidator;
         private IColumnTypeManager _columnTypeManager;
         private IPrimaryKeyManager _primaryKeyManager;
         public TableConfig TableConfig { get; private set; }
         public DatabaseConfig DatabaseConfig { get; private set; }
 
-        public TableInfoBuilder(DatabaseConfig dbConfig, TableConfig tableConfig, IConfigValidator configValidator, IColumnTypeManager columnTypeManager,
-            IPrimaryKeyManager primaryKeyManager, ILogger logger)
+        public TableInfoBuilder(DatabaseConfig dbConfig, TableConfig tableConfig, IConfigValidator configValidator, IWhereConditionValidator whereConditionValidator,
+            IColumnTypeManager columnTypeManager, IPrimaryKeyManager primaryKeyManager, ILogger logger)
         {
             TableConfig = tableConfig;
             DatabaseConfig = dbConfig;
             _configValidator = configValidator;
+            _whereConditionValidator = whereConditionValidator;
             _columnTypeManager = columnTypeManager;
             _primaryKeyManager = primaryKeyManager;
             _logger = logger;
@@ -35,47 +37,44 @@ namespace Scrambler.TableInfo.Abstract
 
         public ITableInfo Build()
         {
+            CheckInputParams();
 
-            if (!_configValidator.IsDbConfigValid(DatabaseConfig))
-            {
-                throw new TableInfoException(TableConfig.FullTableName, DatabaseConfig.ConnectionString,
-                    $"Error while creating the TableInfo object.");
-            }
+            var tableInfo = CreateTableInfoBase();
 
-            if (!_configValidator.IsTableConfigValid(DatabaseConfig, TableConfig))
-            {
-                throw new TableInfoException(TableConfig.FullTableName, DatabaseConfig.ConnectionString,
-                    $"Error while creating the TableInfo object.");
-            }
+            tableInfo.SoloScrambledColumnsAndTypes = GetScrambledColumnTypes(tableInfo);
 
-            TableConfig = NormalizeTableConfigParameters(TableConfig);
-            var dbName = ParseDataSource(DatabaseConfig.ConnectionString);
+            tableInfo.ConstantColumnsAndTypesAndValues = GetConstantColumnTypesAndValues(tableInfo);
 
-            var tableInfo =
-                new TableInfo
-                {
-                    DbConnectionString = DatabaseConfig.ConnectionString,
-                    DbName = dbName,
-                    SchemaName = ParseSchemaAndTableName(TableConfig.FullTableName).schemaName,
-                    TableName = ParseSchemaAndTableName(TableConfig.FullTableName).tableName,
-                    WhereClause = TableConfig.Where
-                };
+            tableInfo.PairedColumnsInside = ParseMappedColumnsInside(tableInfo);
 
+            tableInfo.MappedTablesOutside = ParseMappedTablesOutsideFromConfig();
 
-            Dictionary<string, string> scrambledColumns;
+            tableInfo.PrimaryKeysAndTypes = GetPrimaryKeysAndTypes(tableInfo);
+
+            tableInfo.WhereClause = TableConfig.Where;
+
+            return tableInfo;
+        }
+
+        private Dictionary<string, string> GetPrimaryKeysAndTypes(TableInfo tableInfo)
+        {
             try
             {
-                scrambledColumns = _columnTypeManager.GetColumnNamesAndTypes(tableInfo, TableConfig.ScrambledColumns.Select(c => c.Name).ToList());
+                var primaryKeysAndTypes = new Dictionary<string, string>();
+                var primaryKeys = _primaryKeyManager.GetPrimaryKeys(DatabaseConfig.ConnectionString, TableConfig.FullTableName);
+                primaryKeysAndTypes = _columnTypeManager.GetColumnNamesAndTypes(tableInfo, primaryKeys);
+
+                return primaryKeysAndTypes;
             }
-            catch(ColumnTypesException ex)
+            catch (Exception ex)
             {
-                _logger.LogError($"Error while getting scrambled column types for table {TableConfig.FullTableName}. " +
-                    $"Connection string: {DatabaseConfig.ConnectionString}. Error message: {ex.Message}. ", ex);
-                throw new TableInfoException(TableConfig.FullTableName, DatabaseConfig.ConnectionString, "Error while creating the table.");
+                _logger.LogError($"An error happened while trying to get primary keys and their types {ex.Message}", ex);
+                throw new TableInfoException(TableConfig.FullTableName, DatabaseConfig.ConnectionString, "Error while creating table");
             }
+        }
 
-            tableInfo.SoloScrambledColumnsAndTypes = scrambledColumns;
-
+        private List<ColumnAndTypeAndValue> GetConstantColumnTypesAndValues(TableInfo tableInfo)
+        {
             Dictionary<string, string> constantColumnsAndTypes;
             try
             {
@@ -94,26 +93,40 @@ namespace Scrambler.TableInfo.Abstract
                 constantColumnsAndValues.Add(new ColumnAndTypeAndValue { Name = column.Name, Type = constantColumnsAndTypes[column.Name], Value = column.Value });
             }
 
-            tableInfo.ConstantColumnsAndTypesAndValues = constantColumnsAndValues;
+            return constantColumnsAndValues;
+        }
 
-            tableInfo.PairedColumnsInside = ParseMappedColumnsInside(tableInfo);
+        private TableInfo CreateTableInfoBase()
+        {
+            TableConfig = NormalizeTableConfigParameters(TableConfig);
+            var dbName = ParseDataSource(DatabaseConfig.ConnectionString);
 
-            tableInfo.MappedTablesOutside = ParseMappedTablesOutsideFromConfig();
+            return  
+                new TableInfo
+                {
+                    DbConnectionString = DatabaseConfig.ConnectionString,
+                    DbName = dbName,
+                    SchemaName = ParseSchemaAndTableName(TableConfig.FullTableName).schemaName,
+                    TableName = ParseSchemaAndTableName(TableConfig.FullTableName).tableName,
+                    WhereClause = TableConfig.Where
+                };
+        }
 
-            var primaryKeysAndTypes = new Dictionary<string, string>();
+        private Dictionary<string, string> GetScrambledColumnTypes(TableInfo tableInfo)
+        {
+            Dictionary<string, string> scrambledColumns;
             try
             {
-                var primaryKeys = _primaryKeyManager.GetPrimaryKeys(DatabaseConfig.ConnectionString, TableConfig.FullTableName);
-                primaryKeysAndTypes = _columnTypeManager.GetColumnNamesAndTypes(tableInfo, primaryKeys);
-                tableInfo.PrimaryKeysAndTypes = primaryKeysAndTypes;
+                scrambledColumns = _columnTypeManager.GetColumnNamesAndTypes(tableInfo, TableConfig.ScrambledColumns.Select(c => c.Name).ToList());
             }
-            catch (Exception ex)
+            catch (ColumnTypesException ex)
             {
-                _logger.LogError($"An error happened while trying to get primary keys and their types {ex.Message}", ex);
-                throw new TableInfoException(TableConfig.FullTableName, DatabaseConfig.ConnectionString, "Error while creating table");
+                _logger.LogError($"Error while getting scrambled column types for table {TableConfig.FullTableName}. " +
+                    $"Connection string: {DatabaseConfig.ConnectionString}. Error message: {ex.Message}. ", ex);
+                throw new TableInfoException(TableConfig.FullTableName, DatabaseConfig.ConnectionString, "Error while creating the table.");
             }
 
-            return tableInfo;
+            return scrambledColumns;
         }
 
         protected abstract string ParseDataSource(string connectionString);
@@ -122,19 +135,6 @@ namespace Scrambler.TableInfo.Abstract
 
         protected abstract TableConfig NormalizeTableConfigParameters(TableConfig tableConfig);
 
-        //private string RemoveParenthesis(string column)
-        //{
-        //    var columnNameWithoutParenthesis = column.Trim(' ');
-        //    if (columnNameWithoutParenthesis.StartsWith("[") && columnNameWithoutParenthesis.EndsWith("]"))
-        //    {
-        //        columnNameWithoutParenthesis = columnNameWithoutParenthesis.Remove(0, 1);
-
-        //        var length = columnNameWithoutParenthesis.Length;
-        //        columnNameWithoutParenthesis = columnNameWithoutParenthesis.Remove(length - 1, 1);
-        //    }
-
-        //    return columnNameWithoutParenthesis;
-        //}
 
         private List<MappedTable> ParseMappedTablesOutsideFromConfig()
         {
@@ -189,22 +189,43 @@ namespace Scrambler.TableInfo.Abstract
             return mappedTablesOutside;
         }
 
-        private List<Dictionary<string,string>> ParseMappedColumnsInside(ITableInfo tableInfo)
+        private List<Dictionary<string, string>> ParseMappedColumnsInside(ITableInfo tableInfo)
         {
             var pairedColumnsWithTypesList = new List<Dictionary<string, string>>();
-            foreach(var pairedColumns in TableConfig.PairedColumnsInsideTable)
+            foreach (var pairedColumns in TableConfig.PairedColumnsInsideTable)
             {
                 var pairedColumnsWithTypes = new Dictionary<string, string>();
 
                 foreach (var column in pairedColumns)
                 {
-                    pairedColumnsWithTypes.Add(column,tableInfo.SoloScrambledColumnsAndTypes[column]);
+                    pairedColumnsWithTypes.Add(column, tableInfo.SoloScrambledColumnsAndTypes[column]);
                     tableInfo.SoloScrambledColumnsAndTypes.Remove(column);
                 }
                 pairedColumnsWithTypesList.Add(pairedColumnsWithTypes);
             }
 
             return pairedColumnsWithTypesList;
+        }
+
+        private void CheckInputParams()
+        {
+            if (!_configValidator.IsDbConfigValid(DatabaseConfig))
+            {
+                throw new TableInfoException(TableConfig.FullTableName, DatabaseConfig.ConnectionString,
+                    $"Error while creating the TableInfo object.");
+            }
+
+            if (!_configValidator.IsTableConfigValid(DatabaseConfig, TableConfig))
+            {
+                throw new TableInfoException(TableConfig.FullTableName, DatabaseConfig.ConnectionString,
+                    $"Error while creating the TableInfo object.");
+            }
+
+            if (!_whereConditionValidator.IsWhereConditionValid(DatabaseConfig.ConnectionString, TableConfig))
+            {
+                throw new TableInfoException(TableConfig.FullTableName, DatabaseConfig.ConnectionString,
+                    $"Error while creating the TableInfo object.");
+            }
         }
 
         protected class TableInfo : ITableInfo
@@ -218,7 +239,7 @@ namespace Scrambler.TableInfo.Abstract
             public List<ColumnAndTypeAndValue> ConstantColumnsAndTypesAndValues { get; set; }
             public string WhereClause { get; set; }
             public string FullTableName => $"{DbName}.{SchemaName}.{TableName}";
-            public List<Dictionary<string,string>> PairedColumnsInside { get; set; }
+            public List<Dictionary<string, string>> PairedColumnsInside { get; set; }
             public List<MappedTable> MappedTablesOutside { get; set; }
         }
     }

@@ -20,7 +20,7 @@ namespace Scrambler.Factories
 
         protected override ITableInfo CreateTableInfo(DatabaseConfig dbConfig, TableConfig tableConfig)
         {
-            return new SqlTableInfoBuilder(dbConfig, tableConfig, _configValidator, _columnTypeManager, _primaryKeyManager, _logger).Build();
+            return new SqlTableInfoBuilder(dbConfig, tableConfig, _configValidator, _whereConditionValidator, _columnTypeManager, _primaryKeyManager, _logger).Build();
         }
     }
 }
