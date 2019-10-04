@@ -18,7 +18,7 @@
               "value": "this is a constant"
             }
           ],
-          "where": "[first name] <> 'George' and [last name] <> 'Peterson'",
+          "where": "[last name] <> 'ESTHER'",
           "pairedColumnsInsideTable": [
             [ "[last name]", "location" ]
           ],
@@ -62,6 +62,7 @@
               "value": "this is a constant"
             }
           ],
+          "where": "[last name] <> 'ESTHER'",
           "pairedColumnsInsideTable": [
             [ "[last name]", "location" ]
           ],
@@ -116,6 +117,7 @@
           "pairedColumnsInsideTable": [
             [ "shift", "location" ]
           ],
+          "where": "[last name] <> 'ESTHER'",
           "pairedColumnsOutsideTable": [
             {
               "columnMapping": [

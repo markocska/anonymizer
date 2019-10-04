@@ -199,9 +199,21 @@ namespace Scrambler.SqlScripts.SqlServer
             
             #line default
             #line hidden
-            this.Write(";\r\n\r\n\r\n");
+            this.Write(" \r\n    ");
             
-            #line 111 "E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\Scrambler.SqlServer\SqlScripts\SqlServer\ScrambleTable.tt"
+            #line 109 "E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\Scrambler.SqlServer\SqlScripts\SqlServer\ScrambleTable.tt"
+ 
+       if( !string.IsNullOrEmpty(TableInfo.WhereClause)) 
+       {
+          Write($" where {TableInfo.WhereClause}");
+       }
+    
+            
+            #line default
+            #line hidden
+            this.Write(" ;\r\n \r\n\r\n");
+            
+            #line 117 "E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\Scrambler.SqlServer\SqlScripts\SqlServer\ScrambleTable.tt"
     _scrambleTableNumber = 0;
     for(int i = 0; i < TableInfo.SoloScrambledColumnsAndTypes.Count; i++, _scrambleTableNumber++) 
     {
@@ -212,28 +224,28 @@ namespace Scrambler.SqlScripts.SqlServer
             #line hidden
             this.Write("insert into #column");
             
-            #line 116 "E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\Scrambler.SqlServer\SqlScripts\SqlServer\ScrambleTable.tt"
+            #line 122 "E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\Scrambler.SqlServer\SqlScripts\SqlServer\ScrambleTable.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(_scrambleTableNumber));
             
             #line default
             #line hidden
             this.Write(" with (tablock)\r\n    select row_number() over (order by x), [");
             
-            #line 117 "E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\Scrambler.SqlServer\SqlScripts\SqlServer\ScrambleTable.tt"
+            #line 123 "E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\Scrambler.SqlServer\SqlScripts\SqlServer\ScrambleTable.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(columnName));
             
             #line default
             #line hidden
             this.Write("] from \r\n    (select CHECKSUM(NewId()) x, [");
             
-            #line 118 "E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\Scrambler.SqlServer\SqlScripts\SqlServer\ScrambleTable.tt"
+            #line 124 "E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\Scrambler.SqlServer\SqlScripts\SqlServer\ScrambleTable.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(columnName));
             
             #line default
             #line hidden
             this.Write("] from #prim_keys_and_columns) a;\r\n");
             
-            #line 119 "E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\Scrambler.SqlServer\SqlScripts\SqlServer\ScrambleTable.tt"
+            #line 125 "E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\Scrambler.SqlServer\SqlScripts\SqlServer\ScrambleTable.tt"
 
     }
 
@@ -242,7 +254,7 @@ namespace Scrambler.SqlScripts.SqlServer
             #line hidden
             this.Write("\r\n\r\n");
             
-            #line 124 "E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\Scrambler.SqlServer\SqlScripts\SqlServer\ScrambleTable.tt"
+            #line 130 "E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\Scrambler.SqlServer\SqlScripts\SqlServer\ScrambleTable.tt"
    
     for(int i = 0; i < TableInfo.PairedColumnsInside.Count; i++, _scrambleTableNumber++) 
     {
@@ -253,14 +265,14 @@ namespace Scrambler.SqlScripts.SqlServer
             #line hidden
             this.Write("insert into #column");
             
-            #line 129 "E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\Scrambler.SqlServer\SqlScripts\SqlServer\ScrambleTable.tt"
+            #line 135 "E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\Scrambler.SqlServer\SqlScripts\SqlServer\ScrambleTable.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(_scrambleTableNumber));
             
             #line default
             #line hidden
             this.Write(" with (tablock)\r\n    select row_number() over (order by x), ");
             
-            #line 130 "E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\Scrambler.SqlServer\SqlScripts\SqlServer\ScrambleTable.tt"
+            #line 136 "E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\Scrambler.SqlServer\SqlScripts\SqlServer\ScrambleTable.tt"
   
         for(int j = 0; j < pairedColumns.Count; j++) 
         { 
@@ -278,7 +290,7 @@ namespace Scrambler.SqlScripts.SqlServer
             #line hidden
             this.Write("    \r\n    from (select CHECKSUM(NewId()) x, ");
             
-            #line 142 "E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\Scrambler.SqlServer\SqlScripts\SqlServer\ScrambleTable.tt"
+            #line 148 "E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\Scrambler.SqlServer\SqlScripts\SqlServer\ScrambleTable.tt"
   
         for(int j = 0; j < pairedColumns.Count; j++) 
         { 
@@ -296,7 +308,7 @@ namespace Scrambler.SqlScripts.SqlServer
             #line hidden
             this.Write(" from #prim_keys_and_columns) a;             \r\n");
             
-            #line 154 "E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\Scrambler.SqlServer\SqlScripts\SqlServer\ScrambleTable.tt"
+            #line 160 "E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\Scrambler.SqlServer\SqlScripts\SqlServer\ScrambleTable.tt"
 
     }
 
@@ -305,7 +317,7 @@ namespace Scrambler.SqlScripts.SqlServer
             #line hidden
             this.Write("\r\n\r\ncreate index idx_primarykey on #prim_keys_and_columns(  ");
             
-            #line 159 "E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\Scrambler.SqlServer\SqlScripts\SqlServer\ScrambleTable.tt"
+            #line 165 "E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\Scrambler.SqlServer\SqlScripts\SqlServer\ScrambleTable.tt"
 
     for(int i = 0; i < TableInfo.PrimaryKeysAndTypes.Count; i++)
     {   
@@ -323,7 +335,7 @@ namespace Scrambler.SqlScripts.SqlServer
             #line hidden
             this.Write(" );\r\n\r\n");
             
-            #line 172 "E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\Scrambler.SqlServer\SqlScripts\SqlServer\ScrambleTable.tt"
+            #line 178 "E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\Scrambler.SqlServer\SqlScripts\SqlServer\ScrambleTable.tt"
 
     for(int i = 0; i < _scrambleTableNumber; i++)
     {
@@ -336,21 +348,21 @@ namespace Scrambler.SqlScripts.SqlServer
             #line hidden
             this.Write("\r\nalter table ");
             
-            #line 180 "E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\Scrambler.SqlServer\SqlScripts\SqlServer\ScrambleTable.tt"
+            #line 186 "E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\Scrambler.SqlServer\SqlScripts\SqlServer\ScrambleTable.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(TableInfo.FullTableName));
             
             #line default
             #line hidden
             this.Write(" nocheck constraint all;\r\n\r\nupdate ");
             
-            #line 182 "E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\Scrambler.SqlServer\SqlScripts\SqlServer\ScrambleTable.tt"
+            #line 188 "E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\Scrambler.SqlServer\SqlScripts\SqlServer\ScrambleTable.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(TableInfo.FullTableName));
             
             #line default
             #line hidden
             this.Write(" with (tablock) \r\nset ");
             
-            #line 183 "E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\Scrambler.SqlServer\SqlScripts\SqlServer\ScrambleTable.tt"
+            #line 189 "E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\Scrambler.SqlServer\SqlScripts\SqlServer\ScrambleTable.tt"
 
     for(int i = 0; i < TableInfo.SoloScrambledColumnsAndTypes.Count; i++)
     {   
@@ -396,7 +408,7 @@ namespace Scrambler.SqlScripts.SqlServer
             #line hidden
             this.Write(" from\r\n(\r\n    select ");
             
-            #line 224 "E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\Scrambler.SqlServer\SqlScripts\SqlServer\ScrambleTable.tt"
+            #line 230 "E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\Scrambler.SqlServer\SqlScripts\SqlServer\ScrambleTable.tt"
     var scrambleTableNumberIter= 0;
     for(int i = 0; i < TableInfo.PrimaryKeysAndTypes.Count; i++)
     {   
@@ -440,7 +452,7 @@ namespace Scrambler.SqlScripts.SqlServer
             #line hidden
             this.Write(" from #prim_keys_and_columns\r\n    ");
             
-            #line 262 "E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\Scrambler.SqlServer\SqlScripts\SqlServer\ScrambleTable.tt"
+            #line 268 "E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\Scrambler.SqlServer\SqlScripts\SqlServer\ScrambleTable.tt"
  scrambleTableNumberIter = 0;
     for(int i = 0; i < TableInfo.SoloScrambledColumnsAndTypes.Count; i++, scrambleTableNumberIter++)
     {   
@@ -459,7 +471,7 @@ namespace Scrambler.SqlScripts.SqlServer
             #line hidden
             this.Write(") x\r\nwhere ");
             
-            #line 276 "E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\Scrambler.SqlServer\SqlScripts\SqlServer\ScrambleTable.tt"
+            #line 282 "E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\Scrambler.SqlServer\SqlScripts\SqlServer\ScrambleTable.tt"
  for(int i = 0; i < TableInfo.PrimaryKeysAndTypes.Count; i++)
     {   
         var columnName = TableInfo.PrimaryKeysAndTypes.Keys.ElementAt(i);
@@ -475,7 +487,7 @@ namespace Scrambler.SqlScripts.SqlServer
             #line hidden
             this.Write(" ;\r\n\r\ndrop table #prim_keys_and_columns;\r\n");
             
-            #line 288 "E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\Scrambler.SqlServer\SqlScripts\SqlServer\ScrambleTable.tt"
+            #line 294 "E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\Scrambler.SqlServer\SqlScripts\SqlServer\ScrambleTable.tt"
  scrambleTableNumberIter = 0;
     for(int i = 0; i < TableInfo.SoloScrambledColumnsAndTypes.Count; i++, scrambleTableNumberIter++)
     {   
@@ -494,21 +506,21 @@ namespace Scrambler.SqlScripts.SqlServer
             #line hidden
             this.Write("\r\nalter table ");
             
-            #line 302 "E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\Scrambler.SqlServer\SqlScripts\SqlServer\ScrambleTable.tt"
+            #line 308 "E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\Scrambler.SqlServer\SqlScripts\SqlServer\ScrambleTable.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(TableInfo.FullTableName));
             
             #line default
             #line hidden
             this.Write(" enable trigger all;\r\nalter table ");
             
-            #line 303 "E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\Scrambler.SqlServer\SqlScripts\SqlServer\ScrambleTable.tt"
+            #line 309 "E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\Scrambler.SqlServer\SqlScripts\SqlServer\ScrambleTable.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(TableInfo.FullTableName));
             
             #line default
             #line hidden
             this.Write(" check constraint all;\r\n\r\n\r\n");
             
-            #line 306 "E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\Scrambler.SqlServer\SqlScripts\SqlServer\ScrambleTable.tt"
+            #line 312 "E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\Scrambler.SqlServer\SqlScripts\SqlServer\ScrambleTable.tt"
  
 //if there is more than one mapped table
     foreach(var mappedTable in TableInfo.MappedTablesOutside.Where(m => m.MappedColumnPairsOutside.Count > 1))
@@ -521,14 +533,14 @@ namespace Scrambler.SqlScripts.SqlServer
             #line hidden
             this.Write("update  ");
             
-            #line 313 "E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\Scrambler.SqlServer\SqlScripts\SqlServer\ScrambleTable.tt"
+            #line 319 "E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\Scrambler.SqlServer\SqlScripts\SqlServer\ScrambleTable.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(lastMappingStep.DestinationTableNameWithSchema));
             
             #line default
             #line hidden
             this.Write("\r\nset ");
             
-            #line 314 "E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\Scrambler.SqlServer\SqlScripts\SqlServer\ScrambleTable.tt"
+            #line 320 "E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\Scrambler.SqlServer\SqlScripts\SqlServer\ScrambleTable.tt"
  
         for(int i = 0; i < mappedTable.SourceDestPairedColumnsOutside.Count; i++)
         {
@@ -546,14 +558,14 @@ namespace Scrambler.SqlScripts.SqlServer
             #line hidden
             this.Write(" \r\nfrom ");
             
-            #line 326 "E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\Scrambler.SqlServer\SqlScripts\SqlServer\ScrambleTable.tt"
+            #line 332 "E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\Scrambler.SqlServer\SqlScripts\SqlServer\ScrambleTable.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(lastMappingStep.DestinationTableNameWithSchema));
             
             #line default
             #line hidden
             this.Write(" dest\r\n     ");
             
-            #line 327 "E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\Scrambler.SqlServer\SqlScripts\SqlServer\ScrambleTable.tt"
+            #line 333 "E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\Scrambler.SqlServer\SqlScripts\SqlServer\ScrambleTable.tt"
 
         int tableMaxIndexInMapping =  mappedTable.MappedColumnPairsOutside.Count - 1;
         for(int i = (tableMaxIndexInMapping - 1); i >= 0;i--)
@@ -621,7 +633,7 @@ namespace Scrambler.SqlScripts.SqlServer
             #line hidden
             this.Write("   ");
             
-            #line 389 "E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\Scrambler.SqlServer\SqlScripts\SqlServer\ScrambleTable.tt"
+            #line 395 "E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\Scrambler.SqlServer\SqlScripts\SqlServer\ScrambleTable.tt"
  } 
 
             
@@ -629,7 +641,7 @@ namespace Scrambler.SqlScripts.SqlServer
             #line hidden
             this.Write("\r\n");
             
-            #line 392 "E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\Scrambler.SqlServer\SqlScripts\SqlServer\ScrambleTable.tt"
+            #line 398 "E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\Scrambler.SqlServer\SqlScripts\SqlServer\ScrambleTable.tt"
 
     foreach(var mappedTable in TableInfo.MappedTablesOutside.Where(m => m.MappedColumnPairsOutside.Count == 1))
     {
@@ -640,14 +652,14 @@ namespace Scrambler.SqlScripts.SqlServer
             #line hidden
             this.Write("update  ");
             
-            #line 397 "E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\Scrambler.SqlServer\SqlScripts\SqlServer\ScrambleTable.tt"
+            #line 403 "E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\Scrambler.SqlServer\SqlScripts\SqlServer\ScrambleTable.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(lastMappingStep.DestinationTableNameWithSchema));
             
             #line default
             #line hidden
             this.Write("    \r\nset ");
             
-            #line 398 "E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\Scrambler.SqlServer\SqlScripts\SqlServer\ScrambleTable.tt"
+            #line 404 "E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\Scrambler.SqlServer\SqlScripts\SqlServer\ScrambleTable.tt"
  
         for(int i = 0; i < mappedTable.SourceDestPairedColumnsOutside.Count; i++)
         {
@@ -665,14 +677,14 @@ namespace Scrambler.SqlScripts.SqlServer
             #line hidden
             this.Write(" \r\nfrom ");
             
-            #line 410 "E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\Scrambler.SqlServer\SqlScripts\SqlServer\ScrambleTable.tt"
+            #line 416 "E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\Scrambler.SqlServer\SqlScripts\SqlServer\ScrambleTable.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(TableInfo.FullTableName));
             
             #line default
             #line hidden
             this.Write(" source\r\n  ");
             
-            #line 411 "E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\Scrambler.SqlServer\SqlScripts\SqlServer\ScrambleTable.tt"
+            #line 417 "E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\Scrambler.SqlServer\SqlScripts\SqlServer\ScrambleTable.tt"
   }
 
             

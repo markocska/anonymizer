@@ -105,8 +105,14 @@ insert into #prim_keys_and_columns with (tablock)
         }
     }
     #> )
-    from <#= TableInfo.FullTableName #>;
-
+    from <#= TableInfo.FullTableName #> 
+    <# 
+       if( !string.IsNullOrEmpty(TableInfo.WhereClause)) 
+       {
+          Write($" where {TableInfo.WhereClause}");
+       }
+    #> ;
+ 
 
 <#    _scrambleTableNumber = 0;
     for(int i = 0; i < TableInfo.SoloScrambledColumnsAndTypes.Count; i++, _scrambleTableNumber++) 
