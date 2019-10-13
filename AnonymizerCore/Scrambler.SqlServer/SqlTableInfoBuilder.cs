@@ -16,8 +16,8 @@ namespace Scrambler.TableInfo
     {
 
         public SqlTableInfoBuilder(DatabaseConfig dbConfig, TableConfig tableConfig, IConfigValidator configValidator, IWhereConditionValidator whereConditionValidator,
-            IColumnTypeManager columnTypeManager, IPrimaryKeyManager primaryKeyManager, ILogger logger) :
-            base(dbConfig, tableConfig, configValidator, whereConditionValidator ,columnTypeManager, primaryKeyManager, logger)
+            ILinkedServerValidator linkedServerValidator, IColumnTypeManager columnTypeManager, IPrimaryKeyManager primaryKeyManager, ILogger logger) :
+            base(dbConfig, tableConfig, configValidator, whereConditionValidator, linkedServerValidator ,columnTypeManager, primaryKeyManager, logger)
         {
 
         }

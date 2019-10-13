@@ -19,9 +19,10 @@ namespace Scrambler.Factories
         protected readonly IColumnTypeManager _columnTypeManager;
         protected readonly IPrimaryKeyManager _primaryKeyManager;
         protected readonly IWhereConditionValidator _whereConditionValidator;
+        protected readonly ILinkedServerValidator _linkedServerValidator;
 
         public TableInfoCollectionFactory(IConfigValidator configValidator, IParameterValidator parameterValidator, IColumnTypeManager columnTypeManager,
-            IPrimaryKeyManager primaryKeyManager, IWhereConditionValidator whereConditionValidator, ILogger<TableInfoCollectionFactory> logger)
+            IPrimaryKeyManager primaryKeyManager, IWhereConditionValidator whereConditionValidator, ILinkedServerValidator linkedServerValidator, ILogger<TableInfoCollectionFactory> logger)
         {
             _logger = logger;
             _configValidator = configValidator;
@@ -29,6 +30,7 @@ namespace Scrambler.Factories
             _columnTypeManager = columnTypeManager;
             _primaryKeyManager = primaryKeyManager;
             _whereConditionValidator = whereConditionValidator;
+            _linkedServerValidator = linkedServerValidator;
         }
 
         public List<ITableInfo> CreateTableListFromConfig(DatabasesConfig databasesConfig)
@@ -44,23 +46,28 @@ namespace Scrambler.Factories
                 return new List<ITableInfo>();
             }
 
+            var dbConfigsToRemove = new List<DatabaseConfig>();
             foreach (var dbConfig in databasesConfig.Databases)
             {
                 if (!_configValidator.IsDbConfigValid(dbConfig))
                 {
-                    databasesConfig.Databases.Remove(dbConfig);
+                    dbConfigsToRemove.Add(dbConfig);
                 }
 
+                var tableConfigsToRemove = new List<TableConfig>();
                 foreach (var tableConfig in dbConfig.Tables)
                 {
                     if (!_configValidator.IsTableConfigValid(dbConfig, tableConfig) ||
                         !_parameterValidator.AreTheParamsValid(dbConfig.ConnectionString, tableConfig) ||
-                        !_whereConditionValidator.IsWhereConditionValid(dbConfig.ConnectionString, tableConfig))
+                        !_whereConditionValidator.IsWhereConditionValid(dbConfig.ConnectionString, tableConfig) ||
+                        !_linkedServerValidator.AreLinkedServerParamsValid(dbConfig.ConnectionString, tableConfig))
                     {
-                        dbConfig.Tables.Remove(tableConfig);
+                        tableConfigsToRemove.Add(tableConfig);
                     }
                 }
+                dbConfig.Tables.RemoveAll(t => tableConfigsToRemove.Contains(t));
             }
+            databasesConfig.Databases.RemoveAll(d => dbConfigsToRemove.Contains(d));
 
             var tableInfos = new List<ITableInfo>();
             foreach (var dbConfig in databasesConfig.Databases)

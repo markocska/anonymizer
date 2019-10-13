@@ -773,6 +773,15 @@
           "ref/netstandard1.3/System.Console.dll": {}
         }
       },
+      "System.Data.DataSetExtensions/4.5.0": {
+        "type": "package",
+        "compile": {
+          "ref/netstandard2.0/System.Data.DataSetExtensions.dll": {}
+        },
+        "runtime": {
+          "lib/netstandard2.0/System.Data.DataSetExtensions.dll": {}
+        }
+      },
       "System.Data.SqlClient/4.6.0": {
         "type": "package",
         "dependencies": {
@@ -1793,6 +1802,7 @@
           "Microsoft.Extensions.DependencyInjection": "2.2.0",
           "Microsoft.Extensions.Logging": "2.2.0",
           "Newtonsoft.Json": "12.0.1",
+          "System.Data.DataSetExtensions": "4.5.0",
           "System.Data.SqlClient": "4.6.0",
           "T5.TextTemplating": "1.1.0"
         },
@@ -3178,6 +3188,25 @@
         "ref/xamarinwatchos10/_._",
         "system.console.4.3.0.nupkg.sha512",
         "system.console.nuspec"
+      ]
+    },
+    "System.Data.DataSetExtensions/4.5.0": {
+      "sha512": "xKUL8eeGuJ0uHaRpDKFibVxXjWrquWxQuASlRnhvITQ8cGZPZrO8T8lh8XKfOnirrDyQz81TCwALPXzflSW3JA==",
+      "type": "package",
+      "path": "system.data.datasetextensions/4.5.0",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "LICENSE.TXT",
+        "THIRD-PARTY-NOTICES.TXT",
+        "lib/net45/_._",
+        "lib/netstandard2.0/System.Data.DataSetExtensions.dll",
+        "ref/net45/_._",
+        "ref/netstandard2.0/System.Data.DataSetExtensions.dll",
+        "system.data.datasetextensions.4.5.0.nupkg.sha512",
+        "system.data.datasetextensions.nuspec",
+        "useSharedDesignerContext.txt",
+        "version.txt"
       ]
     },
     "System.Data.SqlClient/4.6.0": {

@@ -19,18 +19,20 @@ namespace Scrambler.TableInfo.Abstract
         private IConfigValidator _configValidator;
         private IWhereConditionValidator _whereConditionValidator;
         private IColumnTypeManager _columnTypeManager;
+        private ILinkedServerValidator _linkedServerValidator;
         private IPrimaryKeyManager _primaryKeyManager;
         public TableConfig TableConfig { get; private set; }
         public DatabaseConfig DatabaseConfig { get; private set; }
 
         public TableInfoBuilder(DatabaseConfig dbConfig, TableConfig tableConfig, IConfigValidator configValidator, IWhereConditionValidator whereConditionValidator,
-            IColumnTypeManager columnTypeManager, IPrimaryKeyManager primaryKeyManager, ILogger logger)
+            ILinkedServerValidator linkedServerValidator,IColumnTypeManager columnTypeManager, IPrimaryKeyManager primaryKeyManager, ILogger logger)
         {
             TableConfig = tableConfig;
             DatabaseConfig = dbConfig;
             _configValidator = configValidator;
             _whereConditionValidator = whereConditionValidator;
             _columnTypeManager = columnTypeManager;
+            _linkedServerValidator = linkedServerValidator;
             _primaryKeyManager = primaryKeyManager;
             _logger = logger;
         }
@@ -222,6 +224,12 @@ namespace Scrambler.TableInfo.Abstract
             }
 
             if (!_whereConditionValidator.IsWhereConditionValid(DatabaseConfig.ConnectionString, TableConfig))
+            {
+                throw new TableInfoException(TableConfig.FullTableName, DatabaseConfig.ConnectionString,
+                    $"Error while creating the TableInfo object.");
+            }
+
+            if (!_linkedServerValidator.AreLinkedServerParamsValid(DatabaseConfig.ConnectionString, TableConfig))
             {
                 throw new TableInfoException(TableConfig.FullTableName, DatabaseConfig.ConnectionString,
                     $"Error while creating the TableInfo object.");

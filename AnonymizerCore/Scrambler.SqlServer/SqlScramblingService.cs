@@ -16,7 +16,7 @@ namespace Scrambler.SqlServer
 {
     public class SqlScramblingService : 
         ScramblingService<SqlConfigValidator, SqlParameterValidator, SqlColumnTypesManager, SqlPrimaryKeyManager, SqlTableInfoCollectionFactory, 
-            SqlTableScramblingService, SqlWhereConditionValidator ,SqlHelper>
+            SqlTableScramblingService, SqlWhereConditionValidator ,SqlLinkedServerValidator, SqlHelper>
     {
         public SqlScramblingService(Action<ILoggingBuilder> logConfig) : base(new SqlHelper(), logConfig)
         {

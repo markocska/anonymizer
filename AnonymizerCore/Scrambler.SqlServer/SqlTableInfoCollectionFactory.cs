@@ -13,14 +13,14 @@ namespace Scrambler.Factories
     {
 
         public SqlTableInfoCollectionFactory(IConfigValidator configValidator, IParameterValidator parameterValidator, IColumnTypeManager columnTypeManager,
-                 IPrimaryKeyManager primaryKeyManager, IWhereConditionValidator whereConditionValidator,ILogger<SqlTableInfoCollectionFactory> logger) 
-            : base(configValidator, parameterValidator, columnTypeManager, primaryKeyManager, whereConditionValidator ,logger)
+                 IPrimaryKeyManager primaryKeyManager, IWhereConditionValidator whereConditionValidator,ILinkedServerValidator linkedServerValidator,ILogger<SqlTableInfoCollectionFactory> logger) 
+            : base(configValidator, parameterValidator, columnTypeManager, primaryKeyManager, whereConditionValidator ,linkedServerValidator, logger)
         {
         }
 
         protected override ITableInfo CreateTableInfo(DatabaseConfig dbConfig, TableConfig tableConfig)
         {
-            return new SqlTableInfoBuilder(dbConfig, tableConfig, _configValidator, _whereConditionValidator, _columnTypeManager, _primaryKeyManager, _logger).Build();
+            return new SqlTableInfoBuilder(dbConfig, tableConfig, _configValidator, _whereConditionValidator, _linkedServerValidator, _columnTypeManager, _primaryKeyManager, _logger).Build();
         }
     }
 }

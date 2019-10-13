@@ -17,7 +17,7 @@ using Scrambler.Validators.Interfaces;
 namespace Scrambler
 {
     public abstract class ScramblingService<TConfigValidator, TParameterValidator, TColumnTypeManager, TPrimaryKeyManager, TTableInfoCollectionFactory,
-        TTableScramblingService,TWhereConditionValidator ,TQueryHelper>
+        TTableScramblingService,TWhereConditionValidator ,TLinkedServerValidator ,TQueryHelper>
         : IScramblingService
         where TConfigValidator : class, IConfigValidator
         where TParameterValidator : class, IParameterValidator
@@ -26,6 +26,7 @@ namespace Scrambler
         where TTableInfoCollectionFactory : class, ITableInfoCollectionFactory
         where TTableScramblingService : class, ITableScramblingService
         where TWhereConditionValidator : class, IWhereConditionValidator
+        where TLinkedServerValidator : class, ILinkedServerValidator
         where TQueryHelper : class, IQueryHelper
     {
         private readonly ServiceProvider _serviceProvider;
@@ -41,6 +42,7 @@ namespace Scrambler
                  .AddScoped<ITableInfoCollectionFactory, TTableInfoCollectionFactory>()
                  .AddScoped<ITableScramblingService, TTableScramblingService>()
                  .AddScoped<IWhereConditionValidator, TWhereConditionValidator>()
+                 .AddScoped<ILinkedServerValidator, TLinkedServerValidator>()
                  .AddScoped<IQueryHelper, TQueryHelper>()
                  .AddLogging(logConfig)
                  .BuildServiceProvider();
