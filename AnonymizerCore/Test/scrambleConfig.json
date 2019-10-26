@@ -118,24 +118,24 @@
             [ "shift", "location" ]
           ],
           "where": "[last name] <> 'ESTHER'",
-          "pairedColumnsOutsideTable": [
-            {
-              "columnMapping": [
-                [ "first name", "full name" ],
-                [ "last name", "citizen name" ]
-              ],
-              "sourceDestMapping": [
-                {
-                  "destinationConnectionString": "data source=MARKO-PC\\SQLEXPRESS;initial catalog=NAV;integrated security=True;",
-                  "destinationFullTableName": "NAV.dbo.EmployeesCitizens",
-                  "destinationLinkedInstance": "",
-                  "foreignKeyMapping": [
-                    [ "id", "employeeId" ]
-                  ]
-                }
-              ]
-            }
-          ]
+          //"pairedColumnsOutsideTable": [
+          //  {
+          //    "columnMapping": [
+          //      [ "first name", "full name" ],
+          //      [ "last name", "citizen name" ]
+          //    ],
+          //    "sourceDestMapping": [
+          //      {
+          //        "destinationConnectionString": "data source=MARKO-PC\\SQLEXPRESS;initial catalog=NAV;integrated security=True;",
+          //        "destinationFullTableName": "NAV.dbo.EmployeesCitizens",
+          //        "destinationLinkedInstance": "",
+          //        "foreignKeyMapping": [
+          //          [ "id", "employeeId" ]
+          //        ]
+          //      }
+          //    ]
+          //  }
+          //]
         }
       ]
     }

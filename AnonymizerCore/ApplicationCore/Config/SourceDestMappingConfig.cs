@@ -12,6 +12,7 @@ namespace Scrambler.Config
         public string DestinationConnectionString { get; set; }
         public string DestinationFullTableName { get; set; }
         public string DestinationLinkedInstance { get; set; }
+        [JsonProperty(Required = Required.Always)]
         public List<List<string>> ForeignKeyMapping { get; set; }
 
         //[OnDeserialized]

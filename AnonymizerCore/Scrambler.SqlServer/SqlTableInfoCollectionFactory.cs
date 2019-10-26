@@ -6,6 +6,7 @@ using Scrambler.TableInfo;
 using Scrambler.TableInfo.Interfaces;
 using Scrambler.Validators;
 using Scrambler.Validators.Interfaces;
+using System.Linq;
 
 namespace Scrambler.Factories
 {
@@ -18,9 +19,31 @@ namespace Scrambler.Factories
         {
         }
 
+
         protected override ITableInfo CreateTableInfo(DatabaseConfig dbConfig, TableConfig tableConfig)
         {
             return new SqlTableInfoBuilder(dbConfig, tableConfig, _configValidator, _whereConditionValidator, _linkedServerValidator, _columnTypeManager, _primaryKeyManager, _logger).Build();
+        }
+
+        protected override void ConstructFullTableName(TableConfig tableConfig)
+        {
+            if (tableConfig.PairedColumnsOutsideTable == null) { return; }
+
+
+            foreach (var outsideConfig in tableConfig.PairedColumnsOutsideTable)
+            {
+                foreach (var mappingStep in outsideConfig.SourceDestMapping)
+                {
+                    if (!string.IsNullOrEmpty(mappingStep.DestinationLinkedInstance))
+                    {
+                        if (mappingStep.DestinationFullTableName.Split('.')[0] == mappingStep.DestinationLinkedInstance)
+                        {
+                            continue;
+                        }
+                        mappingStep.DestinationFullTableName = mappingStep.DestinationLinkedInstance + "." + mappingStep.DestinationFullTableName;
+                    }
+                }
+            }
         }
     }
 }

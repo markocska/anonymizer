@@ -12,6 +12,7 @@ namespace Scrambler.Config
     {
         [JsonProperty(Required = Required.Always)]
         public List<List<string>> ColumnMapping { get; set; }
+        [JsonProperty(Required = Required.Always)]
         public List<SourceDestMappingStepConfig> SourceDestMapping { get; set; }
 
         //[OnDeserialized]

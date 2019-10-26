@@ -316,7 +316,7 @@ alter table <#= TableInfo.FullTableName #> check constraint all;
 
         var lastMappingStep = mappedTable.MappedColumnPairsOutside.Last();
     #>
-update  <#= lastMappingStep.DestinationTableNameWithSchema #>
+update  <#= lastMappingStep.DestinationFullTableName #>
 set <# 
         for(int i = 0; i < mappedTable.SourceDestPairedColumnsOutside.Count; i++)
         {
@@ -329,7 +329,7 @@ set <#
             }
         }    
     #> 
-from <#= lastMappingStep.DestinationTableNameWithSchema #> dest
+from <#= lastMappingStep.DestinationFullTableName #> dest
      <#
         int tableMaxIndexInMapping =  mappedTable.MappedColumnPairsOutside.Count - 1;
         for(int i = (tableMaxIndexInMapping - 1); i >= 0;i--)
@@ -338,7 +338,7 @@ from <#= lastMappingStep.DestinationTableNameWithSchema #> dest
 
             if (i == (tableMaxIndexInMapping - 1))
             {
-                Write($"join {mappingStep.DestinationTableNameWithSchema} a{i} on ");
+                Write($"join {mappingStep.DestinationFullTableName} a{i} on ");
                 for(int j = 0; j < lastMappingStep.MappedColumns.Count;j++)
                 {   
                     var columnPair = lastMappingStep.MappedColumns[j];
@@ -357,7 +357,7 @@ from <#= lastMappingStep.DestinationTableNameWithSchema #> dest
             //There is more than just 1 mapping table between.
             if ((mappedTable.MappedColumnPairsOutside.Count > 2) && (i != (tableMaxIndexInMapping - 1)))
             {
-                Write($"join {mappingStep.DestinationTableNameWithSchema} a{i} on ");
+                Write($"join {mappingStep.DestinationFullTableName} a{i} on ");
                 for(int j = 0; j < mappingStep.MappedColumns.Count;j++)
                 {   
                     var columnPair = mappingStep.MappedColumns[j];
@@ -400,7 +400,7 @@ from <#= lastMappingStep.DestinationTableNameWithSchema #> dest
     {
         var lastMappingStep = mappedTable.MappedColumnPairsOutside.Last();
     #>
-update  <#= lastMappingStep.DestinationTableNameWithSchema #>    
+update  <#= lastMappingStep.DestinationFullTableName #>    
 set <# 
         for(int i = 0; i < mappedTable.SourceDestPairedColumnsOutside.Count; i++)
         {

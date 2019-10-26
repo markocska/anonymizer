@@ -57,8 +57,16 @@ namespace Scrambler.Factories
                 var tableConfigsToRemove = new List<TableConfig>();
                 foreach (var tableConfig in dbConfig.Tables)
                 {
-                    if (!_configValidator.IsTableConfigValid(dbConfig, tableConfig) ||
-                        !_parameterValidator.AreTheParamsValid(dbConfig.ConnectionString, tableConfig) ||
+                    if (!_configValidator.IsTableConfigValid(dbConfig, tableConfig))
+                    {
+                        tableConfigsToRemove.Add(tableConfig);
+                    }
+                    else
+                    {
+                        ConstructFullTableName(tableConfig);
+                    }
+
+                    if (!_parameterValidator.AreTheParamsValid(dbConfig.ConnectionString, tableConfig) ||
                         !_whereConditionValidator.IsWhereConditionValid(dbConfig.ConnectionString, tableConfig) ||
                         !_linkedServerValidator.AreLinkedServerParamsValid(dbConfig.ConnectionString, tableConfig))
                     {
@@ -90,6 +98,8 @@ namespace Scrambler.Factories
             return tableInfos;
 
         }
+
+        protected abstract void ConstructFullTableName(TableConfig tableConfig);
 
         protected abstract ITableInfo CreateTableInfo(DatabaseConfig dbConfig, TableConfig tableConfig);
     }

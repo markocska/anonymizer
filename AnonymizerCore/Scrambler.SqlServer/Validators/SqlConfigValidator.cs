@@ -73,7 +73,7 @@ namespace Scrambler.Validators.ConfigValidators
         {
             var tableAndSchemaName = tableNameWithSchema.Split('.');
 
-            if (tableAndSchemaName.Length != 3)
+            if (tableAndSchemaName.Length != 3 && tableAndSchemaName.Length != 4)
             {
                 _logger.LogError($"The following full table config parameter is invalid {tableNameWithSchema}." +
                     $" Connection string: {connectionString}");

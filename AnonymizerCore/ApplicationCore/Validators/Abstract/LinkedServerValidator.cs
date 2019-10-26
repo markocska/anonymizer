@@ -20,6 +20,8 @@ namespace Scrambler.Validators.Abstract
 
         public bool AreLinkedServerParamsValid(string connectionString, TableConfig tableInfo)
         {
+            if (tableInfo.PairedColumnsOutsideTable == null) { return true; }
+
             var linkedServerNames = tableInfo.PairedColumnsOutsideTable.SelectMany(p => p.SourceDestMapping)
                 .Select(s => s.DestinationLinkedInstance).Where(s => !string.IsNullOrEmpty(s)).Distinct();
 

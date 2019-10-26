@@ -534,7 +534,7 @@ namespace Scrambler.SqlScripts.SqlServer
             this.Write("update  ");
             
             #line 319 "E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\Scrambler.SqlServer\SqlScripts\SqlServer\ScrambleTable.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(lastMappingStep.DestinationTableNameWithSchema));
+            this.Write(this.ToStringHelper.ToStringWithCulture(lastMappingStep.DestinationFullTableName));
             
             #line default
             #line hidden
@@ -559,7 +559,7 @@ namespace Scrambler.SqlScripts.SqlServer
             this.Write(" \r\nfrom ");
             
             #line 332 "E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\Scrambler.SqlServer\SqlScripts\SqlServer\ScrambleTable.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(lastMappingStep.DestinationTableNameWithSchema));
+            this.Write(this.ToStringHelper.ToStringWithCulture(lastMappingStep.DestinationFullTableName));
             
             #line default
             #line hidden
@@ -574,7 +574,7 @@ namespace Scrambler.SqlScripts.SqlServer
 
             if (i == (tableMaxIndexInMapping - 1))
             {
-                Write($"join {mappingStep.DestinationTableNameWithSchema} a{i} on ");
+                Write($"join {mappingStep.DestinationFullTableName} a{i} on ");
                 for(int j = 0; j < lastMappingStep.MappedColumns.Count;j++)
                 {   
                     var columnPair = lastMappingStep.MappedColumns[j];
@@ -593,7 +593,7 @@ namespace Scrambler.SqlScripts.SqlServer
             //There is more than just 1 mapping table between.
             if ((mappedTable.MappedColumnPairsOutside.Count > 2) && (i != (tableMaxIndexInMapping - 1)))
             {
-                Write($"join {mappingStep.DestinationTableNameWithSchema} a{i} on ");
+                Write($"join {mappingStep.DestinationFullTableName} a{i} on ");
                 for(int j = 0; j < mappingStep.MappedColumns.Count;j++)
                 {   
                     var columnPair = mappingStep.MappedColumns[j];
@@ -653,7 +653,7 @@ namespace Scrambler.SqlScripts.SqlServer
             this.Write("update  ");
             
             #line 403 "E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\Scrambler.SqlServer\SqlScripts\SqlServer\ScrambleTable.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(lastMappingStep.DestinationTableNameWithSchema));
+            this.Write(this.ToStringHelper.ToStringWithCulture(lastMappingStep.DestinationFullTableName));
             
             #line default
             #line hidden

@@ -13,7 +13,7 @@ using System.Linq;
 
 namespace Scrambler.TableInfo.Abstract
 {
-    public abstract class TableInfoBuilder : ITableInfoBuilder
+   public abstract class TableInfoBuilder : ITableInfoBuilder
     {
         protected ILogger _logger;
         private IConfigValidator _configValidator;
@@ -39,8 +39,6 @@ namespace Scrambler.TableInfo.Abstract
 
         public ITableInfo Build()
         {
-            CheckInputParams();
-
             var tableInfo = CreateTableInfoBase();
 
             tableInfo.SoloScrambledColumnsAndTypes = GetScrambledColumnTypes(tableInfo);
@@ -159,9 +157,9 @@ namespace Scrambler.TableInfo.Abstract
                         columnMapping.Add(new MappedColumnPair
                         {
                             SourceConnectionString = DatabaseConfig.ConnectionString,
-                            SourceTableNameWithSchema = TableConfig.FullTableName,
+                            SourceFullTableName = TableConfig.FullTableName,
                             DestinationConnectionString = columnMappingConfig.DestinationConnectionString,
-                            DestinationTableNameWithSchema = columnMappingConfig.DestinationFullTableName,
+                            DestinationFullTableName = columnMappingConfig.DestinationFullTableName,
                             DestinationInstance = columnMappingConfig.DestinationLinkedInstance,
                             MappedColumns = columnMappingConfig.ForeignKeyMapping.Select(m => new ColumnPair(m[0], m[1])).ToList()
                         });
@@ -172,10 +170,10 @@ namespace Scrambler.TableInfo.Abstract
                         columnMapping.Add(new MappedColumnPair
                         {
                             SourceConnectionString = previousColumnMappingConfig.DestinationConnectionString,
-                            SourceTableNameWithSchema = previousColumnMappingConfig.DestinationFullTableName,
+                            SourceFullTableName = previousColumnMappingConfig.DestinationFullTableName,
                             SourceInstance = previousColumnMappingConfig.DestinationLinkedInstance,
                             DestinationConnectionString = columnMappingConfig.DestinationConnectionString,
-                            DestinationTableNameWithSchema = columnMappingConfig.DestinationFullTableName,
+                            DestinationFullTableName = columnMappingConfig.DestinationFullTableName,
                             DestinationInstance = columnMappingConfig.DestinationLinkedInstance,
                             MappedColumns = columnMappingConfig.ForeignKeyMapping.Select(m => new ColumnPair(m[0], m[1])).ToList()
                         });
@@ -209,32 +207,32 @@ namespace Scrambler.TableInfo.Abstract
             return pairedColumnsWithTypesList;
         }
 
-        private void CheckInputParams()
-        {
-            if (!_configValidator.IsDbConfigValid(DatabaseConfig))
-            {
-                throw new TableInfoException(TableConfig.FullTableName, DatabaseConfig.ConnectionString,
-                    $"Error while creating the TableInfo object.");
-            }
+        //private void CheckInputParams()
+        //{
+        //    if (!_configValidator.IsDbConfigValid(DatabaseConfig))
+        //    {
+        //        throw new TableInfoException(TableConfig.FullTableName, DatabaseConfig.ConnectionString,
+        //            $"Error while creating the TableInfo object.");
+        //    }
 
-            if (!_configValidator.IsTableConfigValid(DatabaseConfig, TableConfig))
-            {
-                throw new TableInfoException(TableConfig.FullTableName, DatabaseConfig.ConnectionString,
-                    $"Error while creating the TableInfo object.");
-            }
+        //    if (!_configValidator.IsTableConfigValid(DatabaseConfig, TableConfig))
+        //    {
+        //        throw new TableInfoException(TableConfig.FullTableName, DatabaseConfig.ConnectionString,
+        //            $"Error while creating the TableInfo object.");
+        //    }
 
-            if (!_whereConditionValidator.IsWhereConditionValid(DatabaseConfig.ConnectionString, TableConfig))
-            {
-                throw new TableInfoException(TableConfig.FullTableName, DatabaseConfig.ConnectionString,
-                    $"Error while creating the TableInfo object.");
-            }
+        //    if (!_whereConditionValidator.IsWhereConditionValid(DatabaseConfig.ConnectionString, TableConfig))
+        //    {
+        //        throw new TableInfoException(TableConfig.FullTableName, DatabaseConfig.ConnectionString,
+        //            $"Error while creating the TableInfo object.");
+        //    }
 
-            if (!_linkedServerValidator.AreLinkedServerParamsValid(DatabaseConfig.ConnectionString, TableConfig))
-            {
-                throw new TableInfoException(TableConfig.FullTableName, DatabaseConfig.ConnectionString,
-                    $"Error while creating the TableInfo object.");
-            }
-        }
+        //    if (!_linkedServerValidator.AreLinkedServerParamsValid(DatabaseConfig.ConnectionString, TableConfig))
+        //    {
+        //        throw new TableInfoException(TableConfig.FullTableName, DatabaseConfig.ConnectionString,
+        //            $"Error while creating the TableInfo object.");
+        //    }
+        //}
 
         protected class TableInfo : ITableInfo
         {

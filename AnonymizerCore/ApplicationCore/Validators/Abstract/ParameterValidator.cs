@@ -154,6 +154,7 @@ namespace Scrambler.Validators.Abstract
                 return true;
             }
 
+
             bool doAllPairedColumnsOutsideExist = true;
 
             foreach (var pairedColumnsOutsideConfig in tableConfig.PairedColumnsOutsideTable)
