@@ -13,6 +13,7 @@ using Scrambler.DatabaseServices.PrimaryKeys;
 using Scrambler.Utilities;
 using Microsoft.Extensions.Logging;
 using Scrambler.Validators.Interfaces;
+using Serilog;
 
 namespace Scrambler
 {
@@ -32,7 +33,7 @@ namespace Scrambler
         private readonly ServiceProvider _serviceProvider;
         private readonly IQueryHelper _queryHelper;
 
-        public ScramblingService(IQueryHelper queryHelper, Action<ILoggingBuilder> logConfig)
+        public ScramblingService(IQueryHelper queryHelper, LoggerConfiguration logConfig)
         {
             var serviceProvider = new ServiceCollection()
                  .AddScoped<IConfigValidator, TConfigValidator>()
@@ -44,9 +45,9 @@ namespace Scrambler
                  .AddScoped<IWhereConditionValidator, TWhereConditionValidator>()
                  .AddScoped<ILinkedServerValidator, TLinkedServerValidator>()
                  .AddScoped<IQueryHelper, TQueryHelper>()
-                 .AddLogging(logConfig)
                  .BuildServiceProvider();
 
+            Log.Logger = logConfig.CreateLogger();
             _serviceProvider = serviceProvider;
             _queryHelper = queryHelper;
         }

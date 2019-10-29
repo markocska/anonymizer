@@ -31,16 +31,16 @@
               "sourceDestMapping": [
                 {
                   "destinationConnectionString": "data source=MARKO-PC\\SQLEXPRESS;initial catalog=NAV;integrated security=True;",
-                  "destinationFullTableName": "NAV.dbo.EmployeesCitizens",
-                  "destinationLinkedInstance": "",
+                  "destinationFullTableName": "NAV2.dbo.EmployeesCitizen",
+                  "destinationLinkedInstance": "[MARKO-PC\\SQLEXPRESS2]",
                   "foreignKeyMapping": [
                     [ "id", "employeeId" ]
                   ]
                 },
                 {
                   "destinationConnectionString": "data source=MARKO-PC\\SQLEXPRESS;initial catalog=NAV;integrated security=True;",
-                  "destinationFullTableName": "NAV.dbo.citizens",
-                  "destinationLinkedInstance": "",
+                  "destinationFullTableName": "NAV2.dbo.citizens",
+                  "destinationLinkedInstance": "[MARKO-PC\\SQLEXPRESS2]",
                   "foreignKeyMapping": [
                     [ "citizenId", "citizenId" ]
                   ]

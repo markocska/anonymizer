@@ -8,6 +8,7 @@ using Scrambler.Utilities;
 using Scrambler.Utilities.QueryHelpers;
 using Scrambler.Validators.ConfigValidators;
 using Scrambler.Validators.ParameterValidators;
+using Serilog;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -18,7 +19,7 @@ namespace Scrambler.SqlServer
         ScramblingService<SqlConfigValidator, SqlParameterValidator, SqlColumnTypesManager, SqlPrimaryKeyManager, SqlTableInfoCollectionFactory, 
             SqlTableScramblingService, SqlWhereConditionValidator ,SqlLinkedServerValidator, SqlHelper>
     {
-        public SqlScramblingService(Action<ILoggingBuilder> logConfig) : base(new SqlHelper(), logConfig)
+        public SqlScramblingService(LoggerConfiguration logConfig) : base(new SqlHelper(), logConfig)
         {
 
         }

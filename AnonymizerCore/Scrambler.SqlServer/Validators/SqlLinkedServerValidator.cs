@@ -4,6 +4,7 @@ using Scrambler.Validators.Abstract;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Linq;
 using System.Text;
 
 namespace Scrambler.SqlServer.Validators
@@ -12,15 +13,15 @@ namespace Scrambler.SqlServer.Validators
     {
         private readonly IQueryHelper _queryHelper;
 
-        public SqlLinkedServerValidator(ILogger<SqlLinkedServerValidator> logger, IQueryHelper queryHelper)
-            : base(logger)
+        public SqlLinkedServerValidator(IQueryHelper queryHelper)
         {
             _queryHelper = queryHelper;
         }
 
-        protected override DataTable GetLinkedServerNames(string connectionString)
+        protected override List<string> GetLinkedServerNames(string connectionString)
         {
-            return  _queryHelper.ExecuteQueryWithoutParams(connectionString, "select * from sys.servers;");
+            return  _queryHelper.ExecuteQueryWithoutParams(connectionString, "select * from sys.servers;").AsEnumerable().Select(r => r.Field<string>(1))
+                .Select(x => "[" + x + "]" ).ToList(); ;
 
         }
     }

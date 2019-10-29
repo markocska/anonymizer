@@ -12,7 +12,7 @@ namespace Scrambler.DatabaseServices.Scrambling
     public class SqlTableScramblingService : TableScramblingService
     {
 
-        public SqlTableScramblingService(ILogger<SqlTableScramblingService> logger, IQueryHelper queryHelper) : base(logger, queryHelper)
+        public SqlTableScramblingService(IQueryHelper queryHelper) : base(queryHelper)
         {
 
         }

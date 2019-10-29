@@ -5,6 +5,7 @@ using Scrambler.DatabaseServices.PrimaryKeys;
 using Scrambler.TableInfo.Interfaces;
 using Scrambler.Validators;
 using Scrambler.Validators.Interfaces;
+using Serilog;
 using System;
 using System.Collections.Generic;
 
@@ -12,8 +13,6 @@ namespace Scrambler.Factories
 {
     public abstract class TableInfoCollectionFactory : ITableInfoCollectionFactory
     {
-        protected readonly ILogger _logger;
-
         protected readonly IConfigValidator _configValidator;
         protected readonly IParameterValidator _parameterValidator;
         protected readonly IColumnTypeManager _columnTypeManager;
@@ -22,9 +21,8 @@ namespace Scrambler.Factories
         protected readonly ILinkedServerValidator _linkedServerValidator;
 
         public TableInfoCollectionFactory(IConfigValidator configValidator, IParameterValidator parameterValidator, IColumnTypeManager columnTypeManager,
-            IPrimaryKeyManager primaryKeyManager, IWhereConditionValidator whereConditionValidator, ILinkedServerValidator linkedServerValidator, ILogger<TableInfoCollectionFactory> logger)
+            IPrimaryKeyManager primaryKeyManager, IWhereConditionValidator whereConditionValidator, ILinkedServerValidator linkedServerValidator)
         {
-            _logger = logger;
             _configValidator = configValidator;
             _parameterValidator = parameterValidator;
             _columnTypeManager = columnTypeManager;
@@ -89,7 +87,7 @@ namespace Scrambler.Factories
                     }
                     catch (Exception ex)
                     {
-                        _logger.LogError($"An error happened while getting table information for table {tableConfig.FullTableName}. " +
+                        Log.Error($"An error happened while getting table information for table {tableConfig.FullTableName}. " +
                             $"DbConnectionString: {dbConfig.ConnectionString}. Error message: {ex.Message}");
                     }
                 }

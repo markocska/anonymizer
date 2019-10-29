@@ -7,6 +7,7 @@ using Scrambler.TableInfo.Exceptions;
 using Scrambler.TableInfo.Interfaces;
 using Scrambler.Validators;
 using Scrambler.Validators.Interfaces;
+using Serilog;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,7 +16,6 @@ namespace Scrambler.TableInfo.Abstract
 {
    public abstract class TableInfoBuilder : ITableInfoBuilder
     {
-        protected ILogger _logger;
         private IConfigValidator _configValidator;
         private IWhereConditionValidator _whereConditionValidator;
         private IColumnTypeManager _columnTypeManager;
@@ -25,7 +25,7 @@ namespace Scrambler.TableInfo.Abstract
         public DatabaseConfig DatabaseConfig { get; private set; }
 
         public TableInfoBuilder(DatabaseConfig dbConfig, TableConfig tableConfig, IConfigValidator configValidator, IWhereConditionValidator whereConditionValidator,
-            ILinkedServerValidator linkedServerValidator,IColumnTypeManager columnTypeManager, IPrimaryKeyManager primaryKeyManager, ILogger logger)
+            ILinkedServerValidator linkedServerValidator,IColumnTypeManager columnTypeManager, IPrimaryKeyManager primaryKeyManager)
         {
             TableConfig = tableConfig;
             DatabaseConfig = dbConfig;
@@ -34,7 +34,6 @@ namespace Scrambler.TableInfo.Abstract
             _columnTypeManager = columnTypeManager;
             _linkedServerValidator = linkedServerValidator;
             _primaryKeyManager = primaryKeyManager;
-            _logger = logger;
         }
 
         public ITableInfo Build()
@@ -68,7 +67,7 @@ namespace Scrambler.TableInfo.Abstract
             }
             catch (Exception ex)
             {
-                _logger.LogError($"An error happened while trying to get primary keys and their types {ex.Message}", ex);
+                Log.Error($"An error happened while trying to get primary keys and their types {ex.Message}", ex);
                 throw new TableInfoException(TableConfig.FullTableName, DatabaseConfig.ConnectionString, "Error while creating table");
             }
         }
@@ -82,7 +81,7 @@ namespace Scrambler.TableInfo.Abstract
             }
             catch (ColumnTypesException ex)
             {
-                _logger.LogError($"Error while getting constant column types for table {TableConfig.FullTableName}. " +
+                Log.Error($"Error while getting constant column types for table {TableConfig.FullTableName}. " +
                     $"Connection string: {DatabaseConfig.ConnectionString}. Error message: {ex.Message}. ", ex);
                 throw new TableInfoException(TableConfig.FullTableName, DatabaseConfig.ConnectionString, "Error while creating the table.");
             }
@@ -121,7 +120,7 @@ namespace Scrambler.TableInfo.Abstract
             }
             catch (ColumnTypesException ex)
             {
-                _logger.LogError($"Error while getting scrambled column types for table {TableConfig.FullTableName}. " +
+                Log.Error($"Error while getting scrambled column types for table {TableConfig.FullTableName}. " +
                     $"Connection string: {DatabaseConfig.ConnectionString}. Error message: {ex.Message}. ", ex);
                 throw new TableInfoException(TableConfig.FullTableName, DatabaseConfig.ConnectionString, "Error while creating the table.");
             }

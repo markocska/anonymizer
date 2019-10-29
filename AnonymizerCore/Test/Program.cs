@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.Logging;
 using Scrambler.SqlServer;
+using Serilog;
 using System;
 using System.IO;
 
@@ -11,7 +12,8 @@ namespace Test
         {
             var config = File.ReadAllText(".\\scrambleConfig.json");
 
-            Action<ILoggingBuilder> logConfig = logBuilder => logBuilder.AddConsole();
+            var logConfig = new LoggerConfiguration()
+                .WriteTo.Console();
 
             var scrambler = new SqlScramblingService(logConfig);
             scrambler.ScrambleFromConfigStr(config);

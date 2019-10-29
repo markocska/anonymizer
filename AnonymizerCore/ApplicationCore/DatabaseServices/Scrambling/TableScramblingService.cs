@@ -4,17 +4,16 @@ using System.Text;
 using Microsoft.Extensions.Logging;
 using Scrambler.TableInfo.Interfaces;
 using Scrambler.Utilities;
+using Serilog;
 
 namespace Scrambler.DatabaseServices.Scrambling
 {
     public abstract class TableScramblingService : ITableScramblingService
     {
-        protected ILogger _logger;
         protected IQueryHelper _queryHelper;
 
-        public TableScramblingService(ILogger<TableScramblingService> logger, IQueryHelper queryHelper)
+        public TableScramblingService(IQueryHelper queryHelper)
         {
-            _logger = logger;
             _queryHelper = queryHelper;
         }
         public void ScrambleTables(List<ITableInfo> tableInfos)
@@ -28,12 +27,12 @@ namespace Scrambler.DatabaseServices.Scrambling
                 }
                 catch(ScramblingException ex)
                 {
-                    _logger.LogError($"Couldn't scramble table {tableInfo.FullTableName}. Connection string: {tableInfo.DbConnectionString}. " +
+                    Log.Error($"Couldn't scramble table {tableInfo.FullTableName}. Connection string: {tableInfo.DbConnectionString}. " +
                         $"Reason: {ex.Message}", ex);
                 }
                 catch(Exception ex)
                 {
-                    _logger.LogError($"Couldn't scramble table {tableInfo.FullTableName}. Connection string: {tableInfo.DbConnectionString}. " +
+                    Log.Error($"Couldn't scramble table {tableInfo.FullTableName}. Connection string: {tableInfo.DbConnectionString}. " +
                        $"Reason: {ex.Message}", ex);
                 }
             }
