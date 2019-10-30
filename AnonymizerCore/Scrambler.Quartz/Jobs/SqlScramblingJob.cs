@@ -1,19 +1,22 @@
-﻿using Quartz;
+﻿using Microsoft.Extensions.DependencyInjection;
+using Quartz;
 using System;
 using System.Threading.Tasks;
 
-namespace Scrambler.Quartz
+namespace Scrambler.Quartz.Jobs
 {
     public class SqlScramblingJob : IJob
     {
 
         public string ConfigStr { get; set; }
 
-        public Task Execute(IJobExecutionContext context)
+        public async Task Execute(IJobExecutionContext context)
         {
             var jobDataMap = context.MergedJobDataMap;
 
-            var logConfig = jobDataMap.Get("logConfig")
+            var logConfig = jobDataMap.Get("logConfig");
+
+          
 
            
         }

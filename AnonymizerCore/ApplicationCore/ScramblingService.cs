@@ -69,7 +69,7 @@ namespace Scrambler
             }
 
             var validTables = _serviceProvider.GetRequiredService<ITableInfoCollectionFactory>().CreateTableListFromConfig(databasesConfig);
-
+    
             var tableScramblingService = _serviceProvider.GetRequiredService<ITableScramblingService>();
             foreach (var table in validTables)
             {   
