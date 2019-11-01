@@ -5,6 +5,7 @@ using Quartz.Impl;
 using Quartz.Logging;
 using Scrambler.Quartz.ConfigProviders;
 using Scrambler.Quartz.Configuration;
+using Scrambler.Quartz.Interfaces;
 using Scrambler.Quartz.JobFactory;
 using Serilog;
 using System;
@@ -15,7 +16,7 @@ using System.Threading.Tasks;
 
 namespace Scrambler.Quartz
 {
-    public class SchedulingService
+    public class SchedulingService : ISchedulingService
     {
         private IScheduler _scheduler;
 
@@ -28,15 +29,16 @@ namespace Scrambler.Quartz
 
             var jobFactory = new ScramblerJobFactory(container);
 
-            var schedulerFactory = new StdSchedulerFactory(schedulerConfig.Config);
+            var schedulerFactory = new StdSchedulerFactory(schedulerConfig.NameValueCollection);
             var scheduler = schedulerFactory.GetScheduler().GetAwaiter().GetResult();
 
             scheduler.JobFactory = jobFactory;
 
             _scheduler = scheduler;
+
         }
 
-        //public async Task ScheduleSqlScramblingJob(string scramblingConfig, string cronExpression,string description)
+        //public async Task ScheduleSqlScramblingJob(string cronExpression,string description)
         
         //    var job = JobBuilder.CreateForAsync<SqlScramblingJob>()
         //        .WithDescription(description)

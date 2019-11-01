@@ -7,6 +7,6 @@ namespace Scrambler.Quartz.Configuration
 {
     public class SchedulerConfiguration
     {
-        public NameValueCollection Config { get; set; }
+        public NameValueCollection NameValueCollection { get; set; }
     }
 }

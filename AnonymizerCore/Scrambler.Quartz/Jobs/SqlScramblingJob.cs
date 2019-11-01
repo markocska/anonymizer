@@ -12,10 +12,7 @@ namespace Scrambler.Quartz.Jobs
 
         public async Task Execute(IJobExecutionContext context)
         {
-            var jobDataMap = context.MergedJobDataMap;
-
-            var logConfig = jobDataMap.Get("logConfig");
-
+            Console.WriteLine("It works!");
           
 
            
