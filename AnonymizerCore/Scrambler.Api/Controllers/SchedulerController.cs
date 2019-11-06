@@ -3,18 +3,30 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Scrambler.Quartz.Configuration;
+using Scrambler.Quartz.Interfaces;
 
 namespace Scrambler.Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class ValuesController : ControllerBase
+    public class SchedulerController : ControllerBase
     {
+        private readonly ISchedulingService _schedulingService;
+        private readonly SchedulerConfiguration _schedulerConfiguration;
+
+        public SchedulerController(ISchedulingService schedulingService, SchedulerConfiguration schedulerConfiguration)
+        {
+            _schedulingService = schedulingService;
+            _schedulerConfiguration = schedulerConfiguration;
+        }
+
         // GET api/values
         [HttpGet]
         public ActionResult<IEnumerable<string>> Get()
         {
-            return new string[] { "value1", "value2" };
+            _schedulingService.ScheduleSqlScramblingJob("testjob", "testgroup", "testTrigger", "testTriggerGroup", "0,30 * * ? * MON-FRI", "testjob");
+            return Ok();
         }
 
         // GET api/values/5

@@ -35,13 +35,17 @@ namespace Scrambler.Api
             var schedulerConfigPath = Configuration.GetValue<string>("SchedulerConfigPath");
             var schedulerConfig = FileSchedulerConfigurationProvider.GetSchedulerConfig(schedulerConfigPath);
 
+            var configuration = new ConfigurationBuilder()
+                .AddJsonFile("serilog.config.json")
+                .Build();
+                
             var loggerConfig = new LoggerConfiguration()
                   .ReadFrom.Configuration(Configuration);
 
             services.AddSingleton(x => schedulerConfig);
             services.AddSingleton(x => loggerConfig);
 
-            services.AddScoped<ISchedulingService,SchedulingService>();
+            services.AddSingleton<ISchedulingService,SchedulingService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

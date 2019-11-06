@@ -34,7 +34,7 @@ namespace Scrambler.Quartz.JobFactory
                     throw;
                 }
 
-                if (_scopes.TryAdd(job, scope))
+                if (!_scopes.TryAdd(job, scope))
                 {
                     scope.Dispose();
                     throw new Exception("Failed to track DI scope");

@@ -1,12 +1,4 @@
 {
-  "Logging": {
-    "LogLevel": {
-      "Default": "Warning"
-    }
-  },
-  "AllowedHosts": "*",
-  "SchedulerConfigPath": ".//quartz.config.json",
-
   "Serilog": {
     "Using": [ "Serilog.Sinks.Console" ],
     "MinimumLevel": "Debug",

@@ -206,6 +206,19 @@
           "lib/netstandard2.0/Quartz.dll": {}
         }
       },
+      "Quartz.Serialization.Json/3.0.7": {
+        "type": "package",
+        "dependencies": {
+          "Newtonsoft.Json": "11.0.2",
+          "Quartz": "3.0.7"
+        },
+        "compile": {
+          "lib/netstandard2.0/Quartz.Serialization.Json.dll": {}
+        },
+        "runtime": {
+          "lib/netstandard2.0/Quartz.Serialization.Json.dll": {}
+        }
+      },
       "runtime.native.System/4.3.0": {
         "type": "package",
         "dependencies": {
@@ -1580,6 +1593,23 @@
         "lib/netstandard2.0/Quartz.xml",
         "quartz.3.0.7.nupkg.sha512",
         "quartz.nuspec"
+      ]
+    },
+    "Quartz.Serialization.Json/3.0.7": {
+      "sha512": "Mf4jcSP7Rnk63cvEskfbwLK5K47afBU/A3o9MnOj+JPLAxY7+a74J4zg56RQ4CmW0/JKri8sGFmOmFX5cUqp3Q==",
+      "type": "package",
+      "path": "quartz.serialization.json/3.0.7",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "lib/net452/Quartz.Serialization.Json.dll",
+        "lib/net452/Quartz.Serialization.Json.pdb",
+        "lib/net452/Quartz.Serialization.Json.xml",
+        "lib/netstandard2.0/Quartz.Serialization.Json.dll",
+        "lib/netstandard2.0/Quartz.Serialization.Json.pdb",
+        "lib/netstandard2.0/Quartz.Serialization.Json.xml",
+        "quartz.serialization.json.3.0.7.nupkg.sha512",
+        "quartz.serialization.json.nuspec"
       ]
     },
     "runtime.native.System/4.3.0": {
@@ -4751,6 +4781,7 @@
       "NETStandard.Library >= 2.0.3",
       "Newtonsoft.Json >= 12.0.2",
       "Quartz >= 3.0.7",
+      "Quartz.Serialization.Json >= 3.0.7",
       "Serilog >= 2.9.0"
     ]
   },
@@ -4814,6 +4845,10 @@
             "version": "[12.0.2, )"
           },
           "Quartz": {
+            "target": "Package",
+            "version": "[3.0.7, )"
+          },
+          "Quartz.Serialization.Json": {
             "target": "Package",
             "version": "[3.0.7, )"
           },
