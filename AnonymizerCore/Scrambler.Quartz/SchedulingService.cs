@@ -3,16 +3,19 @@ using Microsoft.Extensions.DependencyInjection;
 using Quartz;
 using Quartz.Impl;
 using Quartz.Impl.AdoJobStore;
+using Quartz.Impl.Matchers;
 using Quartz.Logging;
 using Scrambler.Quartz.ConfigProviders;
 using Scrambler.Quartz.Configuration;
 using Scrambler.Quartz.Interfaces;
 using Scrambler.Quartz.JobFactory;
 using Scrambler.Quartz.Jobs;
+using Scrambler.Quartz.Model;
 using Serilog;
 using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -45,7 +48,35 @@ namespace Scrambler.Quartz
             _scheduler.Start();
         }
 
+        public async Task<IReadOnlyCollection<JobKey>> GetAllJobKeys()
+        {
+            var jobKeys = await _scheduler.GetJobKeys(GroupMatcher<JobKey>.AnyGroup());
 
+            return jobKeys;
+        }
+
+        public async Task<List<JobKeyWithDescription>> GetAllJobKeysWithDescription()
+        {
+            var jobKeys = await _scheduler.GetJobKeys(GroupMatcher<JobKey>.AnyGroup());
+
+            var jobKeysWithDescription = new List<JobKeyWithDescription>();
+            
+            foreach (var jobkey in jobKeys)
+            {
+                var jobDetail = await _scheduler.GetJobDetail(jobkey);
+
+                jobKeysWithDescription.Add(
+                    new JobKeyWithDescription
+                    {
+                        JobName = jobkey.Name,
+                        JobGroup = jobkey.Group,
+                        Description = jobDetail.Description,
+                        RequestRecovery = jobDetail.RequestsRecovery
+                    });
+            }
+
+            return jobKeysWithDescription;
+        }
 
         public async Task<SchedulingResult> ScheduleSqlScramblingJob(string jobName, string jobGroup, string triggerName, string triggerGroup,
             string cronExpression, string description)

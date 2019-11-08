@@ -11,7 +11,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Test", "Test\Test.csproj", 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Scrambler.Quartz", "Scrambler.Quartz\Scrambler.Quartz.csproj", "{1CEF5583-B223-4721-9582-66F0EC31BC60}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Scrambler.Api", "Scrambler.Api\Scrambler.Api.csproj", "{59B5D6EE-BECB-4DB0-9F47-E160F79D5871}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Scrambler.Api", "Scrambler.Api\Scrambler.Api.csproj", "{59B5D6EE-BECB-4DB0-9F47-E160F79D5871}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

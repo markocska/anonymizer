@@ -23,17 +23,12 @@ namespace Scrambler.Api.Controllers
         }
 
         // GET api/values
-        [HttpGet]
+        [HttpGet("jobkeyswithdescription")]
         public async Task<ActionResult<IEnumerable<string>>> Get()
         {
-            var schedulingResult = await _schedulingService.ScheduleSqlScramblingJob("testjob", "testgroup", "testTrigger", "testTriggerGroup", "0,30 * * ? * MON-FRI", "testjob");
+            var jobKeysWithDescription = await _schedulingService.GetAllJobKeysWithDescription(); 
 
-            if (!schedulingResult.IsSuccessful)
-            {
-                return BadRequest(new ErrorResponse { ErrorMessage = schedulingResult.ErrorMessage });
-            }
-
-            return Ok();
+            return Ok(jobKeysWithDescription);
         }
 
         // GET api/values/5

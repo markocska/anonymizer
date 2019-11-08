@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
+using AutoMapper;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -14,8 +15,10 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
+using Scrambler.Api.AutoMapper;
 using Scrambler.Quartz;
 using Scrambler.Quartz.ConfigProviders;
+using Scrambler.Quartz.Configuration;
 using Scrambler.Quartz.Interfaces;
 using Serilog;
 
@@ -35,18 +38,11 @@ namespace Scrambler.Api
         {
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
-            var schedulerConfigPath = Configuration.GetValue<string>("SchedulerConfigPath");
-            var schedulerConfig = FileSchedulerConfigurationProvider.GetSchedulerConfig(schedulerConfigPath);
-            
-            var configuration = new ConfigurationBuilder()
-                .AddJsonFile("serilog.config.json")
-                .Build();
-                
-            var loggerConfig = new LoggerConfiguration()
-                  .ReadFrom.Configuration(Configuration);
+            services.AddSingleton(CreateMapper());
 
-            services.AddSingleton(x => schedulerConfig);
-            services.AddSingleton(x => loggerConfig);
+            services.AddSingleton(x => CreateSchedulerConfig());
+
+            services.AddSingleton(x => CreateLoggerConfig());
 
             services.AddSingleton<ISchedulingService,SchedulingService>();
         }
@@ -75,6 +71,34 @@ namespace Scrambler.Api
                 settings.ContractResolver = new DefaultContractResolver();
                 return settings;
             };
+        }
+
+        public IMapper CreateMapper()
+        {
+            var mappingConfig = new MapperConfiguration(mc =>
+            {
+                mc.AddProfile(new MappingProfile());
+            });
+
+            IMapper mapper = mappingConfig.CreateMapper();
+
+            return mapper;
+        }
+
+        public SchedulerConfiguration CreateSchedulerConfig()
+        {
+            var schedulerConfigPath = Configuration.GetValue<string>("SchedulerConfigPath");
+            var schedulerConfig = FileSchedulerConfigurationProvider.GetSchedulerConfig(schedulerConfigPath);
+
+            return schedulerConfig;
+        }
+
+        public LoggerConfiguration CreateLoggerConfig()
+        {
+            var loggerConfig = new LoggerConfiguration()
+               .ReadFrom.Configuration(Configuration);
+
+            return loggerConfig;
         }
     }
 }
