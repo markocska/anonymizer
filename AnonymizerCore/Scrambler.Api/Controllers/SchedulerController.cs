@@ -45,10 +45,17 @@ namespace Scrambler.Api.Controllers
 
         // POST api/values
         [HttpPost]
-        public void Post([FromBody] CreateSchedulingJob newSchedulingJob)
+        public async Task<IActionResult> Post([FromBody] CreateSchedulingJob newSchedulingJob)
         {
-            _schedulingService.ScheduleSqlScramblingJob(newSchedulingJob.JobName, newSchedulingJob.JobGroup, newSchedulingJob.TriggerName, newSchedulingJob.TriggerGroup,
+           var schedulingResult = await _schedulingService.ScheduleSqlScramblingJob(newSchedulingJob.JobName, newSchedulingJob.JobGroup, newSchedulingJob.TriggerName, newSchedulingJob.TriggerGroup,
                 newSchedulingJob.CronExpression, newSchedulingJob.Description);
+
+            if (!schedulingResult.IsSuccessful)
+            {
+                return BadRequest(new ErrorResponse { ErrorMessage = schedulingResult.ErrorMessage });
+            }
+
+            return Ok();
         }
 
         // PUT api/values/5

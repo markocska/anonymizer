@@ -75,7 +75,7 @@ namespace Scrambler.Quartz
             {
                 await _scheduler.ScheduleJob(job, trigger);
             }
-            catch(ObjectAlreadyExistsException ex)
+            catch (ObjectAlreadyExistsException ex) 
             {
                 return new SchedulingResult
                 {
