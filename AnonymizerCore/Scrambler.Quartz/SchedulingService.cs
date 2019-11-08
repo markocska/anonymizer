@@ -20,7 +20,7 @@ namespace Scrambler.Quartz
 {
     public class SchedulingService : ISchedulingService
     {
-        private IScheduler _scheduler;
+        public IScheduler _scheduler { get; set; }
 
 
         public SchedulingService(LoggerConfiguration loggerConfiguration, SchedulerConfiguration schedulerConfig)
@@ -37,13 +37,15 @@ namespace Scrambler.Quartz
 
             var schedulerFactory = new StdSchedulerFactory(schedulerConfig.NameValueCollection);
             var scheduler = schedulerFactory.GetScheduler().GetAwaiter().GetResult();
-
+            
             scheduler.JobFactory = jobFactory;
 
             _scheduler = scheduler;
 
             _scheduler.Start();
         }
+
+
 
         public async Task<SchedulingResult> ScheduleSqlScramblingJob(string jobName, string jobGroup, string triggerName, string triggerGroup,
             string cronExpression, string description)
@@ -58,12 +60,6 @@ namespace Scrambler.Quartz
                 return new SchedulingResult { IsSuccessful = false, ErrorMessage = "The jobname is already taken." };
             }
 
-            //var triggerStatus = _scheduler.GetTrigger(new TriggerKey(triggerName, triggerGroup));
-            //if (_scheduler.GetTrigger(new TriggerKey(triggerName, triggerGroup)). != TaskStatus.WaitingForActivation )
-            //{
-            //    return new SchedulingResult { IsSuccessful = false, ErrorMessage = "The triggername is already taken." };
-            //}
-
             var job = JobBuilder.CreateForAsync<SqlScramblingJob>()
                 .WithIdentity(jobName, jobGroup)
                 .WithDescription(description)
@@ -75,7 +71,18 @@ namespace Scrambler.Quartz
                 .WithCronSchedule(cronExpression)
                 .Build();
 
-            await _scheduler.ScheduleJob(job, trigger);
+            try
+            {
+                await _scheduler.ScheduleJob(job, trigger);
+            }
+            catch(ObjectAlreadyExistsException ex)
+            {
+                return new SchedulingResult
+                {
+                    IsSuccessful = false,
+                    ErrorMessage = ex.Message
+                };
+            }
 
             return new SchedulingResult { IsSuccessful = true };
         }

@@ -3,12 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Scrambler.Api.Dtos;
 using Scrambler.Quartz.Configuration;
 using Scrambler.Quartz.Interfaces;
 
 namespace Scrambler.Api.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("[controller]")]
     [ApiController]
     public class SchedulerController : ControllerBase
     {
@@ -23,9 +24,15 @@ namespace Scrambler.Api.Controllers
 
         // GET api/values
         [HttpGet]
-        public ActionResult<IEnumerable<string>> Get()
+        public async Task<ActionResult<IEnumerable<string>>> Get()
         {
-            _schedulingService.ScheduleSqlScramblingJob("testjob", "testgroup", "testTrigger", "testTriggerGroup", "0,30 * * ? * MON-FRI", "testjob");
+            var schedulingResult = await _schedulingService.ScheduleSqlScramblingJob("testjob", "testgroup", "testTrigger", "testTriggerGroup", "0,30 * * ? * MON-FRI", "testjob");
+
+            if (!schedulingResult.IsSuccessful)
+            {
+                return BadRequest(new ErrorResponse { ErrorMessage = schedulingResult.ErrorMessage });
+            }
+
             return Ok();
         }
 
@@ -38,8 +45,10 @@ namespace Scrambler.Api.Controllers
 
         // POST api/values
         [HttpPost]
-        public void Post([FromBody] string value)
+        public void Post([FromBody] CreateSchedulingJob newSchedulingJob)
         {
+            _schedulingService.ScheduleSqlScramblingJob(newSchedulingJob.JobName, newSchedulingJob.JobGroup, newSchedulingJob.TriggerName, newSchedulingJob.TriggerGroup,
+                newSchedulingJob.CronExpression, newSchedulingJob.Description);
         }
 
         // PUT api/values/5

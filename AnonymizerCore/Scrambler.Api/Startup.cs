@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -11,6 +12,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 using Scrambler.Quartz;
 using Scrambler.Quartz.ConfigProviders;
 using Scrambler.Quartz.Interfaces;
@@ -34,7 +37,7 @@ namespace Scrambler.Api
 
             var schedulerConfigPath = Configuration.GetValue<string>("SchedulerConfigPath");
             var schedulerConfig = FileSchedulerConfigurationProvider.GetSchedulerConfig(schedulerConfigPath);
-
+            
             var configuration = new ConfigurationBuilder()
                 .AddJsonFile("serilog.config.json")
                 .Build();
@@ -54,15 +57,24 @@ namespace Scrambler.Api
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
+
             }
             else
             {
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-                app.UseHsts();
+                //app.UseHsts();
             }
-
             app.UseHttpsRedirection();
             app.UseMvc();
+
+            JsonConvert.DefaultSettings = () =>
+            {
+                var settings = new JsonSerializerSettings();
+                settings.NullValueHandling = NullValueHandling.Ignore;
+                settings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
+                settings.ContractResolver = new DefaultContractResolver();
+                return settings;
+            };
         }
     }
 }

@@ -4,6 +4,7 @@ using System.Text;
 
 namespace Scrambler.Quartz
 {
+
     public class SchedulingResult
     {
         public bool IsSuccessful { get; set; }
