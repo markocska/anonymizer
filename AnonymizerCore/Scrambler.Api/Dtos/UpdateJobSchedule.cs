@@ -6,13 +6,17 @@ using System.Threading.Tasks;
 
 namespace Scrambler.Api.Dtos
 {
-    public class JobKey
+    public class UpdateJobSchedule
     {
         [Required]
-        [StringLength(200, MinimumLength = 1, ErrorMessage = "{0} must be between {2} and {1}")]
-        public string Name { get; set; }
+        [StringLength(200,MinimumLength = 1,ErrorMessage = "{0} must be between {2} and {1}")]
+        public string TriggerGroup { get; set; }
         [Required]
         [StringLength(200, MinimumLength = 1, ErrorMessage = "{0} must be between {2} and {1}")]
-        public string Group { get; set; }
+        public string TriggerName { get; set; }
+        [Required]
+        [StringLength(200, MinimumLength = 1, ErrorMessage = "{0} must be between {2} and {1}")]
+        public string CronExpression { get; set; }
+        public string TriggerDescription { get; set; }
     }
 }

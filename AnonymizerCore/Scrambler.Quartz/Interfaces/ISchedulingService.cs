@@ -9,11 +9,12 @@ namespace Scrambler.Quartz.Interfaces
 {
     public interface ISchedulingService
     {
-        Task<SchedulingResult> ScheduleSqlScramblingJob(string jobName, string jobGroup, string triggerName, string triggerGroup,
+        Task<SchedulingResult> ScheduleSqlScramblingJob(string jobName, string jobGroup, string triggerDescription,
             string cronExpression, string description);
-
+        Task<SchedulingResult> RescheduleJob(string triggerGroup, string triggerName, string cronExpression, string triggerDescription);
         Task<IReadOnlyCollection<JobKey>> GetAllJobKeys();
-
         Task<List<JobKeyWithDescription>> GetAllJobKeysWithDescription();
+        Task<bool> DeleteJob(string jobName, string jobGroup);
+        Task<bool> DeleteTrigger(string triggerName, string triggerGroup);
     }
 }
