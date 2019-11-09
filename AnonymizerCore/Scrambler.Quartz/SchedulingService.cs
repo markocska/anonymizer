@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using AutoMapper;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Quartz;
 using Quartz.Impl;
@@ -25,10 +26,12 @@ namespace Scrambler.Quartz
     {
         public IScheduler _scheduler { get; set; }
 
-
-        public SchedulingService(LoggerConfiguration loggerConfiguration, SchedulerConfiguration schedulerConfig)
+        public IMapper _mapper { get; set; }
+        public SchedulingService(LoggerConfiguration loggerConfiguration, SchedulerConfiguration schedulerConfig, IMapper mapper)
         {
             Log.Logger = loggerConfiguration.CreateLogger();
+
+            _mapper = mapper;
 
             var services = new ServiceCollection();
             services.AddTransient(s => loggerConfiguration);
@@ -65,14 +68,15 @@ namespace Scrambler.Quartz
             {
                 var jobDetail = await _scheduler.GetJobDetail(jobKey);
                 var triggers = await _scheduler.GetTriggersOfJob(jobKey);
-               
+                var l = _mapper.Map<List<ITrigger>, List<TriggerKeyWithDescription>>(triggers.ToList());
                 jobKeysWithDescription.Add(
                     new JobKeyWithDescription
                     {
                         JobName = jobKey.Name,
                         JobGroup = jobKey.Group,
                         Description = jobDetail.Description,
-                        RequestRecovery = jobDetail.RequestsRecovery
+                        RequestRecovery = jobDetail.RequestsRecovery,
+                        Triggers = _mapper.Map<List<ITrigger>, List<TriggerKeyWithDescription>>(triggers.ToList())
                     });
             }
 
