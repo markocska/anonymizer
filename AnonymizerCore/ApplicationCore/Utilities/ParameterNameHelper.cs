@@ -10,7 +10,7 @@ namespace Scrambler.Utilities
     {
         public static string RemoveParenthesises(string str)
         {
-            if (str.StartsWith('[') && str.EndsWith(']'))
+            if (str.StartsWith("[") && str.EndsWith("]"))
             {
                 var newStr = str.TrimStart('[').TrimEnd(']');
                 return newStr;
@@ -30,7 +30,7 @@ namespace Scrambler.Utilities
         {   
             if (str == "" || str == null) { return str; }
 
-            if (!str.StartsWith('[') && !str.EndsWith(']'))
+            if (!str.StartsWith("[") && !str.EndsWith("]"))
             {
                 return "[" + str + "]";
             }

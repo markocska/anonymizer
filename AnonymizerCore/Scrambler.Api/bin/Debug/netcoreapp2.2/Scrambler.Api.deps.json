@@ -1,7 +1,7 @@
 {
   "runtimeTarget": {
     "name": ".NETCoreApp,Version=v2.2",
-    "signature": "be0a750c754bc310f69bdd2ff89534883ffec8d9"
+    "signature": "80308ee0c2c772d0aa86b722e81d5e67a95bd3b7"
   },
   "compilationOptions": {
     "defines": [
@@ -28,6 +28,8 @@
           "AutoMapper.Extensions.Microsoft.DependencyInjection": "7.0.0",
           "Microsoft.AspNetCore.App": "2.2.0",
           "Microsoft.AspNetCore.Razor.Design": "2.2.0",
+          "Microsoft.CodeAnalysis.CSharp": "2.8.0",
+          "Microsoft.CodeAnalysis.Common": "2.8.0",
           "Microsoft.Extensions.Configuration": "2.2.0",
           "Microsoft.NETCore.App": "2.2.0",
           "Microsoft.VisualStudio.Azure.Containers.Tools.Targets": "1.0.2105168",
@@ -77,6 +79,21 @@
           "lib/netstandard2.0/AutoMapper.Extensions.Microsoft.DependencyInjection.dll": {}
         }
       },
+      "Microsoft.CodeAnalysis.CSharp.Scripting/2.6.1": {
+        "dependencies": {
+          "Microsoft.CodeAnalysis.CSharp": "2.8.0",
+          "Microsoft.CodeAnalysis.Scripting.Common": "2.6.1"
+        },
+        "runtime": {
+          "lib/netstandard1.3/Microsoft.CodeAnalysis.CSharp.Scripting.dll": {
+            "assemblyVersion": "2.6.0.0",
+            "fileVersion": "2.6.1.62414"
+          }
+        },
+        "compile": {
+          "lib/netstandard1.3/Microsoft.CodeAnalysis.CSharp.Scripting.dll": {}
+        }
+      },
       "Microsoft.CodeAnalysis.CSharp.Workspaces/2.8.0": {
         "dependencies": {
           "Microsoft.CodeAnalysis.CSharp": "2.8.0",
@@ -90,6 +107,39 @@
         },
         "compile": {
           "lib/netstandard1.3/Microsoft.CodeAnalysis.CSharp.Workspaces.dll": {}
+        }
+      },
+      "Microsoft.CodeAnalysis.Scripting.Common/2.6.1": {
+        "dependencies": {
+          "Microsoft.CodeAnalysis.Common": "2.8.0",
+          "System.AppContext": "4.3.0",
+          "System.Collections": "4.3.0",
+          "System.Collections.Immutable": "1.5.0",
+          "System.Diagnostics.Debug": "4.3.0",
+          "System.Diagnostics.StackTrace": "4.3.0",
+          "System.Diagnostics.Tools": "4.3.0",
+          "System.Globalization": "4.3.0",
+          "System.IO": "4.3.0",
+          "System.IO.FileSystem": "4.3.0",
+          "System.Linq": "4.3.0",
+          "System.Linq.Expressions": "4.3.0",
+          "System.Reflection": "4.3.0",
+          "System.Reflection.Extensions": "4.3.0",
+          "System.Resources.ResourceManager": "4.3.0",
+          "System.Runtime": "4.3.0",
+          "System.Runtime.Extensions": "4.3.0",
+          "System.Runtime.InteropServices": "4.3.0",
+          "System.Threading": "4.3.0",
+          "System.Threading.Tasks": "4.3.0"
+        },
+        "runtime": {
+          "lib/netstandard1.3/Microsoft.CodeAnalysis.Scripting.dll": {
+            "assemblyVersion": "2.6.0.0",
+            "fileVersion": "2.6.1.62414"
+          }
+        },
+        "compile": {
+          "lib/netstandard1.3/Microsoft.CodeAnalysis.Scripting.dll": {}
         }
       },
       "Microsoft.CodeAnalysis.Workspaces.Common/2.8.0": {
@@ -371,6 +421,17 @@
           "lib/netcoreapp1.1/Serilog.Sinks.Console.dll": {}
         }
       },
+      "System.CodeDom/4.4.0": {
+        "runtime": {
+          "lib/netstandard2.0/System.CodeDom.dll": {
+            "assemblyVersion": "4.0.0.0",
+            "fileVersion": "4.6.25519.3"
+          }
+        },
+        "compile": {
+          "ref/netstandard2.0/System.CodeDom.dll": {}
+        }
+      },
       "System.ComponentModel/4.3.0": {
         "dependencies": {
           "System.Runtime": "4.3.0"
@@ -552,6 +613,17 @@
           "System.Threading.Tasks": "4.3.0"
         }
       },
+      "System.Data.DataSetExtensions/4.5.0": {
+        "runtime": {
+          "lib/netstandard2.0/System.Data.DataSetExtensions.dll": {
+            "assemblyVersion": "4.0.0.0",
+            "fileVersion": "4.6.26515.6"
+          }
+        },
+        "compile": {
+          "ref/netstandard2.0/System.Data.DataSetExtensions.dll": {}
+        }
+      },
       "System.Linq.Parallel/4.3.0": {
         "dependencies": {
           "System.Collections": "4.3.0",
@@ -611,6 +683,39 @@
           }
         }
       },
+      "T5.TextTemplating/1.1.0": {
+        "dependencies": {
+          "Microsoft.CodeAnalysis.CSharp.Scripting": "2.6.1",
+          "System.CodeDom": "4.4.0"
+        },
+        "runtime": {
+          "lib/netstandard2.0/T5.TextTemplating.dll": {
+            "assemblyVersion": "1.1.0.0",
+            "fileVersion": "1.1.0.0"
+          }
+        },
+        "compile": {
+          "lib/netstandard2.0/T5.TextTemplating.dll": {}
+        }
+      },
+      "Scrambler.Core/1.0.0": {
+        "dependencies": {
+          "Microsoft.Extensions.DependencyInjection": "2.2.0",
+          "Microsoft.Extensions.Logging": "2.2.0",
+          "Newtonsoft.Json": "12.0.2",
+          "Serilog": "2.9.0",
+          "Serilog.Sinks.Console": "3.1.1",
+          "System.Data.DataSetExtensions": "4.5.0",
+          "System.Data.SqlClient": "4.6.0",
+          "T5.TextTemplating": "1.1.0"
+        },
+        "runtime": {
+          "Scrambler.Core.dll": {}
+        },
+        "compile": {
+          "Scrambler.Core.dll": {}
+        }
+      },
       "Scrambler.Quartz/1.0.0": {
         "dependencies": {
           "AutoMapper": "9.0.0",
@@ -620,6 +725,7 @@
           "Newtonsoft.Json": "12.0.2",
           "Quartz": "3.0.7",
           "Quartz.Serialization.Json": "3.0.7",
+          "Scrambler.SqlServer": "1.0.0",
           "Serilog": "2.9.0"
         },
         "runtime": {
@@ -627,6 +733,19 @@
         },
         "compile": {
           "Scrambler.Quartz.dll": {}
+        }
+      },
+      "Scrambler.SqlServer/1.0.0": {
+        "dependencies": {
+          "Scrambler.Core": "1.0.0",
+          "Serilog": "2.9.0",
+          "Serilog.Sinks.Console": "3.1.1"
+        },
+        "runtime": {
+          "Scrambler.SqlServer.dll": {}
+        },
+        "compile": {
+          "Scrambler.SqlServer.dll": {}
         }
       },
       "Microsoft.AspNet.WebApi.Client/5.2.6": {
@@ -3832,12 +3951,26 @@
       "path": "automapper.extensions.microsoft.dependencyinjection/7.0.0",
       "hashPath": "automapper.extensions.microsoft.dependencyinjection.7.0.0.nupkg.sha512"
     },
+    "Microsoft.CodeAnalysis.CSharp.Scripting/2.6.1": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-3yzob4wr8+GPf2NreDHuV1M/hXbYwc56bYmNKNO+HbhNrtGP0JiIig29B6GHaFhzqLnjP2SDUcZ9VKRlQKh4ag==",
+      "path": "microsoft.codeanalysis.csharp.scripting/2.6.1",
+      "hashPath": "microsoft.codeanalysis.csharp.scripting.2.6.1.nupkg.sha512"
+    },
     "Microsoft.CodeAnalysis.CSharp.Workspaces/2.8.0": {
       "type": "package",
       "serviceable": true,
       "sha512": "sha512-4JcQJNDSyGXtz9ccBzSBmcPmKg7GiL4LYvtv+YG8C9waNP/xhwuvIycSQOF4a0V+J73JwUopA503O7vb8p5ZUQ==",
       "path": "microsoft.codeanalysis.csharp.workspaces/2.8.0",
       "hashPath": "microsoft.codeanalysis.csharp.workspaces.2.8.0.nupkg.sha512"
+    },
+    "Microsoft.CodeAnalysis.Scripting.Common/2.6.1": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-cq+dAoGuX+FXofGPXsQwcg7Px4zzHMUZ2JD/wVgC8eLMg9aNc4RwJ1Lg+NoJQGQAQSDV8kqMC3g3vYE1wZV52g==",
+      "path": "microsoft.codeanalysis.scripting.common/2.6.1",
+      "hashPath": "microsoft.codeanalysis.scripting.common.2.6.1.nupkg.sha512"
     },
     "Microsoft.CodeAnalysis.Workspaces.Common/2.8.0": {
       "type": "package",
@@ -3972,6 +4105,13 @@
       "path": "serilog.sinks.console/3.1.1",
       "hashPath": "serilog.sinks.console.3.1.1.nupkg.sha512"
     },
+    "System.CodeDom/4.4.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-E/lvSfMFPtNflAgdM6AuPU8JbZdqdSoGpU66G7SrduCqdrFyPflaqqV4gN2d0hrCBpu92HaoqpUP5d+g9Itcxw==",
+      "path": "system.codedom/4.4.0",
+      "hashPath": "system.codedom.4.4.0.nupkg.sha512"
+    },
     "System.ComponentModel/4.3.0": {
       "type": "package",
       "serviceable": true,
@@ -4049,6 +4189,13 @@
       "path": "system.data.common/4.3.0",
       "hashPath": "system.data.common.4.3.0.nupkg.sha512"
     },
+    "System.Data.DataSetExtensions/4.5.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-xKUL8eeGuJ0uHaRpDKFibVxXjWrquWxQuASlRnhvITQ8cGZPZrO8T8lh8XKfOnirrDyQz81TCwALPXzflSW3JA==",
+      "path": "system.data.datasetextensions/4.5.0",
+      "hashPath": "system.data.datasetextensions.4.5.0.nupkg.sha512"
+    },
     "System.Linq.Parallel/4.3.0": {
       "type": "package",
       "serviceable": true,
@@ -4077,7 +4224,24 @@
       "path": "system.security.cryptography.protecteddata/4.5.0",
       "hashPath": "system.security.cryptography.protecteddata.4.5.0.nupkg.sha512"
     },
+    "T5.TextTemplating/1.1.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-MCngu+J2jAC0bUpOp2ipXLnOK+2gDbpBrrL/NowquliMpMVETPsOeapZuXlt8MtWsT80l73d8BramxQAIq4L3A==",
+      "path": "t5.texttemplating/1.1.0",
+      "hashPath": "t5.texttemplating.1.1.0.nupkg.sha512"
+    },
+    "Scrambler.Core/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
     "Scrambler.Quartz/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "Scrambler.SqlServer/1.0.0": {
       "type": "project",
       "serviceable": false,
       "sha512": ""

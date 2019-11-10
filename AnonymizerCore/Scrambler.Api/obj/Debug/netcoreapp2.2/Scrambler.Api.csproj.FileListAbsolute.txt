@@ -18,3 +18,7 @@ E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\Scrambler.Api\obj\De
 E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\Scrambler.Api\bin\Debug\netcoreapp2.2\quartz.config.json
 E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\Scrambler.Api\bin\Debug\netcoreapp2.2\appsettings.json
 E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\Scrambler.Api\bin\Debug\netcoreapp2.2\serilog.config.json
+E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\Scrambler.Api\bin\Debug\netcoreapp2.2\Scrambler.Core.dll
+E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\Scrambler.Api\bin\Debug\netcoreapp2.2\Scrambler.SqlServer.dll
+E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\Scrambler.Api\bin\Debug\netcoreapp2.2\Scrambler.Core.pdb
+E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\Scrambler.Api\bin\Debug\netcoreapp2.2\Scrambler.SqlServer.pdb

@@ -1657,6 +1657,19 @@
           "lib/netstandard1.3/Microsoft.CodeAnalysis.CSharp.dll": {}
         }
       },
+      "Microsoft.CodeAnalysis.CSharp.Scripting/2.6.1": {
+        "type": "package",
+        "dependencies": {
+          "Microsoft.CodeAnalysis.CSharp": "[2.6.1]",
+          "Microsoft.CodeAnalysis.Scripting.Common": "[2.6.1]"
+        },
+        "compile": {
+          "lib/netstandard1.3/Microsoft.CodeAnalysis.CSharp.Scripting.dll": {}
+        },
+        "runtime": {
+          "lib/netstandard1.3/Microsoft.CodeAnalysis.CSharp.Scripting.dll": {}
+        }
+      },
       "Microsoft.CodeAnalysis.CSharp.Workspaces/2.8.0": {
         "type": "package",
         "dependencies": {
@@ -1682,6 +1695,37 @@
         },
         "runtime": {
           "lib/netstandard2.0/Microsoft.CodeAnalysis.Razor.dll": {}
+        }
+      },
+      "Microsoft.CodeAnalysis.Scripting.Common/2.6.1": {
+        "type": "package",
+        "dependencies": {
+          "Microsoft.CodeAnalysis.Common": "[2.6.1]",
+          "System.AppContext": "4.3.0",
+          "System.Collections": "4.3.0",
+          "System.Collections.Immutable": "1.3.1",
+          "System.Diagnostics.Debug": "4.3.0",
+          "System.Diagnostics.StackTrace": "4.3.0",
+          "System.Diagnostics.Tools": "4.3.0",
+          "System.Globalization": "4.3.0",
+          "System.IO": "4.3.0",
+          "System.IO.FileSystem": "4.3.0",
+          "System.Linq": "4.3.0",
+          "System.Linq.Expressions": "4.3.0",
+          "System.Reflection": "4.3.0",
+          "System.Reflection.Extensions": "4.3.0",
+          "System.Resources.ResourceManager": "4.3.0",
+          "System.Runtime": "4.3.0",
+          "System.Runtime.Extensions": "4.3.0",
+          "System.Runtime.InteropServices": "4.3.0",
+          "System.Threading": "4.3.0",
+          "System.Threading.Tasks": "4.3.0"
+        },
+        "compile": {
+          "lib/netstandard1.3/Microsoft.CodeAnalysis.Scripting.dll": {}
+        },
+        "runtime": {
+          "lib/netstandard1.3/Microsoft.CodeAnalysis.Scripting.dll": {}
         }
       },
       "Microsoft.CodeAnalysis.Workspaces.Common/2.8.0": {
@@ -3274,6 +3318,15 @@
           "lib/netcoreapp2.0/_._": {}
         }
       },
+      "System.CodeDom/4.4.0": {
+        "type": "package",
+        "compile": {
+          "ref/netstandard2.0/System.CodeDom.dll": {}
+        },
+        "runtime": {
+          "lib/netstandard2.0/System.CodeDom.dll": {}
+        }
+      },
       "System.Collections/4.3.0": {
         "type": "package",
         "dependencies": {
@@ -3570,6 +3623,15 @@
           "lib/netstandard1.2/System.Data.Common.dll": {}
         }
       },
+      "System.Data.DataSetExtensions/4.5.0": {
+        "type": "package",
+        "compile": {
+          "ref/netstandard2.0/System.Data.DataSetExtensions.dll": {}
+        },
+        "runtime": {
+          "lib/netstandard2.0/System.Data.DataSetExtensions.dll": {}
+        }
+      },
       "System.Data.SqlClient/4.6.0": {
         "type": "package",
         "dependencies": {
@@ -3663,7 +3725,7 @@
           "System.Runtime": "4.3.0"
         },
         "compile": {
-          "ref/netstandard1.3/_._": {}
+          "ref/netstandard1.3/System.Diagnostics.StackTrace.dll": {}
         },
         "runtime": {
           "lib/netstandard1.3/System.Diagnostics.StackTrace.dll": {}
@@ -4980,6 +5042,39 @@
           "lib/netstandard1.3/System.Xml.XPath.XDocument.dll": {}
         }
       },
+      "T5.TextTemplating/1.1.0": {
+        "type": "package",
+        "dependencies": {
+          "Microsoft.CodeAnalysis.CSharp.Scripting": "2.6.1",
+          "System.CodeDom": "4.4.0"
+        },
+        "compile": {
+          "lib/netstandard2.0/T5.TextTemplating.dll": {}
+        },
+        "runtime": {
+          "lib/netstandard2.0/T5.TextTemplating.dll": {}
+        }
+      },
+      "Scrambler.Core/1.0.0": {
+        "type": "project",
+        "framework": ".NETStandard,Version=v2.0",
+        "dependencies": {
+          "Microsoft.Extensions.DependencyInjection": "2.2.0",
+          "Microsoft.Extensions.Logging": "2.2.0",
+          "Newtonsoft.Json": "12.0.1",
+          "Serilog": "2.9.0",
+          "Serilog.Sinks.Console": "3.1.1",
+          "System.Data.DataSetExtensions": "4.5.0",
+          "System.Data.SqlClient": "4.6.0",
+          "T5.TextTemplating": "1.1.0"
+        },
+        "compile": {
+          "bin/placeholder/Scrambler.Core.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/Scrambler.Core.dll": {}
+        }
+      },
       "Scrambler.Quartz/1.0.0": {
         "type": "project",
         "framework": ".NETStandard,Version=v2.0",
@@ -4991,6 +5086,7 @@
           "Newtonsoft.Json": "12.0.2",
           "Quartz": "3.0.7",
           "Quartz.Serialization.Json": "3.0.7",
+          "Scrambler.SqlServer": "1.0.0",
           "Serilog": "2.9.0"
         },
         "compile": {
@@ -4998,6 +5094,21 @@
         },
         "runtime": {
           "bin/placeholder/Scrambler.Quartz.dll": {}
+        }
+      },
+      "Scrambler.SqlServer/1.0.0": {
+        "type": "project",
+        "framework": ".NETStandard,Version=v2.0",
+        "dependencies": {
+          "Scrambler.Core": "1.0.0",
+          "Serilog": "2.9.0",
+          "Serilog.Sinks.Console": "3.1.1"
+        },
+        "compile": {
+          "bin/placeholder/Scrambler.SqlServer.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/Scrambler.SqlServer.dll": {}
         }
       }
     }
@@ -6377,6 +6488,19 @@
         "microsoft.codeanalysis.csharp.nuspec"
       ]
     },
+    "Microsoft.CodeAnalysis.CSharp.Scripting/2.6.1": {
+      "sha512": "3yzob4wr8+GPf2NreDHuV1M/hXbYwc56bYmNKNO+HbhNrtGP0JiIig29B6GHaFhzqLnjP2SDUcZ9VKRlQKh4ag==",
+      "type": "package",
+      "path": "microsoft.codeanalysis.csharp.scripting/2.6.1",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "lib/netstandard1.3/Microsoft.CodeAnalysis.CSharp.Scripting.dll",
+        "lib/netstandard1.3/Microsoft.CodeAnalysis.CSharp.Scripting.xml",
+        "microsoft.codeanalysis.csharp.scripting.2.6.1.nupkg.sha512",
+        "microsoft.codeanalysis.csharp.scripting.nuspec"
+      ]
+    },
     "Microsoft.CodeAnalysis.CSharp.Workspaces/2.8.0": {
       "sha512": "4JcQJNDSyGXtz9ccBzSBmcPmKg7GiL4LYvtv+YG8C9waNP/xhwuvIycSQOF4a0V+J73JwUopA503O7vb8p5ZUQ==",
       "type": "package",
@@ -6404,6 +6528,19 @@
         "lib/netstandard2.0/Microsoft.CodeAnalysis.Razor.xml",
         "microsoft.codeanalysis.razor.2.2.0.nupkg.sha512",
         "microsoft.codeanalysis.razor.nuspec"
+      ]
+    },
+    "Microsoft.CodeAnalysis.Scripting.Common/2.6.1": {
+      "sha512": "cq+dAoGuX+FXofGPXsQwcg7Px4zzHMUZ2JD/wVgC8eLMg9aNc4RwJ1Lg+NoJQGQAQSDV8kqMC3g3vYE1wZV52g==",
+      "type": "package",
+      "path": "microsoft.codeanalysis.scripting.common/2.6.1",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "lib/netstandard1.3/Microsoft.CodeAnalysis.Scripting.dll",
+        "lib/netstandard1.3/Microsoft.CodeAnalysis.Scripting.xml",
+        "microsoft.codeanalysis.scripting.common.2.6.1.nupkg.sha512",
+        "microsoft.codeanalysis.scripting.common.nuspec"
       ]
     },
     "Microsoft.CodeAnalysis.Workspaces.Common/2.8.0": {
@@ -8948,6 +9085,27 @@
         "version.txt"
       ]
     },
+    "System.CodeDom/4.4.0": {
+      "sha512": "E/lvSfMFPtNflAgdM6AuPU8JbZdqdSoGpU66G7SrduCqdrFyPflaqqV4gN2d0hrCBpu92HaoqpUP5d+g9Itcxw==",
+      "type": "package",
+      "path": "system.codedom/4.4.0",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "LICENSE.TXT",
+        "THIRD-PARTY-NOTICES.TXT",
+        "lib/net461/System.CodeDom.dll",
+        "lib/netstandard2.0/System.CodeDom.dll",
+        "ref/net461/System.CodeDom.dll",
+        "ref/net461/System.CodeDom.xml",
+        "ref/netstandard2.0/System.CodeDom.dll",
+        "ref/netstandard2.0/System.CodeDom.xml",
+        "system.codedom.4.4.0.nupkg.sha512",
+        "system.codedom.nuspec",
+        "useSharedDesignerContext.txt",
+        "version.txt"
+      ]
+    },
     "System.Collections/4.3.0": {
       "sha512": "3Dcj85/TBdVpL5Zr+gEEBUuFe2icOnLalmEh9hfck1PTYbbyWuZgh4fmm2ysCLTrqLQw6t3TgTyJ+VLp+Qb+Lw==",
       "type": "package",
@@ -9608,6 +9766,25 @@
         "ref/xamarinwatchos10/_._",
         "system.data.common.4.3.0.nupkg.sha512",
         "system.data.common.nuspec"
+      ]
+    },
+    "System.Data.DataSetExtensions/4.5.0": {
+      "sha512": "xKUL8eeGuJ0uHaRpDKFibVxXjWrquWxQuASlRnhvITQ8cGZPZrO8T8lh8XKfOnirrDyQz81TCwALPXzflSW3JA==",
+      "type": "package",
+      "path": "system.data.datasetextensions/4.5.0",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "LICENSE.TXT",
+        "THIRD-PARTY-NOTICES.TXT",
+        "lib/net45/_._",
+        "lib/netstandard2.0/System.Data.DataSetExtensions.dll",
+        "ref/net45/_._",
+        "ref/netstandard2.0/System.Data.DataSetExtensions.dll",
+        "system.data.datasetextensions.4.5.0.nupkg.sha512",
+        "system.data.datasetextensions.nuspec",
+        "useSharedDesignerContext.txt",
+        "version.txt"
       ]
     },
     "System.Data.SqlClient/4.6.0": {
@@ -13728,10 +13905,32 @@
         "system.xml.xpath.xdocument.nuspec"
       ]
     },
+    "T5.TextTemplating/1.1.0": {
+      "sha512": "MCngu+J2jAC0bUpOp2ipXLnOK+2gDbpBrrL/NowquliMpMVETPsOeapZuXlt8MtWsT80l73d8BramxQAIq4L3A==",
+      "type": "package",
+      "path": "t5.texttemplating/1.1.0",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "lib/netstandard2.0/T5.TextTemplating.dll",
+        "t5.texttemplating.1.1.0.nupkg.sha512",
+        "t5.texttemplating.nuspec"
+      ]
+    },
+    "Scrambler.Core/1.0.0": {
+      "type": "project",
+      "path": "../ApplicationCore/Scrambler.Core.csproj",
+      "msbuildProject": "../ApplicationCore/Scrambler.Core.csproj"
+    },
     "Scrambler.Quartz/1.0.0": {
       "type": "project",
       "path": "../Scrambler.Quartz/Scrambler.Quartz.csproj",
       "msbuildProject": "../Scrambler.Quartz/Scrambler.Quartz.csproj"
+    },
+    "Scrambler.SqlServer/1.0.0": {
+      "type": "project",
+      "path": "../Scrambler.SqlServer/Scrambler.SqlServer.csproj",
+      "msbuildProject": "../Scrambler.SqlServer/Scrambler.SqlServer.csproj"
     }
   },
   "projectFileDependencyGroups": {
@@ -13740,6 +13939,8 @@
       "AutoMapper.Extensions.Microsoft.DependencyInjection >= 7.0.0",
       "Microsoft.AspNetCore.App >= 2.2.0",
       "Microsoft.AspNetCore.Razor.Design >= 2.2.0",
+      "Microsoft.CodeAnalysis.CSharp >= 2.8.0",
+      "Microsoft.CodeAnalysis.Common >= 2.8.0",
       "Microsoft.Extensions.Configuration >= 2.2.0",
       "Microsoft.NETCore.App >= 2.2.0",
       "Microsoft.VisualStudio.Azure.Containers.Tools.Targets >= 1.0.2105168",
@@ -13817,6 +14018,14 @@
             "target": "Package",
             "version": "[2.2.0, )"
           },
+          "Microsoft.CodeAnalysis.CSharp": {
+            "target": "Package",
+            "version": "[2.8.0, )"
+          },
+          "Microsoft.CodeAnalysis.Common": {
+            "target": "Package",
+            "version": "[2.8.0, )"
+          },
           "Microsoft.Extensions.Configuration": {
             "target": "Package",
             "version": "[2.2.0, )"
@@ -13867,5 +14076,27 @@
         "warn": true
       }
     }
-  }
+  },
+  "logs": [
+    {
+      "code": "NU1608",
+      "level": "Warning",
+      "warningLevel": 1,
+      "message": "Detected package version outside of dependency constraint: Microsoft.CodeAnalysis.CSharp.Scripting 2.6.1 requires Microsoft.CodeAnalysis.CSharp (= 2.6.1) but version Microsoft.CodeAnalysis.CSharp 2.8.0 was resolved.",
+      "libraryId": "Microsoft.CodeAnalysis.CSharp",
+      "targetGraphs": [
+        ".NETCoreApp,Version=v2.2"
+      ]
+    },
+    {
+      "code": "NU1608",
+      "level": "Warning",
+      "warningLevel": 1,
+      "message": "Detected package version outside of dependency constraint: Microsoft.CodeAnalysis.Scripting.Common 2.6.1 requires Microsoft.CodeAnalysis.Common (= 2.6.1) but version Microsoft.CodeAnalysis.Common 2.8.0 was resolved.",
+      "libraryId": "Microsoft.CodeAnalysis.Common",
+      "targetGraphs": [
+        ".NETCoreApp,Version=v2.2"
+      ]
+    }
+  ]
 }
