@@ -1,23 +1,16 @@
 ﻿using AutoMapper;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Quartz;
 using Quartz.Impl;
-using Quartz.Impl.AdoJobStore;
 using Quartz.Impl.Matchers;
-using Quartz.Logging;
-using Scrambler.Quartz.ConfigProviders;
 using Scrambler.Quartz.Configuration;
 using Scrambler.Quartz.Interfaces;
 using Scrambler.Quartz.JobFactory;
 using Scrambler.Quartz.Jobs;
 using Scrambler.Quartz.Model;
 using Serilog;
-using System;
 using System.Collections.Generic;
-using System.Collections.Specialized;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Scrambler.Quartz
@@ -43,7 +36,7 @@ namespace Scrambler.Quartz
 
             var schedulerFactory = new StdSchedulerFactory(schedulerConfig.NameValueCollection);
             var scheduler = schedulerFactory.GetScheduler().GetAwaiter().GetResult();
-            
+
             scheduler.JobFactory = jobFactory;
 
             _scheduler = scheduler;
@@ -61,14 +54,14 @@ namespace Scrambler.Quartz
         public async Task<List<JobKeyWithDescription>> GetAllJobKeysWithDescription()
         {
             var jobKeys = await _scheduler.GetJobKeys(GroupMatcher<JobKey>.AnyGroup());
-            
+
             var jobKeysWithDescription = new List<JobKeyWithDescription>();
-            
+
             foreach (var jobKey in jobKeys)
             {
                 var jobDetail = await _scheduler.GetJobDetail(jobKey);
                 var triggers = await _scheduler.GetTriggersOfJob(jobKey);
-                var l = _mapper.Map<List<ITrigger>, List<TriggerKeyWithDescription>>(triggers.ToList());
+
                 jobKeysWithDescription.Add(
                     new JobKeyWithDescription
                     {
@@ -76,6 +69,7 @@ namespace Scrambler.Quartz
                         JobGroup = jobKey.Group,
                         Description = jobDetail.Description,
                         RequestRecovery = jobDetail.RequestsRecovery,
+                        IsDurable = jobDetail.Durable,
                         Triggers = _mapper.Map<List<ITrigger>, List<TriggerKeyWithDescription>>(triggers.ToList())
                     });
             }
@@ -90,7 +84,7 @@ namespace Scrambler.Quartz
         }
 
         public async Task<bool> DeleteTrigger(string triggerName, string triggerGroup)
-        {     
+        {
             var wasTriggerFoundAndDeleted = await _scheduler.UnscheduleJob(new TriggerKey(triggerName, triggerGroup));
             return wasTriggerFoundAndDeleted;
         }
@@ -102,20 +96,28 @@ namespace Scrambler.Quartz
                 return new SchedulingResult { IsSuccessful = false, ErrorMessage = "The cron expression is invalid." };
             }
 
-            var trigger = TriggerBuilder.Create()
-                .WithIdentity(triggerName, triggerGroup)
-                .WithCronSchedule(cronExpression)
+            var associatedTrigger = (await _scheduler.GetTrigger(new TriggerKey(triggerName, triggerGroup)));
+            if (associatedTrigger == null)
+            {
+                return new SchedulingResult { IsSuccessful = false, ErrorMessage = "No schedule was found with the given key." };
+            }
+
+            // creating copies before unscheduling
+            var associatedJobKey = associatedTrigger.JobKey;
+            var associatedJobCopy = (await _scheduler.GetJobDetail(associatedJobKey)).GetJobBuilder().Build();
+            var associatedTriggerCopyModified = associatedTrigger.GetTriggerBuilder()
                 .WithDescription(triggerDescription)
+                .WithCronSchedule(cronExpression)
                 .Build();
 
-            try
+            var wasTriggerFoundAndUnscheduled = await _scheduler.UnscheduleJob(new TriggerKey(triggerName, triggerGroup));
+
+            if (!wasTriggerFoundAndUnscheduled)
             {
-                await _scheduler.RescheduleJob(new TriggerKey(triggerName, triggerGroup), trigger);
+                return new SchedulingResult { IsSuccessful = false, ErrorMessage = "Couldn't unschedule the schedule." };
             }
-            catch(ObjectAlreadyExistsException)
-            {
-                return new SchedulingResult { IsSuccessful = false, ErrorMessage = "A trigger with the mentioned name already exists." };
-            }
+
+            await _scheduler.ScheduleJob(associatedJobCopy, associatedTriggerCopyModified);
 
             return new SchedulingResult { IsSuccessful = true };
         }
@@ -125,7 +127,7 @@ namespace Scrambler.Quartz
         {
             if (!CronExpression.IsValidExpression(cronExpression))
             {
-                return new SchedulingResult {IsSuccessful = false, ErrorMessage = "The cron expression is invalid." };
+                return new SchedulingResult { IsSuccessful = false, ErrorMessage = "The cron expression is invalid." };
             }
             var jobDetail = _scheduler.GetJobDetail(new JobKey(jobName, jobGroup));
             if (_scheduler.GetJobDetail(new JobKey(jobName, jobGroup)).Status != TaskStatus.WaitingForActivation)
@@ -138,8 +140,8 @@ namespace Scrambler.Quartz
                 .WithDescription(description)
                 .RequestRecovery()
                 .Build();
-            
-            var trigger = (ICronTrigger) TriggerBuilder.Create()
+
+            var trigger = (ICronTrigger)TriggerBuilder.Create()
                 .WithDescription(triggerDescription)
                 .WithCronSchedule(cronExpression)
                 .Build();
@@ -150,7 +152,7 @@ namespace Scrambler.Quartz
                 await _scheduler.ScheduleJob(job, trigger);
                 //Console.WriteLine($"Trigger after: name: {trigger.Key.Name} group: {trigger.Key.Group}");
             }
-            catch (ObjectAlreadyExistsException ex) 
+            catch (ObjectAlreadyExistsException ex)
             {
                 return new SchedulingResult
                 {

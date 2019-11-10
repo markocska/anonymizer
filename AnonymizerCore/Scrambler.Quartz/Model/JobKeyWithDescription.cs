@@ -10,6 +10,7 @@ namespace Scrambler.Quartz.Model
         public string JobGroup { get; set; }
         public bool RequestRecovery { get; set; }
         public string Description { get; set; }
+        public bool IsDurable { get; set; }
         public List<TriggerKeyWithDescription> Triggers { get; set; }
 
     }

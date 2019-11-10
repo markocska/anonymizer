@@ -13,8 +13,8 @@ namespace Scrambler.Api.AutoMapper
             .ForMember(x => x.Name, opt => opt.MapFrom(x => x.Name));
 
             CreateMap<ITrigger, Quartz.Model.TriggerKeyWithDescription>(MemberList.None)
-                .ForMember(x => x.TriggerGroup, opt => opt.MapFrom(x => x.JobKey.Group))
-                .ForMember(x => x.TriggerName, opt => opt.MapFrom(x => x.JobKey.Name))
+                .ForMember(x => x.TriggerGroup, opt => opt.MapFrom(x => x.Key.Group))
+                .ForMember(x => x.TriggerName, opt => opt.MapFrom(x => x.Key.Name))
                 .ForMember(x => x.Description, opt => opt.MapFrom(x => x.Description))
                 .ForMember(x => x.CalendarName, opt => opt.MapFrom(x => x.CalendarName));
 
