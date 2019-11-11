@@ -17,9 +17,10 @@ namespace Scrambler.MySql.Validators
         }
 
 
+        //MYSql has no real linked server feature
         protected override List<string> GetLinkedServerNames(string connectionString)
         {
-            
+            return new List<string>();
         }
     }
 }
