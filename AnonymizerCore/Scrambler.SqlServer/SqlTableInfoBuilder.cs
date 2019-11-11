@@ -2,6 +2,7 @@
 using Scrambler.Config;
 using Scrambler.DatabaseServices.ColumnTypes;
 using Scrambler.DatabaseServices.PrimaryKeys;
+using Scrambler.SqlServer.Utilities;
 using Scrambler.TableInfo.Abstract;
 using Scrambler.Utilities;
 using Scrambler.Validators;

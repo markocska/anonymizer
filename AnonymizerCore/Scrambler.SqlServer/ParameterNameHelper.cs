@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Scrambler.Utilities
+namespace Scrambler.SqlServer.Utilities
 {
     public static class ParameterNameHelper
     {

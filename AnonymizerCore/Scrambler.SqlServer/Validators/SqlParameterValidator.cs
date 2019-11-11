@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.Logging;
 using Scrambler.Config;
 using Scrambler.Logging;
+using Scrambler.SqlServer.Utilities;
 using Scrambler.Utilities;
 using Scrambler.Validators.Abstract;
 using Serilog;
