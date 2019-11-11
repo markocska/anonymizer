@@ -13,6 +13,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Scrambler.Quartz", "Scrambl
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Scrambler.Api", "Scrambler.Api\Scrambler.Api.csproj", "{59B5D6EE-BECB-4DB0-9F47-E160F79D5871}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Scrambler.MySql", "Scrambler.MySql\Scrambler.MySql.csproj", "{FE0E811C-86DB-4209-BBA5-20C7DEF7CAEE}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
 		{59B5D6EE-BECB-4DB0-9F47-E160F79D5871}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{59B5D6EE-BECB-4DB0-9F47-E160F79D5871}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{59B5D6EE-BECB-4DB0-9F47-E160F79D5871}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FE0E811C-86DB-4209-BBA5-20C7DEF7CAEE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FE0E811C-86DB-4209-BBA5-20C7DEF7CAEE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FE0E811C-86DB-4209-BBA5-20C7DEF7CAEE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FE0E811C-86DB-4209-BBA5-20C7DEF7CAEE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
