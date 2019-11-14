@@ -9,7 +9,7 @@ using System.Text;
 
 namespace Scrambler.MySql.DatabaseServices
 {
-    public class MySqlColumnTypesManager
+    public class MySqlColumnTypesManager : IColumnTypeManager
     {
         private readonly IQueryHelper _queryHelper;
 

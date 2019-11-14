@@ -16,7 +16,7 @@ namespace Scrambler.MySql.Validators
         {
             var tableAndSchemaName = tableNameWithSchema.Split('.');
 
-            if (tableAndSchemaName.Length != 3 && tableAndSchemaName.Length != 4)
+            if (tableAndSchemaName.Length != 2 && tableAndSchemaName.Length != 3)
             {
                 Log.Error($"The following full table config parameter is invalid {tableNameWithSchema}." +
                     $" Connection string: {connectionString}");
