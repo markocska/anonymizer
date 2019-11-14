@@ -1,0 +1,419 @@
+﻿<#@ template language="C#" #>
+<#@ assembly name="System.Core" #>
+<#@ import namespace="System.Linq" #>
+<#@ import namespace="System.Text" #>
+<#@ import namespace="System.Collections.Generic" #>
+
+<#@ template language="C#" #>
+<#@ assembly name="System.Core" #>
+<#@ import namespace="System.Linq" #>
+<#@ import namespace="System.Text" #>
+<#@ import namespace="System.Collections.Generic" #>
+
+
+create table prim_keys_and_columns_scrambler
+(
+  <#  for(int i=0;i<TableInfo.PrimaryKeysAndTypes.Count;i++) 
+      {
+        var columnName = TableInfo.PrimaryKeysAndTypes.Keys.ElementAt(i);
+        Write($"`{columnName}` {TableInfo.PrimaryKeysAndTypes[columnName]}, ");                      
+      }
+ 
+      for(int i=0;i<TableInfo.SoloScrambledColumnsAndTypes.Count;i++) 
+      {
+        var columnName = TableInfo.SoloScrambledColumnsAndTypes.Keys.ElementAt(i);
+        Write($"`{columnName}` {TableInfo.SoloScrambledColumnsAndTypes[columnName]}, ");              
+      }
+    
+     for(int i=0;i<TableInfo.PairedColumnsInside.Count;i++) 
+      {
+        var pairedColumns = TableInfo.PairedColumnsInside[i];
+        for(int j = 0; j<pairedColumns.Count;j++) 
+        {
+            var columnName = pairedColumns.Keys.ElementAt(j);
+            Write($"`{columnName}` {pairedColumns[columnName]}, ");
+        }   
+      }
+    #> 
+    rownum int
+);
+
+<#   
+    for(int i = 0; i < TableInfo.SoloScrambledColumnsAndTypes.Count; i++, _scrambleTableNumber++) 
+    {
+        var columnName = TableInfo.SoloScrambledColumnsAndTypes.Keys.ElementAt(i);
+#>
+create table column<#=_scrambleTableNumber #>_scrambler
+(   
+  random int,   
+  `<#= columnName #>` <#=TableInfo.SoloScrambledColumnsAndTypes[columnName] #>     
+);
+<#
+    }
+#>
+
+
+<#   
+    for(int i = 0; i < TableInfo.PairedColumnsInside.Count; i++, _scrambleTableNumber++) 
+    {
+        var pairedColumns = TableInfo.PairedColumnsInside[i];
+#>
+create table column<#=_scrambleTableNumber #>_scrambler
+(  
+  random int, 
+ <#  
+    for(int j =0; j < pairedColumns.Keys.Count; j++) 
+    { 
+     var columnName = pairedColumns.Keys.ElementAt(j);
+     Write($"`{columnName}` {pairedColumns[columnName]}");
+
+     if (j != pairedColumns.Keys.Count-1)
+     {
+       Write(", ");
+     }
+    } 
+    #>               
+);
+<#
+    }
+#>
+
+insert into prim_keys_and_columns_scrambler
+    select <# 
+    foreach(var columnName in TableInfo.PrimaryKeysAndTypes.Keys) 
+    {
+        Write($"`{columnName}`, ");
+    }
+
+    foreach(var columnName in TableInfo.SoloScrambledColumnsAndTypes.Keys) 
+    {
+        Write($"`{columnName}`, ");
+    }
+
+    foreach(var pairedColumns in TableInfo.PairedColumnsInside) 
+    {   
+        foreach(var columnName in pairedColumns.Keys)
+        {
+            Write($"`{columnName}`, ");
+        }
+    }    
+#> row_number() over (order by 
+    <#
+    for(int i = 0; i < TableInfo.PrimaryKeysAndTypes.Count; i++)
+    {   
+        var columnName= TableInfo.PrimaryKeysAndTypes.Keys.ElementAt(i);
+        Write($"`{columnName}`");
+
+        if (i != (TableInfo.PrimaryKeysAndTypes.Count - 1))
+        {
+            Write(", ");
+        }
+    }
+    #> )
+    from <#= TableInfo.FullTableName #> 
+    <# 
+       if( !string.IsNullOrEmpty(TableInfo.WhereClause)) 
+       {
+          Write($" where {TableInfo.WhereClause}");
+       }
+    #> ;
+ 
+
+<#    _scrambleTableNumber = 0;
+    for(int i = 0; i < TableInfo.SoloScrambledColumnsAndTypes.Count; i++, _scrambleTableNumber++) 
+    {
+        var columnName = TableInfo.SoloScrambledColumnsAndTypes.Keys.ElementAt(i);
+#>
+insert into column<#=_scrambleTableNumber #>_scrambler
+    select row_number() over (order by x), [<#= columnName #>] from 
+    (select rand(uuid()) x, [<#= columnName #>] from prim_keys_and_columns_scrambler) a;
+<#
+    }
+#>
+
+
+<#   
+    for(int i = 0; i < TableInfo.PairedColumnsInside.Count; i++, _scrambleTableNumber++) 
+    {
+        var pairedColumns = TableInfo.PairedColumnsInside[i];
+#>
+insert into column<#=_scrambleTableNumber #>_scrambler
+    select row_number() over (order by x), <#  
+        for(int j = 0; j < pairedColumns.Count; j++) 
+        { 
+            var columnName = pairedColumns.Keys.ElementAt(j);
+            Write($"`{columnName}`");
+            
+            if (j != (pairedColumns.Count-1))
+            {
+                Write(", ");
+            }
+        } 
+    #>    
+    from (select rand(uuid()) x, <#  
+        for(int j = 0; j < pairedColumns.Count; j++) 
+        { 
+            var columnName = pairedColumns.Keys.ElementAt(j);
+            Write($"[{columnName}]");
+            
+            if (j != (pairedColumns.Count-1))
+            {
+                Write(", ");
+            }
+        } 
+    #> from prim_keys_and_columns_scrambler) a;             
+<#
+    }
+#>
+
+
+create index idx_primarykey on prim_keys_and_columns_scrambler(  <#
+    for(int i = 0; i < TableInfo.PrimaryKeysAndTypes.Count; i++)
+    {   
+        var columnName= TableInfo.PrimaryKeysAndTypes.Keys.ElementAt(i);
+        Write($"`{columnName}`");
+
+        if (i != (TableInfo.PrimaryKeysAndTypes.Count - 1))
+        {
+            Write(", ");
+        }
+    }
+    #> );
+
+<#
+    for(int i = 0; i < _scrambleTableNumber; i++)
+    {
+        Write($"create index idx_column{i}_random on column{i}_scrambler(random);");
+        Write(Environment.NewLine);
+    }
+#>
+
+
+update <#= TableInfo.FullTableName #> 
+set <#
+    for(int i = 0; i < TableInfo.SoloScrambledColumnsAndTypes.Count; i++)
+    {   
+        var columnName= TableInfo.SoloScrambledColumnsAndTypes.Keys.ElementAt(i);
+        Write($"`{columnName}` = x.`{columnName}`");
+
+        if ((i == (TableInfo.SoloScrambledColumnsAndTypes.Count - 1)) &&
+            (TableInfo.PairedColumnsInside.Count == 0) && 
+            (TableInfo.ConstantColumnsAndTypesAndValues.Count == 0) )
+        {}
+        else 
+        { 
+            Write(", ");
+        }      
+    }
+    
+    for(int i=0;i<TableInfo.PairedColumnsInside.Count;i++) 
+    {
+        var pairedColumns = TableInfo.PairedColumnsInside[i];
+        for(int j = 0; j < pairedColumns.Count;j++) 
+        {
+            var columnName = pairedColumns.Keys.ElementAt(j);
+            Write($"`{columnName}` = x.`{columnName}`");
+
+            if ((j == (pairedColumns.Count - 1)) && (i == TableInfo.PairedColumnsInside.Count - 1) &&
+                (TableInfo.ConstantColumnsAndTypesAndValues.Count == 0) )
+                {}
+            else 
+            { 
+                Write(", ");
+            } 
+        }   
+    }
+
+    for(int i=0;i<TableInfo.ConstantColumnsAndTypesAndValues.Count;i++) 
+    {
+        var column = TableInfo.ConstantColumnsAndTypesAndValues[i];
+        Write($"`{column.Name}` = cast('{column.Value}' as {column.Type})");                      
+    }
+    #> from
+(
+    select <#    var scrambleTableNumberIter= 0;
+    for(int i = 0; i < TableInfo.PrimaryKeysAndTypes.Count; i++)
+    {   
+        var columnName= TableInfo.PrimaryKeysAndTypes.Keys.ElementAt(i);
+        Write($"`{columnName}`, ");
+    }
+    
+    for(int i = 0; i < TableInfo.SoloScrambledColumnsAndTypes.Count; i++, scrambleTableNumberIter++)
+    {   
+        var columnName= TableInfo.SoloScrambledColumnsAndTypes.Keys.ElementAt(i);
+        Write($"column{scrambleTableNumberIter}_scrambler.`{columnName}`");
+
+        if ((i == (TableInfo.SoloScrambledColumnsAndTypes.Count - 1)) &&
+            (TableInfo.PairedColumnsInside.Count == 0))
+        {}
+        else 
+        { 
+            Write(", ");
+        }      
+    }
+
+    for(int i=0;i<TableInfo.PairedColumnsInside.Count;i++, scrambleTableNumberIter++) 
+    {
+        var pairedColumns = TableInfo.PairedColumnsInside[i];
+        for(int j = 0; j < pairedColumns.Count;j++) 
+        {
+            var columnName = pairedColumns.Keys.ElementAt(j);
+            Write($"column{scrambleTableNumberIter}.`{columnName}`");
+
+            if ((j == (pairedColumns.Count - 1)) && (i == TableInfo.PairedColumnsInside.Count - 1))
+                {}
+            else 
+            { 
+                Write(", ");
+            } 
+        }   
+    }
+    #> from prim_keys_and_columns_scrambler
+    <# scrambleTableNumberIter = 0;
+    for(int i = 0; i < TableInfo.SoloScrambledColumnsAndTypes.Count; i++, scrambleTableNumberIter++)
+    {   
+        Write($"join column{scrambleTableNumberIter}_scrambler on prim_keys_and_columns_scrambler.rownum = column{scrambleTableNumberIter}_scrambler.random");
+        Write(Environment.NewLine);     
+    }
+
+    for(int i=0;i<TableInfo.PairedColumnsInside.Count;i++, scrambleTableNumberIter++) 
+    {
+       Write($"join column{scrambleTableNumberIter}_scrambler on prim_keys_and_columns_scrambler.rownum = column{scrambleTableNumberIter}_scrambler.random");  
+       Write(Environment.NewLine);
+    }
+    #>
+) x
+where <# for(int i = 0; i < TableInfo.PrimaryKeysAndTypes.Count; i++)
+    {   
+        var columnName = TableInfo.PrimaryKeysAndTypes.Keys.ElementAt(i);
+        Write($"{TableInfo.FullTableName}.`{columnName}` = x.`{columnName}`");
+
+        if (i != (TableInfo.PrimaryKeysAndTypes.Count - 1))
+        {
+            Write(", ");
+        }
+    } #> ;
+
+drop table prim_keys_and_columns_scrambler;
+<# scrambleTableNumberIter = 0;
+    for(int i = 0; i < TableInfo.SoloScrambledColumnsAndTypes.Count; i++, scrambleTableNumberIter++)
+    {   
+        Write($"drop table column{scrambleTableNumberIter}_scrambler;");
+        Write(Environment.NewLine);     
+    }
+
+    for(int i=0;i<TableInfo.PairedColumnsInside.Count;i++, scrambleTableNumberIter++) 
+    {
+       Write($"drop table column{scrambleTableNumberIter}_scrambler;");  
+       Write(Environment.NewLine);
+    }
+    #>
+
+
+<# 
+//if there is more than one mapped table
+    foreach(var mappedTable in TableInfo.MappedTablesOutside.Where(m => m.MappedColumnPairsOutside.Count > 1))
+    { 
+
+        var lastMappingStep = mappedTable.MappedColumnPairsOutside.Last();
+    #>
+update  <#= lastMappingStep.DestinationFullTableName #>
+set <# 
+        for(int i = 0; i < mappedTable.SourceDestPairedColumnsOutside.Count; i++)
+        {
+            var mappedColumn = mappedTable.SourceDestPairedColumnsOutside[i];
+            Write($"{mappedColumn.SecondColumn} = source.{mappedColumn.FirstColumn}");
+
+            if (i != (mappedTable.SourceDestPairedColumnsOutside.Count -1)) 
+            {
+                Write($", {Environment.NewLine} ");
+            }
+        }    
+    #> 
+from <#= lastMappingStep.DestinationFullTableName #> dest
+     <#
+        int tableMaxIndexInMapping =  mappedTable.MappedColumnPairsOutside.Count - 1;
+        for(int i = (tableMaxIndexInMapping - 1); i >= 0;i--)
+        {   
+            var mappingStep = mappedTable.MappedColumnPairsOutside[i];
+
+            if (i == (tableMaxIndexInMapping - 1))
+            {
+                Write($"join {mappingStep.DestinationFullTableName} a{i} on ");
+                for(int j = 0; j < lastMappingStep.MappedColumns.Count;j++)
+                {   
+                    var columnPair = lastMappingStep.MappedColumns[j];
+                    Write($"a{i}.{columnPair.FirstColumn} = dest.{columnPair.SecondColumn}");
+                    if (j != (lastMappingStep.MappedColumns.Count - 1))
+                    {
+                        Write($"and ");
+                    }
+                    else 
+                    {
+                        Write(Environment.NewLine);
+                    }
+                }
+            }
+            
+            //There is more than just 1 mapping table between.
+            if ((mappedTable.MappedColumnPairsOutside.Count > 2) && (i != (tableMaxIndexInMapping - 1)))
+            {
+                Write($"join {mappingStep.DestinationFullTableName} a{i} on ");
+                for(int j = 0; j < mappingStep.MappedColumns.Count;j++)
+                {   
+                    var columnPair = mappingStep.MappedColumns[j];
+                    Write($"a{i+1}.{columnPair.FirstColumn} = a{i}.{columnPair.SecondColumn} ");
+                    if (j != (mappingStep.MappedColumns.Count - 1))
+                    {
+                        Write($"and ");
+                    }
+                    else 
+                    {
+                        Write(Environment.NewLine);
+                    }
+                }
+            }
+
+            if(i == 0) 
+            {
+                Write($"join {TableInfo.FullTableName} source on ");
+                for(int j = 0; j < mappingStep.MappedColumns.Count;j++)
+                {   
+                    var columnPair = mappingStep.MappedColumns[j];
+                    Write($"a{i}.{columnPair.SecondColumn} = source.{columnPair.FirstColumn}");
+                    if (j != (mappingStep.MappedColumns.Count - 1))
+                    {
+                        Write($"and ");
+                    }
+                    else 
+                    {
+                        Write(";" + Environment.NewLine);
+                    }
+                }
+            }
+        }
+     #>
+   <# } 
+#>
+
+<#
+    foreach(var mappedTable in TableInfo.MappedTablesOutside.Where(m => m.MappedColumnPairsOutside.Count == 1))
+    {
+        var lastMappingStep = mappedTable.MappedColumnPairsOutside.Last();
+    #>
+update  <#= lastMappingStep.DestinationFullTableName #>    
+set <# 
+        for(int i = 0; i < mappedTable.SourceDestPairedColumnsOutside.Count; i++)
+        {
+            var mappedColumn = mappedTable.SourceDestPairedColumnsOutside[i];
+            Write($"{mappedColumn.SecondColumn} = source.{mappedColumn.FirstColumn}");
+
+            if (i != (mappedTable.SourceDestPairedColumnsOutside.Count -1)) 
+            {
+                Write($", {Environment.NewLine} ");
+            }
+        }    
+    #> 
+from <#= TableInfo.FullTableName #> source
+  <#  }
+#>

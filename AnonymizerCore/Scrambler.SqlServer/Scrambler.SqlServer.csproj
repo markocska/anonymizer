@@ -23,9 +23,9 @@
       <AutoGen>True</AutoGen>
     </Compile>
     <Compile Update="SqlScripts\SqlServer\GetIndexes.cs">
-      <DependentUpon>GetIndexes.tt</DependentUpon>
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
+      <DependentUpon>GetIndexes.tt</DependentUpon>
     </Compile>
     <Compile Update="SqlScripts\SqlServer\ScrambleTable.cs">
       <DependentUpon>ScrambleTable.tt</DependentUpon>
@@ -33,9 +33,9 @@
       <AutoGen>True</AutoGen>
     </Compile>
     <Compile Update="SqlScripts\SqlServer\TurnOnOffIndexes.cs">
-      <DependentUpon>TurnOnOffIndexes.tt</DependentUpon>
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
+      <DependentUpon>TurnOnOffIndexes.tt</DependentUpon>
     </Compile>
   </ItemGroup>
 
@@ -45,16 +45,16 @@
       <Generator>TextTemplatingFilePreprocessor</Generator>
     </None>
     <None Update="SqlScripts\SqlServer\GetIndexes.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>GetIndexes.cs</LastGenOutput>
-      <Generator>TextTemplatingFilePreprocessor</Generator>
     </None>
     <None Update="SqlScripts\SqlServer\ScrambleTable.tt">
       <LastGenOutput>ScrambleTable.cs</LastGenOutput>
       <Generator>TextTemplatingFilePreprocessor</Generator>
     </None>
     <None Update="SqlScripts\SqlServer\TurnOnOffIndexes.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>TurnOnOffIndexes.cs</LastGenOutput>
-      <Generator>TextTemplatingFilePreprocessor</Generator>
     </None>
   </ItemGroup>
 
