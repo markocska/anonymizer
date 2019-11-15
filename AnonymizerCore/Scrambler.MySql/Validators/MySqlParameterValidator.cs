@@ -39,12 +39,15 @@ namespace Scrambler.MySql.Validators
 
             var loggingInfo = new LoggingInfo { ConnectionString = connectionString, TableNameWithSchema = tableConfig.FullTableName };
 
-            var constantColumns = tableConfig.ConstantColumns?.Select(c => c.Name) ?? new List<string>();
+            var constantColumns = tableConfig.ConstantColumns?.Select(c => c.Name)
+            .Select(c => ParameterNameHelper.RemoveQuotationMarks(c)) ?? new List<string>();
 
-            var scrambledColumns = tableConfig.ScrambledColumns?.Select(c => c.Name) ?? new List<string>();
+            var scrambledColumns = tableConfig.ScrambledColumns?.Select(c => c.Name)
+                .Select(c => ParameterNameHelper.RemoveQuotationMarks(c)) ?? new List<string>();
 
             var pairedColumns = tableConfig.PairedColumnsInsideTable?
-                .Select(cl => cl.ToList()).ToList() ?? new List<List<string>>();
+                .Select(cl =>
+                    cl.Select(c => ParameterNameHelper.RemoveQuotationMarks(c)).ToList()).ToList() ?? new List<List<string>>();
 
             var allColumns = constantColumns.Concat(scrambledColumns);
 

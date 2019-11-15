@@ -10,7 +10,8 @@
           "scrambledColumns": [
             { "name": "first name" },
             { "name": "[last name]" },
-            { "name": "location" }
+            { "name": "location" },
+            { "name": "shift" }
           ],
           "constantColumns": [
             {
