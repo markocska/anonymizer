@@ -1,0 +1,30 @@
+{
+  "databases": [
+    {
+      "type": "MYSQL",
+      "version": "11.0.7",
+      "connectionString": "Server=localhost;Port=3306;Database=test;Uid=root;Pwd=root;",
+      "tables": [
+        {
+          "fullTableName": "test.employees",
+          "scrambledColumns": [
+            { "name": "first_name" },
+            { "name": "last_name" },
+            { "name": "location" },
+            { "name": "shift" }
+          ],
+          "constantColumns": [
+            {
+              "name": "constant",
+              "value": "this is a constant"
+            }
+          ],
+          "where": "last_name <> 'ESTHER'",
+          "pairedColumnsInsideTable": [
+            [ "last_name", "location" ]
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -13,10 +13,14 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Scrambler.MySql\Scrambler.MySql.csproj" />
     <ProjectReference Include="..\Scrambler.SqlServer\Scrambler.SqlServer.csproj" />
   </ItemGroup>
 
   <ItemGroup>
+    <None Update="mySqlscrambleConfig.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Update="scrambleConfig.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

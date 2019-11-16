@@ -20,7 +20,8 @@ namespace Scrambler.MySql.DatabaseServices
 
         public Dictionary<string, string> GetColumnNamesAndTypes(ITableInfo tableInfo, List<string> columnNames)
         {
-            var columnTypesTemplate = new GetColumnTypes(tableInfo.SchemaName, tableInfo.TableName, columnNames);
+            var columnTypesTemplate = new GetColumnTypes(ParameterNameHelper.RemoveQuotationMarks(tableInfo.SchemaName), 
+                ParameterNameHelper.RemoveQuotationMarks(tableInfo.TableName), columnNames);
             var columnTypesQuery = columnTypesTemplate.TransformText();
 
             //Console.WriteLine(columnTypesQuery);

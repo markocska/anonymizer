@@ -70,7 +70,7 @@ namespace Scrambler.MySql.Validators
         protected override DataTable GetTableSchema(string connectionString, string fullTableName)
         {
             using (var sqlConnection = new MySqlConnection(connectionString))
-            using (var adapter = new MySqlDataAdapter("select * from " + fullTableName + ";", sqlConnection))
+            using (var adapter = new MySqlDataAdapter("select * from " + fullTableName + " limit 1;", sqlConnection))
             using (var tableMetadata = new DataTable(fullTableName))
             {
                 return adapter

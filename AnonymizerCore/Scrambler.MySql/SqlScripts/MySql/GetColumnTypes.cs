@@ -50,7 +50,7 @@ namespace Scrambler.MySql.SqlScripts.MySql
                             for(int i=0;i<Columns.Count;i++) 
                             {   
                                 var columnName= Columns[i];
-                                Write($"''{columnName}''");
+                                Write($"'{columnName}'");
         
                                 if (i != (Columns.Count-1)) 
                                 {

@@ -37,7 +37,8 @@ namespace Scrambler.MySql.Utilities
                     CommandType = System.Data.CommandType.Text
                 };
 
-                using (var Reader = cmd.ExecuteReader())
+                using (
+                    var Reader = cmd.ExecuteReader())
                 {
                     Results.Load(Reader);
                 }
