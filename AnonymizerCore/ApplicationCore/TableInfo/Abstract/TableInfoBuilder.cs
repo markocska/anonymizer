@@ -21,8 +21,8 @@ namespace Scrambler.TableInfo.Abstract
         private IColumnTypeManager _columnTypeManager;
         private ILinkedServerValidator _linkedServerValidator;
         private IPrimaryKeyManager _primaryKeyManager;
-        public TableConfig TableConfig { get; private set; }
-        public DatabaseConfig DatabaseConfig { get; private set; }
+        public TableConfig TableConfig { get; protected set; }
+        public DatabaseConfig DatabaseConfig { get; protected set; }
 
         public TableInfoBuilder(DatabaseConfig dbConfig, TableConfig tableConfig, IConfigValidator configValidator, IWhereConditionValidator whereConditionValidator,
             ILinkedServerValidator linkedServerValidator,IColumnTypeManager columnTypeManager, IPrimaryKeyManager primaryKeyManager)
@@ -95,7 +95,7 @@ namespace Scrambler.TableInfo.Abstract
             return constantColumnsAndValues;
         }
 
-        private TableInfo CreateTableInfoBase()
+        protected virtual TableInfo CreateTableInfoBase()
         {
             TableConfig = NormalizeTableConfigParameters(TableConfig);
             var dbName = ParseDataSource(DatabaseConfig.ConnectionString);
@@ -243,7 +243,7 @@ namespace Scrambler.TableInfo.Abstract
             public Dictionary<string, string> SoloScrambledColumnsAndTypes { get; set; }
             public List<ColumnAndTypeAndValue> ConstantColumnsAndTypesAndValues { get; set; }
             public string WhereClause { get; set; }
-            public string FullTableName => $"{DbName}.{SchemaName}.{TableName}";
+            public virtual string FullTableName => $"{DbName}.{SchemaName}.{TableName}";
             public List<Dictionary<string, string>> PairedColumnsInside { get; set; }
             public List<MappedTable> MappedTablesOutside { get; set; }
         }

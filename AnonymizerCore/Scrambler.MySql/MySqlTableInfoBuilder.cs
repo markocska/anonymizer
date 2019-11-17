@@ -21,6 +21,22 @@ namespace Scrambler.MySql
 
         }
 
+        protected override TableInfo CreateTableInfoBase()
+        {
+            TableConfig = NormalizeTableConfigParameters(TableConfig);
+            var dbName = ParseDataSource(DatabaseConfig.ConnectionString);
+
+            return
+                new MySqlTableInfo
+                {
+                    DbConnectionString = DatabaseConfig.ConnectionString,
+                    DbName = dbName,
+                    SchemaName = ParseSchemaAndTableName(TableConfig.FullTableName).schemaName,
+                    TableName = ParseSchemaAndTableName(TableConfig.FullTableName).tableName,
+                    WhereClause = TableConfig.Where
+                };
+        }
+
         protected override string ParseDataSource(string connectionString)
         {
             var connectionStringBuilder = new MySqlConnectionStringBuilder(DatabaseConfig.ConnectionString);
@@ -74,6 +90,11 @@ namespace Scrambler.MySql
             };
 
             return normalizedTableConfig;
+        }
+
+        protected class MySqlTableInfo : TableInfo
+        {
+            public override string FullTableName => $"{SchemaName}.{TableName}";
         }
     }
 }

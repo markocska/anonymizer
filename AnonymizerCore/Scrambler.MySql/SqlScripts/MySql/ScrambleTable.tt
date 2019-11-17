@@ -10,6 +10,7 @@
 <#@ import namespace="System.Text" #>
 <#@ import namespace="System.Collections.Generic" #>
 
+set sql_safe_updates = 0;
 
 create table prim_keys_and_columns_scrambler
 (
@@ -125,8 +126,8 @@ insert into prim_keys_and_columns_scrambler
         var columnName = TableInfo.SoloScrambledColumnsAndTypes.Keys.ElementAt(i);
 #>
 insert into column<#=_scrambleTableNumber #>_scrambler
-    select row_number() over (order by x), [<#= columnName #>] from 
-    (select rand(uuid()) x, [<#= columnName #>] from prim_keys_and_columns_scrambler) a;
+    select row_number() over (order by x), <#= columnName #> from 
+    (select rand(uuid()) x, <#= columnName #> from prim_keys_and_columns_scrambler) a;
 <#
     }
 #>
@@ -154,7 +155,7 @@ insert into column<#=_scrambleTableNumber #>_scrambler
         for(int j = 0; j < pairedColumns.Count; j++) 
         { 
             var columnName = pairedColumns.Keys.ElementAt(j);
-            Write($"[{columnName}]");
+            Write($"{columnName}");
             
             if (j != (pairedColumns.Count-1))
             {
@@ -189,47 +190,7 @@ create index idx_primarykey on prim_keys_and_columns_scrambler(  <#
 #>
 
 
-update <#= TableInfo.FullTableName #> 
-set <#
-    for(int i = 0; i < TableInfo.SoloScrambledColumnsAndTypes.Count; i++)
-    {   
-        var columnName= TableInfo.SoloScrambledColumnsAndTypes.Keys.ElementAt(i);
-        Write($"`{columnName}` = x.`{columnName}`");
-
-        if ((i == (TableInfo.SoloScrambledColumnsAndTypes.Count - 1)) &&
-            (TableInfo.PairedColumnsInside.Count == 0) && 
-            (TableInfo.ConstantColumnsAndTypesAndValues.Count == 0) )
-        {}
-        else 
-        { 
-            Write(", ");
-        }      
-    }
-    
-    for(int i=0;i<TableInfo.PairedColumnsInside.Count;i++) 
-    {
-        var pairedColumns = TableInfo.PairedColumnsInside[i];
-        for(int j = 0; j < pairedColumns.Count;j++) 
-        {
-            var columnName = pairedColumns.Keys.ElementAt(j);
-            Write($"`{columnName}` = x.`{columnName}`");
-
-            if ((j == (pairedColumns.Count - 1)) && (i == TableInfo.PairedColumnsInside.Count - 1) &&
-                (TableInfo.ConstantColumnsAndTypesAndValues.Count == 0) )
-                {}
-            else 
-            { 
-                Write(", ");
-            } 
-        }   
-    }
-
-    for(int i=0;i<TableInfo.ConstantColumnsAndTypesAndValues.Count;i++) 
-    {
-        var column = TableInfo.ConstantColumnsAndTypesAndValues[i];
-        Write($"`{column.Name}` = cast('{column.Value}' as {column.Type})");                      
-    }
-    #> from
+update <#= TableInfo.FullTableName #> as dest,
 (
     select <#    var scrambleTableNumberIter= 0;
     for(int i = 0; i < TableInfo.PrimaryKeysAndTypes.Count; i++)
@@ -258,7 +219,7 @@ set <#
         for(int j = 0; j < pairedColumns.Count;j++) 
         {
             var columnName = pairedColumns.Keys.ElementAt(j);
-            Write($"column{scrambleTableNumberIter}.`{columnName}`");
+            Write($"column{scrambleTableNumberIter}_scrambler.`{columnName}`");
 
             if ((j == (pairedColumns.Count - 1)) && (i == TableInfo.PairedColumnsInside.Count - 1))
                 {}
@@ -282,11 +243,51 @@ set <#
        Write(Environment.NewLine);
     }
     #>
-) x
+) x 
+set <#
+    for(int i = 0; i < TableInfo.SoloScrambledColumnsAndTypes.Count; i++)
+    {   
+        var columnName= TableInfo.SoloScrambledColumnsAndTypes.Keys.ElementAt(i);
+        Write($"dest.`{columnName}` = x.`{columnName}`");
+
+        if ((i == (TableInfo.SoloScrambledColumnsAndTypes.Count - 1)) &&
+            (TableInfo.PairedColumnsInside.Count == 0) && 
+            (TableInfo.ConstantColumnsAndTypesAndValues.Count == 0) )
+        {}
+        else 
+        { 
+            Write(", ");
+        }      
+    }
+    
+    for(int i=0;i<TableInfo.PairedColumnsInside.Count;i++) 
+    {
+        var pairedColumns = TableInfo.PairedColumnsInside[i];
+        for(int j = 0; j < pairedColumns.Count;j++) 
+        {
+            var columnName = pairedColumns.Keys.ElementAt(j);
+            Write($"dest.`{columnName}` = x.`{columnName}`");
+
+            if ((j == (pairedColumns.Count - 1)) && (i == TableInfo.PairedColumnsInside.Count - 1) &&
+                (TableInfo.ConstantColumnsAndTypesAndValues.Count == 0) )
+                {}
+            else 
+            { 
+                Write(", ");
+            } 
+        }   
+    }
+
+    for(int i=0;i<TableInfo.ConstantColumnsAndTypesAndValues.Count;i++) 
+    {
+        var column = TableInfo.ConstantColumnsAndTypesAndValues[i];
+        Write($"`{column.Name}` = cast('{column.Value}' as NCHAR)");                      
+    }
+    #> 
 where <# for(int i = 0; i < TableInfo.PrimaryKeysAndTypes.Count; i++)
     {   
         var columnName = TableInfo.PrimaryKeysAndTypes.Keys.ElementAt(i);
-        Write($"{TableInfo.FullTableName}.`{columnName}` = x.`{columnName}`");
+        Write($"dest.`{columnName}` = x.`{columnName}`");
 
         if (i != (TableInfo.PrimaryKeysAndTypes.Count - 1))
         {
@@ -294,17 +295,17 @@ where <# for(int i = 0; i < TableInfo.PrimaryKeysAndTypes.Count; i++)
         }
     } #> ;
 
-drop table prim_keys_and_columns_scrambler;
+drop table <#= TableInfo.SchemaName #>.prim_keys_and_columns_scrambler;
 <# scrambleTableNumberIter = 0;
     for(int i = 0; i < TableInfo.SoloScrambledColumnsAndTypes.Count; i++, scrambleTableNumberIter++)
     {   
-        Write($"drop table column{scrambleTableNumberIter}_scrambler;");
+        Write($"drop table {TableInfo.SchemaName}.column{scrambleTableNumberIter}_scrambler;");
         Write(Environment.NewLine);     
     }
 
     for(int i=0;i<TableInfo.PairedColumnsInside.Count;i++, scrambleTableNumberIter++) 
     {
-       Write($"drop table column{scrambleTableNumberIter}_scrambler;");  
+       Write($"drop table {TableInfo.SchemaName}.column{scrambleTableNumberIter}_scrambler;");  
        Write(Environment.NewLine);
     }
     #>
@@ -417,3 +418,5 @@ set <#
 from <#= TableInfo.FullTableName #> source
   <#  }
 #>
+
+set sql_safe_updates = 0;
