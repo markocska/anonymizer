@@ -224,21 +224,21 @@ namespace Scrambler.MySql.SqlScripts.MySql
             
             #line default
             #line hidden
-            this.Write("_scrambler\r\n    select row_number() over (order by x), ");
+            this.Write("_scrambler\r\n    select row_number() over (order by x), `");
             
             #line 129 "E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\Scrambler.MySql\SqlScripts\MySql\ScrambleTable.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(columnName));
             
             #line default
             #line hidden
-            this.Write(" from \r\n    (select rand(uuid()) x, ");
+            this.Write("` from \r\n    (select rand(uuid()) x, `");
             
             #line 130 "E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\Scrambler.MySql\SqlScripts\MySql\ScrambleTable.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(columnName));
             
             #line default
             #line hidden
-            this.Write(" from prim_keys_and_columns_scrambler) a;\r\n");
+            this.Write("` from prim_keys_and_columns_scrambler) a;\r\n");
             
             #line 131 "E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\Scrambler.MySql\SqlScripts\MySql\ScrambleTable.tt"
 
@@ -290,7 +290,7 @@ namespace Scrambler.MySql.SqlScripts.MySql
         for(int j = 0; j < pairedColumns.Count; j++) 
         { 
             var columnName = pairedColumns.Keys.ElementAt(j);
-            Write($"{columnName}");
+            Write($"`{columnName}`");
             
             if (j != (pairedColumns.Count-1))
             {
@@ -671,7 +671,7 @@ namespace Scrambler.MySql.SqlScripts.MySql
             
             #line default
             #line hidden
-            this.Write("\r\nset sql_safe_updates = 0;");
+            this.Write("\r\nset sql_safe_updates = 1;");
             return this.GenerationEnvironment.ToString();
         }
     }

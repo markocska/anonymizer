@@ -126,8 +126,8 @@ insert into prim_keys_and_columns_scrambler
         var columnName = TableInfo.SoloScrambledColumnsAndTypes.Keys.ElementAt(i);
 #>
 insert into column<#=_scrambleTableNumber #>_scrambler
-    select row_number() over (order by x), <#= columnName #> from 
-    (select rand(uuid()) x, <#= columnName #> from prim_keys_and_columns_scrambler) a;
+    select row_number() over (order by x), `<#= columnName #>` from 
+    (select rand(uuid()) x, `<#= columnName #>` from prim_keys_and_columns_scrambler) a;
 <#
     }
 #>
@@ -155,7 +155,7 @@ insert into column<#=_scrambleTableNumber #>_scrambler
         for(int j = 0; j < pairedColumns.Count; j++) 
         { 
             var columnName = pairedColumns.Keys.ElementAt(j);
-            Write($"{columnName}");
+            Write($"`{columnName}`");
             
             if (j != (pairedColumns.Count-1))
             {
@@ -419,4 +419,4 @@ from <#= TableInfo.FullTableName #> source
   <#  }
 #>
 
-set sql_safe_updates = 0;
+set sql_safe_updates = 1;
