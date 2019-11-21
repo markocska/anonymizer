@@ -413,6 +413,20 @@ set <#
             }
         }    
     #> 
-from <#= TableInfo.FullTableName #> source
+from <#= lastMappingStep.DestinationFullTableName #> dest 
+join <#= TableInfo.FullTableName #> source 
+on <#   for(int i = 0; i < lastMappingStep.MappedColumns.Count;i++)
+        {
+            var foreignKeyMapping = lastMappingStep.MappedColumns[i];
+              if (i != (lastMappingStep.MappedColumns.Count - 1))  
+              {
+                Write($"source.{foreignKeyMapping.FirstColumn} = dest.{foreignKeyMapping.SecondColumn} and ");
+              }
+            else 
+            {
+                Write($"source.{foreignKeyMapping.FirstColumn} = dest.{foreignKeyMapping.SecondColumn} ");
+            }
+        }
+ #>
   <#  }
-#>
+#> ;

@@ -678,18 +678,45 @@ namespace Scrambler.SqlScripts.SqlServer
             this.Write(" \r\nfrom ");
             
             #line 416 "E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\Scrambler.SqlServer\SqlScripts\SqlServer\ScrambleTable.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(lastMappingStep.DestinationFullTableName));
+            
+            #line default
+            #line hidden
+            this.Write(" dest \r\njoin ");
+            
+            #line 417 "E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\Scrambler.SqlServer\SqlScripts\SqlServer\ScrambleTable.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(TableInfo.FullTableName));
             
             #line default
             #line hidden
-            this.Write(" source\r\n  ");
+            this.Write(" source \r\non ");
             
-            #line 417 "E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\Scrambler.SqlServer\SqlScripts\SqlServer\ScrambleTable.tt"
+            #line 418 "E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\Scrambler.SqlServer\SqlScripts\SqlServer\ScrambleTable.tt"
+   for(int i = 0; i < lastMappingStep.MappedColumns.Count;i++)
+        {
+            var foreignKeyMapping = lastMappingStep.MappedColumns[i];
+              if (i != (lastMappingStep.MappedColumns.Count - 1))  
+              {
+                Write($"source.{foreignKeyMapping.FirstColumn} = dest.{foreignKeyMapping.SecondColumn} and ");
+              }
+            else 
+            {
+                Write($"source.{foreignKeyMapping.FirstColumn} = dest.{foreignKeyMapping.SecondColumn} ");
+            }
+        }
+ 
+            
+            #line default
+            #line hidden
+            this.Write("  ");
+            
+            #line 431 "E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\Scrambler.SqlServer\SqlScripts\SqlServer\ScrambleTable.tt"
   }
 
             
             #line default
             #line hidden
+            this.Write(" ;");
             return this.GenerationEnvironment.ToString();
         }
     }

@@ -51,6 +51,7 @@
     <None Update="SqlScripts\SqlServer\ScrambleTable.tt">
       <LastGenOutput>ScrambleTable.cs</LastGenOutput>
       <Generator>TextTemplatingFilePreprocessor</Generator>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </None>
     <None Update="SqlScripts\SqlServer\TurnOnOffIndexes.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
