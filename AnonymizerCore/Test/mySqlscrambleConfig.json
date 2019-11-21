@@ -47,8 +47,45 @@
               ]
             }
           ]
+        },
+        {
+          "fullTableName": "test.employees",
+          "scrambledColumns": [
+            { "name": "location" },
+            { "name": "shift" },
+            { "name": "base_rate" }
+          ],
+          "constantColumns": [
+            {
+              "name": "first_name",
+              "value": "marko"
+            }
+          ],
+          "pairedColumnsInsideTable": [
+            [ "shift", "location" ]
+          ],
+          "where": "last_name <> 'ESTHER'",
+          "pairedColumnsOutsideTable": [
+            {
+              "columnMapping": [
+                [ "first_name", "full_name" ],
+                [ "last_name", "citizen_name" ]
+              ],
+              "sourceDestMapping": [
+                {
+                  "destinationConnectionString": "Server=localhost;Port=3306;Database=nav;Uid=root;Pwd=root;",
+                  "destinationFullTableName": "nav.EmployeesCitizens",
+                  "destinationLinkedInstance": "",
+                  "foreignKeyMapping": [
+                    [ "id", "employeeId" ]
+                  ]
+                }
+              ]
+            }
+          ]
         }
       ]
     }
+   
   ]
 }

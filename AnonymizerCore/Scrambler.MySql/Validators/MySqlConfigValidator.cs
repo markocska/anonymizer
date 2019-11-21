@@ -30,6 +30,12 @@ namespace Scrambler.MySql.Validators
         {
             try
             {
+                if (connectionString == null)
+                {
+                    Log.Error($"The connection string is null");
+                    return false;
+                }
+
                 var connectionStringBuilder = new MySqlConnectionStringBuilder(connectionString);
 
                 if (connectionStringBuilder.Database == string.Empty)

@@ -651,25 +651,25 @@ namespace Scrambler.MySql.SqlScripts.MySql
             var foreignKeyMapping = lastMappingStep.MappedColumns[i];
               if (i != (lastMappingStep.MappedColumns.Count - 1))  
               {
-                Write($"source.`{foreignKeyMapping.FirstColumn}` = dest.`{foreignKeyMapping.SecondColumn}` and ");
+                Write($"source.{foreignKeyMapping.FirstColumn} = dest.{foreignKeyMapping.SecondColumn} and ");
               }
             else 
             {
-                Write($"source.`{foreignKeyMapping.FirstColumn}` = dest.`{foreignKeyMapping.SecondColumn}` ");
+                Write($"source.{foreignKeyMapping.FirstColumn} = dest.{foreignKeyMapping.SecondColumn} ");
             }
         }
 
             
             #line default
             #line hidden
-            this.Write("set ");
+            this.Write("\r\nset ");
             
-            #line 424 "E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\Scrambler.MySql\SqlScripts\MySql\ScrambleTable.tt"
+            #line 425 "E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\Scrambler.MySql\SqlScripts\MySql\ScrambleTable.tt"
  
         for(int i = 0; i < mappedTable.SourceDestPairedColumnsOutside.Count; i++)
         {
             var mappedColumn = mappedTable.SourceDestPairedColumnsOutside[i];
-            Write($"dest.`{mappedColumn.SecondColumn}` = source.`{mappedColumn.FirstColumn}`");
+            Write($"dest.{mappedColumn.SecondColumn} = source.{mappedColumn.FirstColumn}");
 
             if (i != (mappedTable.SourceDestPairedColumnsOutside.Count -1)) 
             {
@@ -686,7 +686,7 @@ namespace Scrambler.MySql.SqlScripts.MySql
             #line hidden
             this.Write(" \r\n  ");
             
-            #line 440 "E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\Scrambler.MySql\SqlScripts\MySql\ScrambleTable.tt"
+            #line 441 "E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\Scrambler.MySql\SqlScripts\MySql\ScrambleTable.tt"
   }
 
             

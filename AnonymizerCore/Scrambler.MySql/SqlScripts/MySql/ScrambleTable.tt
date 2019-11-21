@@ -413,19 +413,20 @@ join <#= TableInfo.FullTableName #> source on <#
             var foreignKeyMapping = lastMappingStep.MappedColumns[i];
               if (i != (lastMappingStep.MappedColumns.Count - 1))  
               {
-                Write($"source.`{foreignKeyMapping.FirstColumn}` = dest.`{foreignKeyMapping.SecondColumn}` and ");
+                Write($"source.{foreignKeyMapping.FirstColumn} = dest.{foreignKeyMapping.SecondColumn} and ");
               }
             else 
             {
-                Write($"source.`{foreignKeyMapping.FirstColumn}` = dest.`{foreignKeyMapping.SecondColumn}` ");
+                Write($"source.{foreignKeyMapping.FirstColumn} = dest.{foreignKeyMapping.SecondColumn} ");
             }
         }
 #>
+
 set <# 
         for(int i = 0; i < mappedTable.SourceDestPairedColumnsOutside.Count; i++)
         {
             var mappedColumn = mappedTable.SourceDestPairedColumnsOutside[i];
-            Write($"dest.`{mappedColumn.SecondColumn}` = source.`{mappedColumn.FirstColumn}`");
+            Write($"dest.{mappedColumn.SecondColumn} = source.{mappedColumn.FirstColumn}");
 
             if (i != (mappedTable.SourceDestPairedColumnsOutside.Count -1)) 
             {

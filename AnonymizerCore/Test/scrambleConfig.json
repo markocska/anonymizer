@@ -117,7 +117,7 @@
           "pairedColumnsInsideTable": [
             [ "shift", "location" ]
           ],
-          "where": "[last name] <> 'ESTHER'",
+          "where": "[last name] <> 'ESTHER'"
           //"pairedColumnsOutsideTable": [
           //  {
           //    "columnMapping": [
