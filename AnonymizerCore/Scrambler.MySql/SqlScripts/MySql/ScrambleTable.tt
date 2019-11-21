@@ -406,20 +406,37 @@ set <#
     {
         var lastMappingStep = mappedTable.MappedColumnPairsOutside.Last();
     #>
-update  <#= lastMappingStep.DestinationFullTableName #>    
+update  <#= lastMappingStep.DestinationFullTableName #> as dest    
+join <#= TableInfo.FullTableName #> source on <#
+        for(int i = 0; i < lastMappingStep.MappedColumns.Count;i++)
+        {
+            var foreignKeyMapping = lastMappingStep.MappedColumns[i];
+              if (i != (lastMappingStep.MappedColumns.Count - 1))  
+              {
+                Write($"source.`{foreignKeyMapping.FirstColumn}` = dest.`{foreignKeyMapping.SecondColumn}` and ");
+              }
+            else 
+            {
+                Write($"source.`{foreignKeyMapping.FirstColumn}` = dest.`{foreignKeyMapping.SecondColumn}` ");
+            }
+        }
+#>
 set <# 
         for(int i = 0; i < mappedTable.SourceDestPairedColumnsOutside.Count; i++)
         {
             var mappedColumn = mappedTable.SourceDestPairedColumnsOutside[i];
-            Write($"{mappedColumn.SecondColumn} = source.{mappedColumn.FirstColumn}");
+            Write($"dest.`{mappedColumn.SecondColumn}` = source.`{mappedColumn.FirstColumn}`");
 
             if (i != (mappedTable.SourceDestPairedColumnsOutside.Count -1)) 
             {
                 Write($", {Environment.NewLine} ");
             }
+            else 
+            {
+                Write($";");
+            }
         }    
     #> 
-from <#= TableInfo.FullTableName #> source
   <#  }
 #>
 
