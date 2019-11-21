@@ -318,20 +318,7 @@ drop table <#= TableInfo.SchemaName #>.prim_keys_and_columns_scrambler;
 
         var lastMappingStep = mappedTable.MappedColumnPairsOutside.Last();
     #>
-update  <#= lastMappingStep.DestinationFullTableName #>
-set <# 
-        for(int i = 0; i < mappedTable.SourceDestPairedColumnsOutside.Count; i++)
-        {
-            var mappedColumn = mappedTable.SourceDestPairedColumnsOutside[i];
-            Write($"{mappedColumn.SecondColumn} = source.{mappedColumn.FirstColumn}");
-
-            if (i != (mappedTable.SourceDestPairedColumnsOutside.Count -1)) 
-            {
-                Write($", {Environment.NewLine} ");
-            }
-        }    
-    #> 
-from <#= lastMappingStep.DestinationFullTableName #> dest
+update  <#= lastMappingStep.DestinationFullTableName #> as dest 
      <#
         int tableMaxIndexInMapping =  mappedTable.MappedColumnPairsOutside.Count - 1;
         for(int i = (tableMaxIndexInMapping - 1); i >= 0;i--)
@@ -388,14 +375,31 @@ from <#= lastMappingStep.DestinationFullTableName #> dest
                     }
                     else 
                     {
-                        Write(";" + Environment.NewLine);
+                        Write(Environment.NewLine);
                     }
                 }
             }
         }
      #>
+set <# 
+        for(int i = 0; i < mappedTable.SourceDestPairedColumnsOutside.Count; i++)
+        {
+            var mappedColumn = mappedTable.SourceDestPairedColumnsOutside[i];
+            Write($"dest.{mappedColumn.SecondColumn} = source.{mappedColumn.FirstColumn}");
+
+            if (i != (mappedTable.SourceDestPairedColumnsOutside.Count -1)) 
+            {
+                Write($", {Environment.NewLine} ");
+            }
+            else 
+            {
+                Write(";");
+            }
+        }    
+    #> 
    <# } 
 #>
+
 
 <#
     foreach(var mappedTable in TableInfo.MappedTablesOutside.Where(m => m.MappedColumnPairsOutside.Count == 1))

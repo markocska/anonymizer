@@ -22,6 +22,30 @@
           "where": "last_name <> 'ESTHER'",
           "pairedColumnsInsideTable": [
             [ "last_name", "location" ]
+          ],
+          "pairedColumnsOutsideTable": [
+            {
+              "columnMapping": [
+                [ "first_name", "first_name" ],
+                [ "last_name", "last_name" ]
+              ],
+              "sourceDestMapping": [
+                {
+                  "destinationConnectionString": "Server=localhost;Port=3306;Database=nav;Uid=root;Pwd=root;",
+                  "destinationFullTableName": "nav.EmployeesCitizens",
+                  "foreignKeyMapping": [
+                    [ "id", "employeeId" ]
+                  ]
+                },
+                {
+                  "destinationConnectionString": "Server=localhost;Port=3306;Database=nav;Uid=root;Pwd=root;",
+                  "destinationFullTableName": "nav.citizens",
+                  "foreignKeyMapping": [
+                    [ "citizenId", "citizenId" ]
+                  ]
+                }
+              ]
+            }
           ]
         }
       ]

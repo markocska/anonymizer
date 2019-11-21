@@ -79,7 +79,7 @@ namespace Scrambler.MySql
                             {
                                 DestinationLinkedInstance = ParameterNameHelper.AddQuotationMarks(s.DestinationLinkedInstance),
                                 DestinationConnectionString = s.DestinationConnectionString,
-                                DestinationFullTableName = ParameterNameHelper.AddQuotationMarks(s.DestinationFullTableName),
+                                DestinationFullTableName = ParameterNameHelper.AddQuotationMarksToFullTableName(s.DestinationFullTableName),
                                 ForeignKeyMapping = s.ForeignKeyMapping.Select(l => ParameterNameHelper.AddQuotationMarksToStrList(l)).ToList()
                             }).ToList()
                     }).ToList()

@@ -519,34 +519,9 @@ namespace Scrambler.MySql.SqlScripts.MySql
             
             #line default
             #line hidden
-            this.Write("\r\nset ");
+            this.Write(" as dest \r\n     ");
             
             #line 322 "E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\Scrambler.MySql\SqlScripts\MySql\ScrambleTable.tt"
- 
-        for(int i = 0; i < mappedTable.SourceDestPairedColumnsOutside.Count; i++)
-        {
-            var mappedColumn = mappedTable.SourceDestPairedColumnsOutside[i];
-            Write($"{mappedColumn.SecondColumn} = source.{mappedColumn.FirstColumn}");
-
-            if (i != (mappedTable.SourceDestPairedColumnsOutside.Count -1)) 
-            {
-                Write($", {Environment.NewLine} ");
-            }
-        }    
-    
-            
-            #line default
-            #line hidden
-            this.Write(" \r\nfrom ");
-            
-            #line 334 "E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\Scrambler.MySql\SqlScripts\MySql\ScrambleTable.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(lastMappingStep.DestinationFullTableName));
-            
-            #line default
-            #line hidden
-            this.Write(" dest\r\n     ");
-            
-            #line 335 "E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\Scrambler.MySql\SqlScripts\MySql\ScrambleTable.tt"
 
         int tableMaxIndexInMapping =  mappedTable.MappedColumnPairsOutside.Count - 1;
         for(int i = (tableMaxIndexInMapping - 1); i >= 0;i--)
@@ -603,7 +578,7 @@ namespace Scrambler.MySql.SqlScripts.MySql
                     }
                     else 
                     {
-                        Write(";" + Environment.NewLine);
+                        Write(Environment.NewLine);
                     }
                 }
             }
@@ -612,17 +587,39 @@ namespace Scrambler.MySql.SqlScripts.MySql
             
             #line default
             #line hidden
-            this.Write("   ");
+            this.Write("set ");
             
-            #line 397 "E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\Scrambler.MySql\SqlScripts\MySql\ScrambleTable.tt"
+            #line 384 "E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\Scrambler.MySql\SqlScripts\MySql\ScrambleTable.tt"
+ 
+        for(int i = 0; i < mappedTable.SourceDestPairedColumnsOutside.Count; i++)
+        {
+            var mappedColumn = mappedTable.SourceDestPairedColumnsOutside[i];
+            Write($"dest.{mappedColumn.SecondColumn} = source.{mappedColumn.FirstColumn}");
+
+            if (i != (mappedTable.SourceDestPairedColumnsOutside.Count -1)) 
+            {
+                Write($", {Environment.NewLine} ");
+            }
+            else 
+            {
+                Write(";");
+            }
+        }    
+    
+            
+            #line default
+            #line hidden
+            this.Write(" \r\n   ");
+            
+            #line 400 "E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\Scrambler.MySql\SqlScripts\MySql\ScrambleTable.tt"
  } 
 
             
             #line default
             #line hidden
-            this.Write("\r\n");
+            this.Write("\r\n\r\n");
             
-            #line 400 "E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\Scrambler.MySql\SqlScripts\MySql\ScrambleTable.tt"
+            #line 404 "E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\Scrambler.MySql\SqlScripts\MySql\ScrambleTable.tt"
 
     foreach(var mappedTable in TableInfo.MappedTablesOutside.Where(m => m.MappedColumnPairsOutside.Count == 1))
     {
@@ -633,14 +630,14 @@ namespace Scrambler.MySql.SqlScripts.MySql
             #line hidden
             this.Write("update  ");
             
-            #line 405 "E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\Scrambler.MySql\SqlScripts\MySql\ScrambleTable.tt"
+            #line 409 "E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\Scrambler.MySql\SqlScripts\MySql\ScrambleTable.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(lastMappingStep.DestinationFullTableName));
             
             #line default
             #line hidden
             this.Write("    \r\nset ");
             
-            #line 406 "E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\Scrambler.MySql\SqlScripts\MySql\ScrambleTable.tt"
+            #line 410 "E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\Scrambler.MySql\SqlScripts\MySql\ScrambleTable.tt"
  
         for(int i = 0; i < mappedTable.SourceDestPairedColumnsOutside.Count; i++)
         {
@@ -658,14 +655,14 @@ namespace Scrambler.MySql.SqlScripts.MySql
             #line hidden
             this.Write(" \r\nfrom ");
             
-            #line 418 "E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\Scrambler.MySql\SqlScripts\MySql\ScrambleTable.tt"
+            #line 422 "E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\Scrambler.MySql\SqlScripts\MySql\ScrambleTable.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(TableInfo.FullTableName));
             
             #line default
             #line hidden
             this.Write(" source\r\n  ");
             
-            #line 419 "E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\Scrambler.MySql\SqlScripts\MySql\ScrambleTable.tt"
+            #line 423 "E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\Scrambler.MySql\SqlScripts\MySql\ScrambleTable.tt"
   }
 
             
