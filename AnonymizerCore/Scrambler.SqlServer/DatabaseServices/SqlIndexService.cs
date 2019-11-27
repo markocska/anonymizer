@@ -1,4 +1,4 @@
-﻿using Scrambler.SqlScripts.SqlServer;
+﻿using Scrambler.SqlServer.SqlScripts;
 using Scrambler.TableInfo.Interfaces;
 using Scrambler.Utilities;
 using Scrambler.Utilities.QueryHelpers;

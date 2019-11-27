@@ -7,7 +7,7 @@
 //     the code is regenerated.
 // </auto-generated>
 // ------------------------------------------------------------------------------
-namespace Scrambler.SqlScripts.SqlServer
+namespace Scrambler.SqlServer.SqlScripts
 {
     using System.Linq;
     using System.Text;
@@ -18,9 +18,9 @@ namespace Scrambler.SqlScripts.SqlServer
     /// Class to produce the template output
     /// </summary>
     
-    #line 1 "E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\Scrambler.SqlServer\SqlScripts\SqlServer\TurnOnOffIndexes.tt"
+    #line 1 "E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\Scrambler.SqlServer\SqlScripts\GetColumnTypes.tt"
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.TextTemplating", "15.0.0.0")]
-    public partial class TurnOnOffIndexes : TurnOnOffIndexesBase
+    public partial class GetColumnTypes : GetColumnTypesBase
     {
 #line hidden
         /// <summary>
@@ -28,45 +28,63 @@ namespace Scrambler.SqlScripts.SqlServer
         /// </summary>
         public virtual string TransformText()
         {
-            this.Write("\r\n");
-            
-            #line 7 "E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\Scrambler.SqlServer\SqlScripts\SqlServer\TurnOnOffIndexes.tt"
+            this.Write(@"
+/****** Object:  StoredProcedure [dbo].[sp_SimpleAnonymizer]    Script Date: 2019. 01. 17. 10:35:57 ******/
+SET ANSI_NULLS ON
+SET QUOTED_IDENTIFIER ON
 
-    foreach(var index in IndexNames) 
-    {  
-            
-            #line default
-            #line hidden
-            this.Write("    \r\n          alter index ");
-            
-            #line 10 "E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\Scrambler.SqlServer\SqlScripts\SqlServer\TurnOnOffIndexes.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(index));
-            
-            #line default
-            #line hidden
-            this.Write(" on ");
-            
-            #line 10 "E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\Scrambler.SqlServer\SqlScripts\SqlServer\TurnOnOffIndexes.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(FullTableName));
-            
-            #line default
-            #line hidden
-            this.Write(" ");
-            
-            #line 10 "E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\Scrambler.SqlServer\SqlScripts\SqlServer\TurnOnOffIndexes.tt"
- if(Enable == true) Write("rebuild"); else Write("disable"); 
-            
-            #line default
-            #line hidden
-            this.Write(";\r\n\r\n ");
-            
-            #line 12 "E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\Scrambler.SqlServer\SqlScripts\SqlServer\TurnOnOffIndexes.tt"
-    }
 
+	declare @sql_to_describe nvarchar(MAX) = '', 
+			@sql_to_get_type nvarchar(MAX) = '';
+	declare @columns_with_types table(");
+            
+            #line 14 "E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\Scrambler.SqlServer\SqlScripts\GetColumnTypes.tt"
+ Write(columnName); 
+            
+            #line default
+            #line hidden
+            this.Write(" nvarchar(128), ");
+            
+            #line 14 "E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\Scrambler.SqlServer\SqlScripts\GetColumnTypes.tt"
+ Write(columnType); 
+            
+            #line default
+            #line hidden
+            this.Write(" nvarchar(128));\r\n\t\r\n\tset @sql_to_describe = \'select * from ");
+            
+            #line 16 "E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\Scrambler.SqlServer\SqlScripts\GetColumnTypes.tt"
+ Write($"{Database}.{Schema}.{Table}"); 
+            
+            #line default
+            #line hidden
+            this.Write(" ;\'\r\n\t\r\n\tset @sql_to_get_type = \r\n\t\'select\tname, system_type_name\r\n\t\tFROM ");
+            
+            #line 20 "E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\Scrambler.SqlServer\SqlScripts\GetColumnTypes.tt"
+ Write($"{Database}"); 
+            
+            #line default
+            #line hidden
+            this.Write(".sys.dm_exec_describe_first_result_set(\'\'\' + @sql_to_describe + \' \'\', NULL, 1)\r\n\t" +
+                    "\twhere name in (");
+            
+            #line 21 "E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\Scrambler.SqlServer\SqlScripts\GetColumnTypes.tt"
  
+                            for(int i=0;i<Columns.Count;i++) 
+                            {   
+                                var columnName= Columns[i];
+                                Write($"''{columnName}''");
+        
+                                if (i != (Columns.Count-1)) 
+                                {
+                                    Write($", ");        
+                                }
+                            }
+                        
             
             #line default
             #line hidden
+            this.Write(" )\'\r\n\r\n\r\n\r\n    insert into @columns_with_types exec (@sql_to_get_type);\r\n\r\n\tselec" +
+                    "t * from @columns_with_types;\r\n");
             return this.GenerationEnvironment.ToString();
         }
     }
@@ -78,7 +96,7 @@ namespace Scrambler.SqlScripts.SqlServer
     /// Base class for this transformation
     /// </summary>
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.TextTemplating", "15.0.0.0")]
-    public class TurnOnOffIndexesBase
+    public class GetColumnTypesBase
     {
         #region Fields
         private global::System.Text.StringBuilder generationEnvironmentField;

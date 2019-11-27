@@ -4,7 +4,7 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Text;
 using Scrambler.DatabaseServices.ColumnTypes;
-using Scrambler.SqlScripts.SqlServer;
+using Scrambler.SqlServer.SqlScripts;
 using Scrambler.TableInfo;
 using Scrambler.TableInfo.Interfaces;
 using Scrambler.Utilities;

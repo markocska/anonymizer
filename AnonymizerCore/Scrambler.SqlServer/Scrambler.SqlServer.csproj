@@ -17,17 +17,17 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Update="SqlScripts\SqlServer\GetColumnTypes.cs">
+    <Compile Update="SqlScripts\GetColumnTypes.cs">
       <DependentUpon>GetColumnTypes.tt</DependentUpon>
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
     </Compile>
-    <Compile Update="SqlScripts\SqlServer\GetIndexes.cs">
+    <Compile Update="SqlScripts\GetIndexes.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
       <DependentUpon>GetIndexes.tt</DependentUpon>
     </Compile>
-    <Compile Update="SqlScripts\SqlServer\ScrambleTable.cs">
+    <Compile Update="SqlScripts\ScrambleTable.cs">
       <DependentUpon>ScrambleTable.tt</DependentUpon>
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
@@ -37,24 +37,33 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>TurnOnOffIndexes.tt</DependentUpon>
     </Compile>
+    <Compile Update="SqlScripts\TurnOnOffIndexes.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>TurnOnOffIndexes.tt</DependentUpon>
+    </Compile>
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="SqlScripts\SqlServer\GetColumnTypes.tt">
+    <None Update="SqlScripts\GetColumnTypes.tt">
       <LastGenOutput>GetColumnTypes.cs</LastGenOutput>
       <Generator>TextTemplatingFilePreprocessor</Generator>
     </None>
-    <None Update="SqlScripts\SqlServer\GetIndexes.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
+    <None Update="SqlScripts\GetIndexes.tt">
+      <Generator>TextTemplatingFilePreprocessor</Generator>
       <LastGenOutput>GetIndexes.cs</LastGenOutput>
     </None>
-    <None Update="SqlScripts\SqlServer\ScrambleTable.tt">
+    <None Update="SqlScripts\ScrambleTable.tt">
       <LastGenOutput>ScrambleTable.cs</LastGenOutput>
       <Generator>TextTemplatingFilePreprocessor</Generator>
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </None>
     <None Update="SqlScripts\SqlServer\TurnOnOffIndexes.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>TurnOnOffIndexes.cs</LastGenOutput>
+    </None>
+    <None Update="SqlScripts\TurnOnOffIndexes.tt">
+      <Generator>TextTemplatingFilePreprocessor</Generator>
       <LastGenOutput>TurnOnOffIndexes.cs</LastGenOutput>
     </None>
   </ItemGroup>

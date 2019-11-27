@@ -5,6 +5,7 @@
 <#@ import namespace="System.Collections.Generic" #>
 
 alter table <#= TableInfo.FullTableName #> disable trigger all; 
+SET TRANSACTION ISOLATION LEVEL SERIALIZABLE;
 
 create table #prim_keys_and_columns
 (

@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Scrambler.SqlScripts.SqlServer
+namespace Scrambler.SqlServer.SqlScripts
 {
     public partial class ScrambleTable
     {

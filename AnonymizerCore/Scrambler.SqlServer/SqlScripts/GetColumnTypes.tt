@@ -8,6 +8,7 @@
 SET ANSI_NULLS ON
 SET QUOTED_IDENTIFIER ON
 
+
 	declare @sql_to_describe nvarchar(MAX) = '', 
 			@sql_to_get_type nvarchar(MAX) = '';
 	declare @columns_with_types table(<# Write(columnName); #> nvarchar(128), <# Write(columnType); #> nvarchar(128));
