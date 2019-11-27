@@ -12,7 +12,7 @@
 
 set sql_safe_updates = 0;
 
-create table prim_keys_and_columns_scrambler
+create temporary table prim_keys_and_columns_scrambler
 (
   <#  for(int i=0;i<TableInfo.PrimaryKeysAndTypes.Count;i++) 
       {
@@ -44,7 +44,7 @@ create table prim_keys_and_columns_scrambler
     {
         var columnName = TableInfo.SoloScrambledColumnsAndTypes.Keys.ElementAt(i);
 #>
-create table column<#=_scrambleTableNumber #>_scrambler
+create temporary table column<#=_scrambleTableNumber #>_scrambler
 (   
   random int,   
   `<#= columnName #>` <#=TableInfo.SoloScrambledColumnsAndTypes[columnName] #>     
@@ -59,7 +59,7 @@ create table column<#=_scrambleTableNumber #>_scrambler
     {
         var pairedColumns = TableInfo.PairedColumnsInside[i];
 #>
-create table column<#=_scrambleTableNumber #>_scrambler
+create temporary table column<#=_scrambleTableNumber #>_scrambler
 (  
   random int, 
  <#  

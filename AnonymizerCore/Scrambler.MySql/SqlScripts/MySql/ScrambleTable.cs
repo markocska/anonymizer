@@ -29,8 +29,8 @@ namespace Scrambler.MySql.SqlScripts.MySql
         public virtual string TransformText()
         {
             this.Write("\r\n");
-            this.Write("\r\nset sql_safe_updates = 0;\r\n\r\ncreate table prim_keys_and_columns_scrambler\r\n(\r\n " +
-                    " ");
+            this.Write("\r\nset sql_safe_updates = 0;\r\n\r\ncreate temporary table prim_keys_and_columns_scram" +
+                    "bler\r\n(\r\n  ");
             
             #line 17 "E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\Scrambler.MySql\SqlScripts\MySql\ScrambleTable.tt"
   for(int i=0;i<TableInfo.PrimaryKeysAndTypes.Count;i++) 
@@ -69,7 +69,7 @@ namespace Scrambler.MySql.SqlScripts.MySql
             
             #line default
             #line hidden
-            this.Write("create table column");
+            this.Write("create temporary table column");
             
             #line 47 "E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\Scrambler.MySql\SqlScripts\MySql\ScrambleTable.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(_scrambleTableNumber));
@@ -110,7 +110,7 @@ namespace Scrambler.MySql.SqlScripts.MySql
             
             #line default
             #line hidden
-            this.Write("create table column");
+            this.Write("create temporary table column");
             
             #line 62 "E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\Scrambler.MySql\SqlScripts\MySql\ScrambleTable.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(_scrambleTableNumber));
