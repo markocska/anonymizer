@@ -40,6 +40,8 @@ namespace Scrambler.Quartz.Jobs
 
             Log.Information($"Job execution successfully finished: Description: {context.JobDetail.Description}, " +
                 $"Groupname: {context.JobDetail.Key.Group}, Keyname: {context.JobDetail.Key.Name}.");
+
+            
            
         }
     }

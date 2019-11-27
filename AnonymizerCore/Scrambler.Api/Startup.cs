@@ -98,6 +98,8 @@ namespace Scrambler.Api
             var loggerConfig = new LoggerConfiguration()
                .ReadFrom.Configuration(Configuration);
 
+            Serilog.Debugging.SelfLog.Enable(msg => Console.WriteLine(msg));
+
             return loggerConfig;
         }
     }
