@@ -27,6 +27,7 @@ namespace Scrambler.Quartz.JobFactory
                 try
                 {
                     job = scope.ServiceProvider.GetRequiredService(bundle.JobDetail.JobType) as IJob;
+                 
                 }
                 catch
                 {

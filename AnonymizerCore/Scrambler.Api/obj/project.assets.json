@@ -13946,6 +13946,7 @@
       "Microsoft.VisualStudio.Azure.Containers.Tools.Targets >= 1.0.2105168",
       "Microsoft.VisualStudio.Web.CodeGeneration.Design >= 2.2.0",
       "Newtonsoft.Json >= 12.0.2",
+      "Scrambler.Core >= 1.0.0",
       "Scrambler.Quartz >= 1.0.0",
       "Serilog >= 2.9.0",
       "Serilog.Enrichers.Environment >= 2.1.3",
@@ -13984,6 +13985,9 @@
       "frameworks": {
         "netcoreapp2.2": {
           "projectReferences": {
+            "E:\\GoogleDrive\\Documents\\szakdoga\\anonymizer\\AnonymizerCore\\ApplicationCore\\Scrambler.Core.csproj": {
+              "projectPath": "E:\\GoogleDrive\\Documents\\szakdoga\\anonymizer\\AnonymizerCore\\ApplicationCore\\Scrambler.Core.csproj"
+            },
             "E:\\GoogleDrive\\Documents\\szakdoga\\anonymizer\\AnonymizerCore\\Scrambler.Quartz\\Scrambler.Quartz.csproj": {
               "projectPath": "E:\\GoogleDrive\\Documents\\szakdoga\\anonymizer\\AnonymizerCore\\Scrambler.Quartz\\Scrambler.Quartz.csproj"
             }

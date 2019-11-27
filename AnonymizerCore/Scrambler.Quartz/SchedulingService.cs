@@ -1,8 +1,10 @@
 ﻿using AutoMapper;
 using Microsoft.Extensions.DependencyInjection;
+using Newtonsoft.Json;
 using Quartz;
 using Quartz.Impl;
 using Quartz.Impl.Matchers;
+using Scrambler.Config;
 using Scrambler.Quartz.Configuration;
 using Scrambler.Quartz.Interfaces;
 using Scrambler.Quartz.JobFactory;
@@ -123,7 +125,7 @@ namespace Scrambler.Quartz
         }
 
         public async Task<SchedulingResult> ScheduleSqlScramblingJob(string jobName, string jobGroup, string triggerDescription,
-            string cronExpression, string description)
+            string cronExpression, string description, DatabasesConfig jobConfig)
         {
             if (!CronExpression.IsValidExpression(cronExpression))
             {
@@ -137,6 +139,7 @@ namespace Scrambler.Quartz
 
             var job = JobBuilder.CreateForAsync<SqlScramblingJob>()
                 .WithIdentity(jobName, jobGroup)
+                .UsingJobData("configStr", JsonConvert.SerializeObject(jobConfig))
                 .WithDescription(description)
                 .RequestRecovery()
                 .Build();

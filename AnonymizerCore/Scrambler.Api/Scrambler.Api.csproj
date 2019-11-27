@@ -26,6 +26,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\ApplicationCore\Scrambler.Core.csproj" />
     <ProjectReference Include="..\Scrambler.Quartz\Scrambler.Quartz.csproj" />
   </ItemGroup>
 

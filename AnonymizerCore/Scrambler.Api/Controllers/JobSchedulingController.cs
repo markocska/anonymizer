@@ -24,7 +24,7 @@ namespace Scrambler.Api.Controllers
         public async Task<IActionResult> Post([FromBody] CreateScheduledJob newScheduledJob)
         {
             var schedulingResult = await _schedulingService.ScheduleSqlScramblingJob(newScheduledJob.JobName, newScheduledJob.JobGroup, newScheduledJob.TriggerDescription,
-                 newScheduledJob.CronExpression, newScheduledJob.Description);
+                 newScheduledJob.CronExpression, newScheduledJob.Description, newScheduledJob.JobConfig);
 
             if (!schedulingResult.IsSuccessful)
             {

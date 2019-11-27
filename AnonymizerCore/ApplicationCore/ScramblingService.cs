@@ -47,7 +47,7 @@ namespace Scrambler
                  .AddScoped<IQueryHelper, TQueryHelper>()
                  .BuildServiceProvider();
 
-            Log.Logger = logConfig.CreateLogger();
+            //Log.Logger = logConfig.CreateLogger();
             _serviceProvider = serviceProvider;
             _queryHelper = queryHelper;
         }
