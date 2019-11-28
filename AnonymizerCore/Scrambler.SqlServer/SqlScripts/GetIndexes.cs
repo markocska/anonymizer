@@ -28,7 +28,7 @@ namespace Scrambler.SqlServer.SqlScripts
         /// </summary>
         public virtual string TransformText()
         {
-            this.Write("\r\nselect i.name \r\n\t\tfrom ");
+            this.Write("SET TRANSACTION ISOLATION LEVEL SERIALIZABLE;\r\nselect i.name \r\n\t\tfrom ");
             
             #line 8 "E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\Scrambler.SqlServer\SqlScripts\GetIndexes.tt"
  Write(Database); 

@@ -7,7 +7,7 @@
 //     the code is regenerated.
 // </auto-generated>
 // ------------------------------------------------------------------------------
-namespace Scrambler.MySql.SqlScripts.MySql
+namespace Scrambler.MySql.SqlScripts
 {
     using System.Linq;
     using System.Text;
@@ -18,7 +18,7 @@ namespace Scrambler.MySql.SqlScripts.MySql
     /// Class to produce the template output
     /// </summary>
     
-    #line 1 "E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\Scrambler.MySql\SqlScripts\MySql\ScrambleTable.tt"
+    #line 1 "E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\Scrambler.MySql\SqlScripts\ScrambleTable.tt"
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.TextTemplating", "15.0.0.0")]
     public partial class ScrambleTable : ScrambleTableBase
     {
@@ -29,10 +29,10 @@ namespace Scrambler.MySql.SqlScripts.MySql
         public virtual string TransformText()
         {
             this.Write("\r\n");
-            this.Write("\r\nset sql_safe_updates = 0;\r\n\r\ncreate temporary table prim_keys_and_columns_scram" +
-                    "bler\r\n(\r\n  ");
+            this.Write("\r\nset session transaction isolation level serializable;\r\nset sql_safe_updates = 0" +
+                    ";\r\n\r\ncreate temporary table prim_keys_and_columns_scrambler\r\n(\r\n  ");
             
-            #line 17 "E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\Scrambler.MySql\SqlScripts\MySql\ScrambleTable.tt"
+            #line 18 "E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\Scrambler.MySql\SqlScripts\ScrambleTable.tt"
   for(int i=0;i<TableInfo.PrimaryKeysAndTypes.Count;i++) 
       {
         var columnName = TableInfo.PrimaryKeysAndTypes.Keys.ElementAt(i);
@@ -60,7 +60,7 @@ namespace Scrambler.MySql.SqlScripts.MySql
             #line hidden
             this.Write(" \r\n    rownum int\r\n);\r\n\r\n");
             
-            #line 42 "E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\Scrambler.MySql\SqlScripts\MySql\ScrambleTable.tt"
+            #line 43 "E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\Scrambler.MySql\SqlScripts\ScrambleTable.tt"
    
     for(int i = 0; i < TableInfo.SoloScrambledColumnsAndTypes.Count; i++, _scrambleTableNumber++) 
     {
@@ -71,28 +71,28 @@ namespace Scrambler.MySql.SqlScripts.MySql
             #line hidden
             this.Write("create temporary table column");
             
-            #line 47 "E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\Scrambler.MySql\SqlScripts\MySql\ScrambleTable.tt"
+            #line 48 "E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\Scrambler.MySql\SqlScripts\ScrambleTable.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(_scrambleTableNumber));
             
             #line default
             #line hidden
             this.Write("_scrambler\r\n(   \r\n  random int,   \r\n  `");
             
-            #line 50 "E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\Scrambler.MySql\SqlScripts\MySql\ScrambleTable.tt"
+            #line 51 "E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\Scrambler.MySql\SqlScripts\ScrambleTable.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(columnName));
             
             #line default
             #line hidden
             this.Write("` ");
             
-            #line 50 "E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\Scrambler.MySql\SqlScripts\MySql\ScrambleTable.tt"
+            #line 51 "E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\Scrambler.MySql\SqlScripts\ScrambleTable.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(TableInfo.SoloScrambledColumnsAndTypes[columnName]));
             
             #line default
             #line hidden
             this.Write("     \r\n);\r\n");
             
-            #line 52 "E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\Scrambler.MySql\SqlScripts\MySql\ScrambleTable.tt"
+            #line 53 "E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\Scrambler.MySql\SqlScripts\ScrambleTable.tt"
 
     }
 
@@ -101,7 +101,7 @@ namespace Scrambler.MySql.SqlScripts.MySql
             #line hidden
             this.Write("\r\n\r\n");
             
-            #line 57 "E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\Scrambler.MySql\SqlScripts\MySql\ScrambleTable.tt"
+            #line 58 "E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\Scrambler.MySql\SqlScripts\ScrambleTable.tt"
    
     for(int i = 0; i < TableInfo.PairedColumnsInside.Count; i++, _scrambleTableNumber++) 
     {
@@ -112,14 +112,14 @@ namespace Scrambler.MySql.SqlScripts.MySql
             #line hidden
             this.Write("create temporary table column");
             
-            #line 62 "E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\Scrambler.MySql\SqlScripts\MySql\ScrambleTable.tt"
+            #line 63 "E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\Scrambler.MySql\SqlScripts\ScrambleTable.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(_scrambleTableNumber));
             
             #line default
             #line hidden
             this.Write("_scrambler\r\n(  \r\n  random int, \r\n ");
             
-            #line 65 "E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\Scrambler.MySql\SqlScripts\MySql\ScrambleTable.tt"
+            #line 66 "E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\Scrambler.MySql\SqlScripts\ScrambleTable.tt"
   
     for(int j =0; j < pairedColumns.Keys.Count; j++) 
     { 
@@ -137,7 +137,7 @@ namespace Scrambler.MySql.SqlScripts.MySql
             #line hidden
             this.Write("               \r\n);\r\n");
             
-            #line 78 "E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\Scrambler.MySql\SqlScripts\MySql\ScrambleTable.tt"
+            #line 79 "E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\Scrambler.MySql\SqlScripts\ScrambleTable.tt"
 
     }
 
@@ -146,7 +146,7 @@ namespace Scrambler.MySql.SqlScripts.MySql
             #line hidden
             this.Write("\r\ninsert into prim_keys_and_columns_scrambler\r\n    select ");
             
-            #line 83 "E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\Scrambler.MySql\SqlScripts\MySql\ScrambleTable.tt"
+            #line 84 "E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\Scrambler.MySql\SqlScripts\ScrambleTable.tt"
  
     foreach(var columnName in TableInfo.PrimaryKeysAndTypes.Keys) 
     {
@@ -171,7 +171,7 @@ namespace Scrambler.MySql.SqlScripts.MySql
             #line hidden
             this.Write(" row_number() over (order by \r\n    ");
             
-            #line 102 "E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\Scrambler.MySql\SqlScripts\MySql\ScrambleTable.tt"
+            #line 103 "E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\Scrambler.MySql\SqlScripts\ScrambleTable.tt"
 
     for(int i = 0; i < TableInfo.PrimaryKeysAndTypes.Count; i++)
     {   
@@ -189,14 +189,14 @@ namespace Scrambler.MySql.SqlScripts.MySql
             #line hidden
             this.Write(" )\r\n    from ");
             
-            #line 114 "E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\Scrambler.MySql\SqlScripts\MySql\ScrambleTable.tt"
+            #line 115 "E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\Scrambler.MySql\SqlScripts\ScrambleTable.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(TableInfo.FullTableName));
             
             #line default
             #line hidden
             this.Write(" \r\n    ");
             
-            #line 115 "E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\Scrambler.MySql\SqlScripts\MySql\ScrambleTable.tt"
+            #line 116 "E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\Scrambler.MySql\SqlScripts\ScrambleTable.tt"
  
        if( !string.IsNullOrEmpty(TableInfo.WhereClause)) 
        {
@@ -208,7 +208,7 @@ namespace Scrambler.MySql.SqlScripts.MySql
             #line hidden
             this.Write(" ;\r\n \r\n\r\n");
             
-            #line 123 "E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\Scrambler.MySql\SqlScripts\MySql\ScrambleTable.tt"
+            #line 124 "E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\Scrambler.MySql\SqlScripts\ScrambleTable.tt"
     _scrambleTableNumber = 0;
     for(int i = 0; i < TableInfo.SoloScrambledColumnsAndTypes.Count; i++, _scrambleTableNumber++) 
     {
@@ -219,28 +219,28 @@ namespace Scrambler.MySql.SqlScripts.MySql
             #line hidden
             this.Write("insert into column");
             
-            #line 128 "E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\Scrambler.MySql\SqlScripts\MySql\ScrambleTable.tt"
+            #line 129 "E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\Scrambler.MySql\SqlScripts\ScrambleTable.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(_scrambleTableNumber));
             
             #line default
             #line hidden
             this.Write("_scrambler\r\n    select row_number() over (order by x), `");
             
-            #line 129 "E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\Scrambler.MySql\SqlScripts\MySql\ScrambleTable.tt"
+            #line 130 "E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\Scrambler.MySql\SqlScripts\ScrambleTable.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(columnName));
             
             #line default
             #line hidden
             this.Write("` from \r\n    (select rand(uuid()) x, `");
             
-            #line 130 "E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\Scrambler.MySql\SqlScripts\MySql\ScrambleTable.tt"
+            #line 131 "E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\Scrambler.MySql\SqlScripts\ScrambleTable.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(columnName));
             
             #line default
             #line hidden
             this.Write("` from prim_keys_and_columns_scrambler) a;\r\n");
             
-            #line 131 "E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\Scrambler.MySql\SqlScripts\MySql\ScrambleTable.tt"
+            #line 132 "E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\Scrambler.MySql\SqlScripts\ScrambleTable.tt"
 
     }
 
@@ -249,7 +249,7 @@ namespace Scrambler.MySql.SqlScripts.MySql
             #line hidden
             this.Write("\r\n\r\n");
             
-            #line 136 "E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\Scrambler.MySql\SqlScripts\MySql\ScrambleTable.tt"
+            #line 137 "E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\Scrambler.MySql\SqlScripts\ScrambleTable.tt"
    
     for(int i = 0; i < TableInfo.PairedColumnsInside.Count; i++, _scrambleTableNumber++) 
     {
@@ -260,14 +260,14 @@ namespace Scrambler.MySql.SqlScripts.MySql
             #line hidden
             this.Write("insert into column");
             
-            #line 141 "E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\Scrambler.MySql\SqlScripts\MySql\ScrambleTable.tt"
+            #line 142 "E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\Scrambler.MySql\SqlScripts\ScrambleTable.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(_scrambleTableNumber));
             
             #line default
             #line hidden
             this.Write("_scrambler\r\n    select row_number() over (order by x), ");
             
-            #line 142 "E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\Scrambler.MySql\SqlScripts\MySql\ScrambleTable.tt"
+            #line 143 "E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\Scrambler.MySql\SqlScripts\ScrambleTable.tt"
   
         for(int j = 0; j < pairedColumns.Count; j++) 
         { 
@@ -285,7 +285,7 @@ namespace Scrambler.MySql.SqlScripts.MySql
             #line hidden
             this.Write("    \r\n    from (select rand(uuid()) x, ");
             
-            #line 154 "E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\Scrambler.MySql\SqlScripts\MySql\ScrambleTable.tt"
+            #line 155 "E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\Scrambler.MySql\SqlScripts\ScrambleTable.tt"
   
         for(int j = 0; j < pairedColumns.Count; j++) 
         { 
@@ -303,7 +303,7 @@ namespace Scrambler.MySql.SqlScripts.MySql
             #line hidden
             this.Write(" from prim_keys_and_columns_scrambler) a;             \r\n");
             
-            #line 166 "E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\Scrambler.MySql\SqlScripts\MySql\ScrambleTable.tt"
+            #line 167 "E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\Scrambler.MySql\SqlScripts\ScrambleTable.tt"
 
     }
 
@@ -312,7 +312,7 @@ namespace Scrambler.MySql.SqlScripts.MySql
             #line hidden
             this.Write("\r\n\r\ncreate index idx_primarykey on prim_keys_and_columns_scrambler(  ");
             
-            #line 171 "E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\Scrambler.MySql\SqlScripts\MySql\ScrambleTable.tt"
+            #line 172 "E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\Scrambler.MySql\SqlScripts\ScrambleTable.tt"
 
     for(int i = 0; i < TableInfo.PrimaryKeysAndTypes.Count; i++)
     {   
@@ -330,7 +330,7 @@ namespace Scrambler.MySql.SqlScripts.MySql
             #line hidden
             this.Write(" );\r\n\r\n");
             
-            #line 184 "E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\Scrambler.MySql\SqlScripts\MySql\ScrambleTable.tt"
+            #line 185 "E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\Scrambler.MySql\SqlScripts\ScrambleTable.tt"
 
     for(int i = 0; i < _scrambleTableNumber; i++)
     {
@@ -343,14 +343,14 @@ namespace Scrambler.MySql.SqlScripts.MySql
             #line hidden
             this.Write("\r\n\r\nupdate ");
             
-            #line 193 "E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\Scrambler.MySql\SqlScripts\MySql\ScrambleTable.tt"
+            #line 194 "E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\Scrambler.MySql\SqlScripts\ScrambleTable.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(TableInfo.FullTableName));
             
             #line default
             #line hidden
             this.Write(" as dest,\r\n(\r\n    select ");
             
-            #line 195 "E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\Scrambler.MySql\SqlScripts\MySql\ScrambleTable.tt"
+            #line 196 "E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\Scrambler.MySql\SqlScripts\ScrambleTable.tt"
     var scrambleTableNumberIter= 0;
     for(int i = 0; i < TableInfo.PrimaryKeysAndTypes.Count; i++)
     {   
@@ -394,7 +394,7 @@ namespace Scrambler.MySql.SqlScripts.MySql
             #line hidden
             this.Write(" from prim_keys_and_columns_scrambler\r\n    ");
             
-            #line 233 "E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\Scrambler.MySql\SqlScripts\MySql\ScrambleTable.tt"
+            #line 234 "E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\Scrambler.MySql\SqlScripts\ScrambleTable.tt"
  scrambleTableNumberIter = 0;
     for(int i = 0; i < TableInfo.SoloScrambledColumnsAndTypes.Count; i++, scrambleTableNumberIter++)
     {   
@@ -413,7 +413,7 @@ namespace Scrambler.MySql.SqlScripts.MySql
             #line hidden
             this.Write(") x \r\nset ");
             
-            #line 247 "E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\Scrambler.MySql\SqlScripts\MySql\ScrambleTable.tt"
+            #line 248 "E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\Scrambler.MySql\SqlScripts\ScrambleTable.tt"
 
     for(int i = 0; i < TableInfo.SoloScrambledColumnsAndTypes.Count; i++)
     {   
@@ -459,7 +459,7 @@ namespace Scrambler.MySql.SqlScripts.MySql
             #line hidden
             this.Write(" \r\nwhere ");
             
-            #line 287 "E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\Scrambler.MySql\SqlScripts\MySql\ScrambleTable.tt"
+            #line 288 "E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\Scrambler.MySql\SqlScripts\ScrambleTable.tt"
  for(int i = 0; i < TableInfo.PrimaryKeysAndTypes.Count; i++)
     {   
         var columnName = TableInfo.PrimaryKeysAndTypes.Keys.ElementAt(i);
@@ -475,14 +475,14 @@ namespace Scrambler.MySql.SqlScripts.MySql
             #line hidden
             this.Write(" ;\r\n\r\ndrop table ");
             
-            #line 298 "E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\Scrambler.MySql\SqlScripts\MySql\ScrambleTable.tt"
+            #line 299 "E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\Scrambler.MySql\SqlScripts\ScrambleTable.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(TableInfo.SchemaName));
             
             #line default
             #line hidden
             this.Write(".prim_keys_and_columns_scrambler;\r\n");
             
-            #line 299 "E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\Scrambler.MySql\SqlScripts\MySql\ScrambleTable.tt"
+            #line 300 "E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\Scrambler.MySql\SqlScripts\ScrambleTable.tt"
  scrambleTableNumberIter = 0;
     for(int i = 0; i < TableInfo.SoloScrambledColumnsAndTypes.Count; i++, scrambleTableNumberIter++)
     {   
@@ -501,7 +501,7 @@ namespace Scrambler.MySql.SqlScripts.MySql
             #line hidden
             this.Write("\r\n\r\n");
             
-            #line 314 "E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\Scrambler.MySql\SqlScripts\MySql\ScrambleTable.tt"
+            #line 315 "E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\Scrambler.MySql\SqlScripts\ScrambleTable.tt"
  
 //if there is more than one mapped table
     foreach(var mappedTable in TableInfo.MappedTablesOutside.Where(m => m.MappedColumnPairsOutside.Count > 1))
@@ -514,14 +514,14 @@ namespace Scrambler.MySql.SqlScripts.MySql
             #line hidden
             this.Write("update  ");
             
-            #line 321 "E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\Scrambler.MySql\SqlScripts\MySql\ScrambleTable.tt"
+            #line 322 "E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\Scrambler.MySql\SqlScripts\ScrambleTable.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(lastMappingStep.DestinationFullTableName));
             
             #line default
             #line hidden
             this.Write(" as dest \r\n     ");
             
-            #line 322 "E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\Scrambler.MySql\SqlScripts\MySql\ScrambleTable.tt"
+            #line 323 "E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\Scrambler.MySql\SqlScripts\ScrambleTable.tt"
 
         int tableMaxIndexInMapping =  mappedTable.MappedColumnPairsOutside.Count - 1;
         for(int i = (tableMaxIndexInMapping - 1); i >= 0;i--)
@@ -589,7 +589,7 @@ namespace Scrambler.MySql.SqlScripts.MySql
             #line hidden
             this.Write("set ");
             
-            #line 384 "E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\Scrambler.MySql\SqlScripts\MySql\ScrambleTable.tt"
+            #line 385 "E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\Scrambler.MySql\SqlScripts\ScrambleTable.tt"
  
         for(int i = 0; i < mappedTable.SourceDestPairedColumnsOutside.Count; i++)
         {
@@ -611,7 +611,7 @@ namespace Scrambler.MySql.SqlScripts.MySql
             #line hidden
             this.Write(" \r\n   ");
             
-            #line 400 "E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\Scrambler.MySql\SqlScripts\MySql\ScrambleTable.tt"
+            #line 401 "E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\Scrambler.MySql\SqlScripts\ScrambleTable.tt"
  } 
 
             
@@ -619,7 +619,7 @@ namespace Scrambler.MySql.SqlScripts.MySql
             #line hidden
             this.Write("\r\n\r\n");
             
-            #line 404 "E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\Scrambler.MySql\SqlScripts\MySql\ScrambleTable.tt"
+            #line 405 "E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\Scrambler.MySql\SqlScripts\ScrambleTable.tt"
 
     foreach(var mappedTable in TableInfo.MappedTablesOutside.Where(m => m.MappedColumnPairsOutside.Count == 1))
     {
@@ -630,21 +630,21 @@ namespace Scrambler.MySql.SqlScripts.MySql
             #line hidden
             this.Write("update  ");
             
-            #line 409 "E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\Scrambler.MySql\SqlScripts\MySql\ScrambleTable.tt"
+            #line 410 "E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\Scrambler.MySql\SqlScripts\ScrambleTable.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(lastMappingStep.DestinationFullTableName));
             
             #line default
             #line hidden
             this.Write(" as dest    \r\njoin ");
             
-            #line 410 "E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\Scrambler.MySql\SqlScripts\MySql\ScrambleTable.tt"
+            #line 411 "E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\Scrambler.MySql\SqlScripts\ScrambleTable.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(TableInfo.FullTableName));
             
             #line default
             #line hidden
             this.Write(" source on ");
             
-            #line 410 "E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\Scrambler.MySql\SqlScripts\MySql\ScrambleTable.tt"
+            #line 411 "E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\Scrambler.MySql\SqlScripts\ScrambleTable.tt"
 
         for(int i = 0; i < lastMappingStep.MappedColumns.Count;i++)
         {
@@ -664,7 +664,7 @@ namespace Scrambler.MySql.SqlScripts.MySql
             #line hidden
             this.Write("\r\nset ");
             
-            #line 425 "E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\Scrambler.MySql\SqlScripts\MySql\ScrambleTable.tt"
+            #line 426 "E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\Scrambler.MySql\SqlScripts\ScrambleTable.tt"
  
         for(int i = 0; i < mappedTable.SourceDestPairedColumnsOutside.Count; i++)
         {
@@ -686,7 +686,7 @@ namespace Scrambler.MySql.SqlScripts.MySql
             #line hidden
             this.Write(" \r\n  ");
             
-            #line 441 "E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\Scrambler.MySql\SqlScripts\MySql\ScrambleTable.tt"
+            #line 442 "E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\Scrambler.MySql\SqlScripts\ScrambleTable.tt"
   }
 
             

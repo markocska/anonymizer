@@ -20,10 +20,30 @@ namespace Scrambler.Api.Controllers
             _schedulerConfiguration = schedulerConfiguration;
         }
 
-        [HttpPost]
-        public async Task<IActionResult> Post([FromBody] CreateScheduledJob newScheduledJob)
+        [HttpPost("sql")]
+        public async Task<IActionResult> PostSql([FromBody] CreateScheduledJob newScheduledJob)
         {
             var schedulingResult = await _schedulingService.ScheduleSqlScramblingJob(newScheduledJob.JobName, newScheduledJob.JobGroup, newScheduledJob.TriggerDescription,
+                 newScheduledJob.CronExpression, newScheduledJob.Description, newScheduledJob.JobConfig);
+
+            if (!schedulingResult.IsSuccessful)
+            {
+                return BadRequest(new ErrorResponse { ErrorMessage = schedulingResult.ErrorMessage });
+            }
+
+            return Ok(new JobSuccessfullyCreated
+            {
+                JobGroup = schedulingResult.JobKey.Group,
+                JobName = schedulingResult.JobKey.Name,
+                TriggerGroup = schedulingResult.TriggerKey.Group,
+                TriggerName = schedulingResult.TriggerKey.Name
+            });
+        }
+
+        [HttpPost("mysql")]
+        public async Task<IActionResult> PostMySql([FromBody] CreateScheduledJob newScheduledJob)
+        {
+            var schedulingResult = await _schedulingService.ScheduleMySqlScramblingJob(newScheduledJob.JobName, newScheduledJob.JobGroup, newScheduledJob.TriggerDescription,
                  newScheduledJob.CronExpression, newScheduledJob.Description, newScheduledJob.JobConfig);
 
             if (!schedulingResult.IsSuccessful)

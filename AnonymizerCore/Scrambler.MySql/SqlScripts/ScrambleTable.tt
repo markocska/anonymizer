@@ -10,6 +10,7 @@
 <#@ import namespace="System.Text" #>
 <#@ import namespace="System.Collections.Generic" #>
 
+set session transaction isolation level serializable;
 set sql_safe_updates = 0;
 
 create temporary table prim_keys_and_columns_scrambler

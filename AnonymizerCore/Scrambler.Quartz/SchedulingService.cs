@@ -32,6 +32,7 @@ namespace Scrambler.Quartz
             services.AddTransient(s => loggerConfiguration);
             services.AddTransient(s => schedulerConfig);
             services.AddTransient<SqlScramblingJob>();
+            services.AddTransient<MySqlScramblingJob>();
             var container = services.BuildServiceProvider();
 
             var jobFactory = new ScramblerJobFactory(container);
@@ -127,6 +128,19 @@ namespace Scrambler.Quartz
         public async Task<SchedulingResult> ScheduleSqlScramblingJob(string jobName, string jobGroup, string triggerDescription,
             string cronExpression, string description, DatabasesConfig jobConfig)
         {
+            return (await ScheduleScramblingJob<SqlScramblingJob>(jobName, jobGroup, triggerDescription, cronExpression, description, jobConfig));
+        }
+
+        public async Task<SchedulingResult> ScheduleMySqlScramblingJob(string jobName, string jobGroup, string triggerDescription,
+           string cronExpression, string description, DatabasesConfig jobConfig)
+        {
+            return (await ScheduleScramblingJob<MySqlScramblingJob>(jobName, jobGroup, triggerDescription, cronExpression, description, jobConfig));
+        }
+
+        private async Task<SchedulingResult> ScheduleScramblingJob<JobType>(string jobName, string jobGroup, string triggerDescription,
+           string cronExpression, string description, DatabasesConfig jobConfig)
+            where JobType : IJob
+        {
             if (!CronExpression.IsValidExpression(cronExpression))
             {
                 return new SchedulingResult { IsSuccessful = false, ErrorMessage = "The cron expression is invalid." };
@@ -137,7 +151,7 @@ namespace Scrambler.Quartz
                 return new SchedulingResult { IsSuccessful = false, ErrorMessage = "The jobname is already taken." };
             }
 
-            var job = JobBuilder.CreateForAsync<SqlScramblingJob>()
+            var job = JobBuilder.CreateForAsync<JobType>()
                 .WithIdentity(jobName, jobGroup)
                 .UsingJobData("configStr", JsonConvert.SerializeObject(jobConfig))
                 .WithDescription(description)
@@ -174,6 +188,7 @@ namespace Scrambler.Quartz
 
             return new SchedulingResult { IsSuccessful = true, JobKey = job.Key, TriggerKey = trigger.Key };
         }
+
 
     }
 }

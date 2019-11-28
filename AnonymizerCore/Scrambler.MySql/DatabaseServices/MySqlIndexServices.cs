@@ -1,5 +1,5 @@
 ﻿using Scrambler.DatabaseServices.Indexes;
-using Scrambler.MySql.SqlScripts.MySql;
+using Scrambler.MySql.SqlScripts;
 using Scrambler.TableInfo.Interfaces;
 using Scrambler.Utilities;
 using System;

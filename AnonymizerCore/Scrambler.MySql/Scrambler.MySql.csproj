@@ -15,20 +15,16 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="SqlScripts\MySql\GetColumnTypes.tt">
+    <None Update="SqlScripts\GetColumnTypes.tt">
       <Generator>TextTemplatingFilePreprocessor</Generator>
       <LastGenOutput>GetColumnTypes.cs</LastGenOutput>
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </None>
-    <None Update="SqlScripts\MySql\GetIndexes.tt">
-      <Generator>TextTemplatingFilePreprocessor</Generator>
-      <LastGenOutput>GetIndexes.cs</LastGenOutput>
-    </None>
-    <None Update="SqlScripts\MySql\ScrambleTable.tt">
+    <None Update="SqlScripts\ScrambleTable.tt">
       <Generator>TextTemplatingFilePreprocessor</Generator>
       <LastGenOutput>ScrambleTable.cs</LastGenOutput>
     </None>
-    <None Update="SqlScripts\MySql\TurnOnOffIndexes.tt">
+    <None Update="SqlScripts\TurnOnOffIndexes.tt">
       <Generator>TextTemplatingFilePreprocessor</Generator>
       <LastGenOutput>TurnOnOffIndexes.cs</LastGenOutput>
     </None>
@@ -39,22 +35,17 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Update="SqlScripts\MySql\GetColumnTypes.cs">
+    <Compile Update="SqlScripts\GetColumnTypes.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
       <DependentUpon>GetColumnTypes.tt</DependentUpon>
     </Compile>
-    <Compile Update="SqlScripts\MySql\GetIndexes.cs">
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-      <DependentUpon>GetIndexes.tt</DependentUpon>
-    </Compile>
-    <Compile Update="SqlScripts\MySql\ScrambleTable.cs">
+    <Compile Update="SqlScripts\ScrambleTable.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
       <DependentUpon>ScrambleTable.tt</DependentUpon>
     </Compile>
-    <Compile Update="SqlScripts\MySql\TurnOnOffIndexes.cs">
+    <Compile Update="SqlScripts\TurnOnOffIndexes.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
       <DependentUpon>TurnOnOffIndexes.tt</DependentUpon>

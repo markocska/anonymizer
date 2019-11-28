@@ -4,7 +4,7 @@
 <#@ import namespace="System.Text" #>
 <#@ import namespace="System.Collections.Generic" #>
 
-
+set session transaction isolation level serializable;
 SET autocommit=<# if(Enable == true) Write("1"); else Write("0"); #>; 
 SET unique_checks=<# if(Enable == true) Write("1"); else Write("0"); #>; 
 SET foreign_key_checks=<# if(Enable == true) Write("1"); else Write("0"); #>;

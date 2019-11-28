@@ -12,6 +12,8 @@ namespace Scrambler.Quartz.Interfaces
     {
         Task<SchedulingResult> ScheduleSqlScramblingJob(string jobName, string jobGroup, string triggerDescription,
             string cronExpression, string description, DatabasesConfig jobConfig);
+        Task<SchedulingResult> ScheduleMySqlScramblingJob(string jobName, string jobGroup, string triggerDescription,
+            string cronExpression, string description, DatabasesConfig jobConfig);
         Task<SchedulingResult> RescheduleJob(string triggerGroup, string triggerName, string cronExpression, string triggerDescription);
         Task<IReadOnlyCollection<JobKey>> GetAllJobKeys();
         Task<List<JobKeyWithDescription>> GetAllJobKeysWithDescription();

@@ -7,7 +7,7 @@
 //     the code is regenerated.
 // </auto-generated>
 // ------------------------------------------------------------------------------
-namespace Scrambler.MySql.SqlScripts.MySql
+namespace Scrambler.MySql.SqlScripts
 {
     using System.Linq;
     using System.Text;
@@ -18,7 +18,7 @@ namespace Scrambler.MySql.SqlScripts.MySql
     /// Class to produce the template output
     /// </summary>
     
-    #line 1 "E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\Scrambler.MySql\SqlScripts\MySql\TurnOnOffIndexes.tt"
+    #line 1 "E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\Scrambler.MySql\SqlScripts\TurnOnOffIndexes.tt"
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.TextTemplating", "15.0.0.0")]
     public partial class TurnOnOffIndexes : TurnOnOffIndexesBase
     {
@@ -28,23 +28,23 @@ namespace Scrambler.MySql.SqlScripts.MySql
         /// </summary>
         public virtual string TransformText()
         {
-            this.Write("\r\n\r\nSET autocommit=");
+            this.Write("\r\nset session transaction isolation level serializable;\r\nSET autocommit=");
             
-            #line 8 "E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\Scrambler.MySql\SqlScripts\MySql\TurnOnOffIndexes.tt"
+            #line 8 "E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\Scrambler.MySql\SqlScripts\TurnOnOffIndexes.tt"
  if(Enable == true) Write("1"); else Write("0"); 
             
             #line default
             #line hidden
             this.Write("; \r\nSET unique_checks=");
             
-            #line 9 "E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\Scrambler.MySql\SqlScripts\MySql\TurnOnOffIndexes.tt"
+            #line 9 "E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\Scrambler.MySql\SqlScripts\TurnOnOffIndexes.tt"
  if(Enable == true) Write("1"); else Write("0"); 
             
             #line default
             #line hidden
             this.Write("; \r\nSET foreign_key_checks=");
             
-            #line 10 "E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\Scrambler.MySql\SqlScripts\MySql\TurnOnOffIndexes.tt"
+            #line 10 "E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\Scrambler.MySql\SqlScripts\TurnOnOffIndexes.tt"
  if(Enable == true) Write("1"); else Write("0"); 
             
             #line default

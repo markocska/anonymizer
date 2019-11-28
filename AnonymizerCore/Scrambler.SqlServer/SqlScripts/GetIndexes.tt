@@ -3,7 +3,7 @@
 <#@ import namespace="System.Linq" #>
 <#@ import namespace="System.Text" #>
 <#@ import namespace="System.Collections.Generic" #>
-
+SET TRANSACTION ISOLATION LEVEL SERIALIZABLE;
 select i.name 
 		from <# Write(Database); #>.sys.indexes i
 		join  

@@ -7,7 +7,7 @@
 //     the code is regenerated.
 // </auto-generated>
 // ------------------------------------------------------------------------------
-namespace Scrambler.MySql.SqlScripts.MySql
+namespace Scrambler.MySql.SqlScripts
 {
     using System.Linq;
     using System.Text;
@@ -18,7 +18,7 @@ namespace Scrambler.MySql.SqlScripts.MySql
     /// Class to produce the template output
     /// </summary>
     
-    #line 1 "E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\Scrambler.MySql\SqlScripts\MySql\GetColumnTypes.tt"
+    #line 1 "E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\Scrambler.MySql\SqlScripts\GetColumnTypes.tt"
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.TextTemplating", "15.0.0.0")]
     public partial class GetColumnTypes : GetColumnTypesBase
     {
@@ -31,21 +31,21 @@ namespace Scrambler.MySql.SqlScripts.MySql
             this.Write("\r\n\r\n\tselect\tcolumn_name, column_type\r\n\t\tFROM information_schema.columns\r\n\t\twhere " +
                     "table_schema = \'");
             
-            #line 10 "E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\Scrambler.MySql\SqlScripts\MySql\GetColumnTypes.tt"
+            #line 10 "E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\Scrambler.MySql\SqlScripts\GetColumnTypes.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(Schema));
             
             #line default
             #line hidden
             this.Write("\' and table_name = \'");
             
-            #line 10 "E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\Scrambler.MySql\SqlScripts\MySql\GetColumnTypes.tt"
+            #line 10 "E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\Scrambler.MySql\SqlScripts\GetColumnTypes.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(Table));
             
             #line default
             #line hidden
             this.Write("\' and column_name in (");
             
-            #line 10 "E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\Scrambler.MySql\SqlScripts\MySql\GetColumnTypes.tt"
+            #line 10 "E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\Scrambler.MySql\SqlScripts\GetColumnTypes.tt"
  
                             for(int i=0;i<Columns.Count;i++) 
                             {   

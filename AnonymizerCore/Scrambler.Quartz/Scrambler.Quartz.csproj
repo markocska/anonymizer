@@ -16,6 +16,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Scrambler.MySql\Scrambler.MySql.csproj" />
     <ProjectReference Include="..\Scrambler.SqlServer\Scrambler.SqlServer.csproj" />
   </ItemGroup>
 

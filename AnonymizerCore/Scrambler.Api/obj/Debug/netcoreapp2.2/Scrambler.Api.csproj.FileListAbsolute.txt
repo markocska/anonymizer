@@ -22,3 +22,5 @@ E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\Scrambler.Api\obj\De
 E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\Scrambler.Api\obj\Debug\netcoreapp2.2\Scrambler.Api.csproj.CopyComplete
 E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\Scrambler.Api\obj\Debug\netcoreapp2.2\Scrambler.Api.dll
 E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\Scrambler.Api\obj\Debug\netcoreapp2.2\Scrambler.Api.pdb
+E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\Scrambler.Api\bin\Debug\netcoreapp2.2\Scrambler.MySql.dll
+E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\Scrambler.Api\bin\Debug\netcoreapp2.2\Scrambler.MySql.pdb

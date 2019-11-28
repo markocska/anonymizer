@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Scrambler.MySql.SqlScripts.MySql
+namespace Scrambler.MySql.SqlScripts
 {
     public partial class GetColumnTypes
     {

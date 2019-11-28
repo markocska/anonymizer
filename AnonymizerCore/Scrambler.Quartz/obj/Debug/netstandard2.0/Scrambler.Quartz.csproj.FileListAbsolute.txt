@@ -13,3 +13,5 @@ E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\Scrambler.Quartz\bin
 E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\Scrambler.Quartz\obj\Debug\netstandard2.0\Scrambler.Quartz.csproj.CopyComplete
 E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\Scrambler.Quartz\obj\Debug\netstandard2.0\Scrambler.Quartz.dll
 E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\Scrambler.Quartz\obj\Debug\netstandard2.0\Scrambler.Quartz.pdb
+E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\Scrambler.Quartz\bin\Debug\netstandard2.0\Scrambler.MySql.dll
+E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\Scrambler.Quartz\bin\Debug\netstandard2.0\Scrambler.MySql.pdb
