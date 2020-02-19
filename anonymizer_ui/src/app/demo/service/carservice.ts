@@ -7,21 +7,21 @@ export class CarService {
 
     constructor(private http: HttpClient) {}
 
-    getCarsSmall() {
+    getCarsSmall() : Promise<Car[]> {
         return this.http.get<any>('assets/demo/data/cars-small.json')
                     .toPromise()
                     .then(res => res.data as Car[])
                     .then(data => data);
     }
 
-    getCarsMedium() {
+    getCarsMedium() : Promise<Car[]> {
         return this.http.get<any>('assets/demo/data/cars-medium.json')
                     .toPromise()
                     .then(res => res.data as Car[])
                     .then(data => data);
     }
 
-    getCarsLarge() {
+    getCarsLarge() : Promise<Car[]> {
         return this.http.get<any>('assets/demo/data/cars-large.json')
                     .toPromise()
                     .then(res => res.data as Car[])
