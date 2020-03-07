@@ -10,3 +10,14 @@ E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\Scrambler.MySql\obj\
 E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\Scrambler.MySql\obj\Debug\netstandard2.0\Scrambler.MySql.csproj.CopyComplete
 E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\Scrambler.MySql\obj\Debug\netstandard2.0\Scrambler.MySql.dll
 E:\GoogleDrive\Documents\szakdoga\anonymizer\AnonymizerCore\Scrambler.MySql\obj\Debug\netstandard2.0\Scrambler.MySql.pdb
+F:\Szakdoga\anonymizer\AnonymizerCore\Scrambler.MySql\bin\Debug\netstandard2.0\Scrambler.MySql.deps.json
+F:\Szakdoga\anonymizer\AnonymizerCore\Scrambler.MySql\bin\Debug\netstandard2.0\Scrambler.MySql.dll
+F:\Szakdoga\anonymizer\AnonymizerCore\Scrambler.MySql\bin\Debug\netstandard2.0\Scrambler.MySql.pdb
+F:\Szakdoga\anonymizer\AnonymizerCore\Scrambler.MySql\bin\Debug\netstandard2.0\Scrambler.Core.dll
+F:\Szakdoga\anonymizer\AnonymizerCore\Scrambler.MySql\bin\Debug\netstandard2.0\Scrambler.Core.pdb
+F:\Szakdoga\anonymizer\AnonymizerCore\Scrambler.MySql\obj\Debug\netstandard2.0\Scrambler.MySql.csprojAssemblyReference.cache
+F:\Szakdoga\anonymizer\AnonymizerCore\Scrambler.MySql\obj\Debug\netstandard2.0\Scrambler.MySql.AssemblyInfoInputs.cache
+F:\Szakdoga\anonymizer\AnonymizerCore\Scrambler.MySql\obj\Debug\netstandard2.0\Scrambler.MySql.AssemblyInfo.cs
+F:\Szakdoga\anonymizer\AnonymizerCore\Scrambler.MySql\obj\Debug\netstandard2.0\Scrambler.MySql.csproj.CopyComplete
+F:\Szakdoga\anonymizer\AnonymizerCore\Scrambler.MySql\obj\Debug\netstandard2.0\Scrambler.MySql.dll
+F:\Szakdoga\anonymizer\AnonymizerCore\Scrambler.MySql\obj\Debug\netstandard2.0\Scrambler.MySql.pdb
