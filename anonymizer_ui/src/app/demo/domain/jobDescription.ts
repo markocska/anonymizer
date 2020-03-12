@@ -1,4 +1,4 @@
-import { TriggerDescription } from './TriggerDescription';
+import { TriggerDescription } from './triggerDescription';
 
 export interface JobDescription {
     jobName: string;

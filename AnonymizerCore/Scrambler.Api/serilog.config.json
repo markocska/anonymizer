@@ -7,7 +7,7 @@
       {
         "Name": "MSSqlServer",
         "Args": {
-          "connectionString": "data source=MARKO-PC\\SQLEXPRESS;initial catalog=Serilog;integrated security=True;",
+          "connectionString": "data source=DESKTOP-UBKC2MM;initial catalog=Serilog;integrated security=True;",
           "schemaName": "EventLogging",
           "tableName": "Logs",
           "autoCreateSqlTable": true,

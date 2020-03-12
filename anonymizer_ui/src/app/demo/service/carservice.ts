@@ -1,13 +1,20 @@
 import {Injectable} from '@angular/core';
 import { HttpClient} from '@angular/common/http';
 import {Car} from '../domain/car';
+import { ConfigService } from './configService';
 
 @Injectable()
 export class CarService {
 
-    constructor(private http: HttpClient) {}
+    constructor(private http: HttpClient, private config: ConfigService) {}
 
     getCarsSmall() : Promise<Car[]> {
+        let host = this.config.getConfig('baseUrl');
+        console.log(host);
+
+        let env = this.config.getEnv('env');
+        console.log(env);
+
         return this.http.get<any>('assets/demo/data/cars-small.json')
                     .toPromise()
                     .then(res => res.data as Car[])
