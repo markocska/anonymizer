@@ -8,8 +8,26 @@
     <ng-template pTemplate="header" let-columns> 
         <tr>
             <th style="background:#03a9f4; color: white; width: 40px;"></th>
-            <th *ngFor="let col of columns" style="background:#03a9f4; color:white" class="header" pResizableColumn>
+            <!-- <th *ngFor="let col of columns" style="background:#03a9f4; color:white" class="header" pResizableColumn>
                 {{col.header}}
+            </th> -->
+            <th style="background:#03a9f4; color:white"  pResizableColumn>
+                Id
+            </th>
+            <th style="background:#03a9f4; color:white"  pResizableColumn>
+                Job Name
+            </th>
+            <th style="background:#03a9f4; color:white"  pResizableColumn>
+                Job Group Name
+            </th>
+            <th style="background:#03a9f4; color:white" pResizableColumn>
+                Request Recovery
+            </th>
+            <th style="background:#03a9f4; color:white" pResizableColumn>
+                Description
+            </th>
+            <th style="background:#03a9f4; color:white"  class="absorbing-column" pResizableColumn>
+                Is Durable
             </th>
         </tr>
         <tr>
@@ -21,23 +39,41 @@
                 <p-dropdown *ngIf="col.field === 'isDurable'" appendTo="body" style="font-size:12px" [options]="isDurableOptions"
                      [(ngModel)]="isDurableSelected" class="dropdown" [style]="{'width':'100%'}" [autoWidth]="false" (onChange)="filter($event.value,col.field,'equals')"></p-dropdown>
                 <p-dropdown *ngIf="col.field === 'requestRecovery'" appendTo="body" style="font-size:12px" [options]="requestRecoveryOptions"
-                [(ngModel)]="requestRecoverySelected" class="dropdown" [style]="{'width':'100%'}" [autoWidth]="false" (onChange)="filter($event.value,col.field,'equals')"></p-dropdown>
+                [(ngModel)]="requestRecoverySelected" class="dropdown absorbing-column" [style]="{'width':'100%'}" [autoWidth]="false" (onChange)="filter($event.value,col.field,'equals')"></p-dropdown>
             </th>
         </tr>
     </ng-template>>   
     <ng-template pTemplate="body" let-rowData let-expanded="expanded" let-columns="columns">
         <tr [pSelectableRow]="rowData">
-            <td style="width: 25px;text-align: center;" class="ui-resizable-column">
+            <td style="width: 25px;text-align: center;">
                 <div style="text-align: center">
                     <a href="#" [pRowToggler]="rowData">
                         <i [ngClass]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"></i>
                     </a>
                 </div>
             </td>
-            <td *ngFor="let col of columns" class="ui-resizable-column request-field">
+            <!-- <td *ngFor="let col of columns" class="ui-resizable-column request-field">
                 <span *ngIf="col.field !== 'triggers'">
                     {{rowData[col.field]}}
                 </span>
+            </td> -->
+            <td >
+                    {{rowData['id']}}
+            </td>
+            <td >
+                    {{rowData['jobName']}}
+            </td>
+            <td >
+                    {{rowData['jobGroup']}}
+            </td>
+            <td >
+                    {{rowData['requestRecovery']}}
+            </td>
+            <td>
+                    {{rowData['description']}}
+            </td>
+            <td>
+                    {{rowData['isDurable']}}
             </td>
         </tr>
     </ng-template>

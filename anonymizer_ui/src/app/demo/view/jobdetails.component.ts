@@ -10,6 +10,7 @@ import { BooleanSelectItems } from '../utilities/booleanSelectItems';
 
 @Component({
     selector: 'jobdetails',
+    styleUrls:['./jobdetails.component.css'],
     templateUrl: './jobdetails.component.html',
     animations: [
         trigger('rowExpansionTrigger', [
