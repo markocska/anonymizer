@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Data;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -21,6 +23,7 @@ using Scrambler.Quartz.ConfigProviders;
 using Scrambler.Quartz.Configuration;
 using Scrambler.Quartz.Interfaces;
 using Serilog;
+using Serilog.Sinks.MSSqlServer;
 
 namespace Scrambler.Api
 {
@@ -52,7 +55,7 @@ namespace Scrambler.Api
 
             services.AddSingleton(x => CreateLoggerConfig());
 
-            services.AddSingleton<ISchedulingService,SchedulingService>();
+            services.AddSingleton<ISchedulingService, SchedulingService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -68,6 +71,8 @@ namespace Scrambler.Api
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 //app.UseHsts();
             }
+
+            AppDomain.CurrentDomain.ProcessExit += (s, e) => Log.CloseAndFlush();
             app.UseCors();
             app.UseHttpsRedirection();
             app.UseMvc();

@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.28307.136
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29905.134
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Scrambler.Core", "ApplicationCore\Scrambler.Core.csproj", "{90EE6926-06EF-4BCD-99E9-BD32986FB01A}"
 EndProject
@@ -13,7 +13,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Scrambler.Quartz", "Scrambl
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Scrambler.Api", "Scrambler.Api\Scrambler.Api.csproj", "{59B5D6EE-BECB-4DB0-9F47-E160F79D5871}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Scrambler.MySql", "Scrambler.MySql\Scrambler.MySql.csproj", "{FE0E811C-86DB-4209-BBA5-20C7DEF7CAEE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Scrambler.MySql", "Scrambler.MySql\Scrambler.MySql.csproj", "{FE0E811C-86DB-4209-BBA5-20C7DEF7CAEE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -22,7 +22,7 @@ namespace Scrambler.Quartz.Jobs
         public async Task Execute(IJobExecutionContext context)
         {
             Log.Information($"Job execution starting: Description: {context.JobDetail.Description}, " +
-                $"Groupname: {context.JobDetail.Key.Group}, Keyname: {context.JobDetail.Key.Name}.");
+                $"Groupname: {context.JobDetail.Key.Group}, Keyname: {context.JobDetail.Key.Name}.", context);
 
             try
             {
@@ -33,11 +33,11 @@ namespace Scrambler.Quartz.Jobs
             catch (Exception ex)
             {
                 Log.Error(ex, "Error while executing job:  Description: {context.JobDetail.Description}, " +
-                $"Groupname: {context.JobDetail.Key.Group}, Keyname: {context.JobDetail.Key.Name}.");
+                $"Groupname: {context.JobDetail.Key.Group}, Keyname: {context.JobDetail.Key.Name}.", context);
             }
 
             Log.Information($"Job execution successfully finished: Description: {context.JobDetail.Description}, " +
-                $"Groupname: {context.JobDetail.Key.Group}, Keyname: {context.JobDetail.Key.Name}.");
+                $"Groupname: {context.JobDetail.Key.Group}, Keyname: {context.JobDetail.Key.Name}.", context);
 
 
 
