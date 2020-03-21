@@ -4,6 +4,7 @@ import { JobDescription } from '../domain/jobDescription';
 import { JobService } from '../service/jobservice';
 import { SelectItem, LazyLoadEvent } from 'primeng/api';
 import { BooleanSelectItems } from '../utilities/booleanSelectItems';
+import { TriggerDescription } from '../domain/triggerDescription';
 
 
 
@@ -29,7 +30,6 @@ import { BooleanSelectItems } from '../utilities/booleanSelectItems';
 export class JobDetailsComponent implements OnInit {
     
     protected jobCols: any[] = [
-        {field:  'id', header:'Id'},
         {field:  'jobName', header:'Job Name'},
         {field:  'jobGroup', header:'Job Group Name'},
         {field:  'requestRecovery', header:'Request Recovery'},
@@ -39,8 +39,13 @@ export class JobDetailsComponent implements OnInit {
     protected jobDescriptions: JobDescription[] = [];
     protected totalNumberOfJobs: number;
 
-    protected triggerCols: any[] = [];
-    protected triggers: any[] = [];
+    protected triggerCols: any[] = [
+        {field:  'triggerName', header:'Trigger Name'},
+        {field:  'triggerGroup', header:'Trigger Group Name'},
+        {field:  'description', header:'Description'},
+        {field:  'calendarName', header:'Calendar Name'}
+    ];
+    protected triggers: TriggerDescription[] = [];
 
     protected isDurableOptions: SelectItem[] = BooleanSelectItems.booleanSelectItems;
     protected isDurableSelected: string;
@@ -72,7 +77,7 @@ export class JobDetailsComponent implements OnInit {
     }
 
     expandRow(event: any) {
-        console.log(this.jobDescriptions);
+        this.triggers = this.jobDescriptions.filter(x => x.id === event.data.id)[0].triggers;
     }
 
     filter(value, field, mode) {

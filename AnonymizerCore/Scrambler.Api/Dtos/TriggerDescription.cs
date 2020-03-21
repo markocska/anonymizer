@@ -7,6 +7,7 @@ namespace Scrambler.Api.Dtos
 {
     public class TriggerDescription
     {
+        public string Id { get; set; }
         public string TriggerGroup { get; set; }
         public string TriggerName { get; set; }
         public string Description { get; set; }

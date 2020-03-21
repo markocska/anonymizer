@@ -12,9 +12,6 @@
                 {{col.header}}
             </th> -->
             <th style="background:#03a9f4; color:white"  pResizableColumn>
-                Id
-            </th>
-            <th style="background:#03a9f4; color:white"  pResizableColumn>
                 Job Name
             </th>
             <th style="background:#03a9f4; color:white"  pResizableColumn>
@@ -58,9 +55,6 @@
                 </span>
             </td> -->
             <td >
-                    {{rowData['id']}}
-            </td>
-            <td >
                     {{rowData['jobName']}}
             </td>
             <td >
@@ -82,7 +76,7 @@
         <tr>
             <td [attr.colspan]="columns.length+1">
                 <div>
-                    <p-table [columns]="triggerCols" [value]="triggers">
+                    <p-table [columns]="triggerCols" [value]="triggers" dataKey="id">
                         <ng-template pTemplate="header" let-columns> 
                             <tr>
                                 <th *ngFor="let col of columns" style="background:#03a9f4; color:white">

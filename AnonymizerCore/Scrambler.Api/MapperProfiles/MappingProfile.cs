@@ -20,6 +20,7 @@ namespace Scrambler.Api.AutoMapper
                 .ForMember(x => x.CalendarName, opt => opt.MapFrom(x => x.CalendarName));
 
             CreateMap<TriggerKeyWithDescription, Scrambler.Api.Dtos.TriggerDescription>(MemberList.None)
+                .ForMember(x => x.Id, opt => opt.MapFrom(x => x.TriggerGroup + x.TriggerName))
                 .ForMember(x => x.TriggerName, opt => opt.MapFrom(x => x.TriggerName))
                 .ForMember(x => x.TriggerGroup, opt => opt.MapFrom(x => x.TriggerGroup))
                 .ForMember(x => x.Description, opt => opt.MapFrom(x => x.Description))
