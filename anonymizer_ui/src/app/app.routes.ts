@@ -14,6 +14,7 @@ import {ChartsDemoComponent} from './demo/view/chartsdemo.component';
 import {FileDemoComponent} from './demo/view/filedemo.component';
 import {UtilsDemoComponent} from './demo/view/utilsdemo.component';
 import {DocumentationComponent} from './demo/view/documentation.component';
+import { JobDetailsComponent } from './demo/view/jobdetails.component';
 
 export const routes: Routes = [
     {path: '', component: DashboardDemoComponent},
@@ -29,7 +30,8 @@ export const routes: Routes = [
     {path: 'charts', component: ChartsDemoComponent},
     {path: 'file', component: FileDemoComponent},
     {path: 'utils', component: UtilsDemoComponent},
-    {path: 'documentation', component: DocumentationComponent}
+    {path: 'documentation', component: DocumentationComponent},
+    {path: 'jobdetails', component: JobDetailsComponent}
 ];
 
 export const AppRoutes: ModuleWithProviders = RouterModule.forRoot(routes, {scrollPositionRestoration: 'enabled'});

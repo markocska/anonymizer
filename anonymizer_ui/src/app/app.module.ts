@@ -96,6 +96,8 @@ import {EventService} from './demo/service/eventservice';
 import {NodeService} from './demo/service/nodeservice';
 import {APP_INITIALIZER} from '@angular/core'
 import { ConfigService } from './demo/service/configService';
+import { JobDetailsComponent } from './demo/view/jobdetails.component';
+import { JobService } from './demo/service/jobservice';
 
 @NgModule({
     imports: [
@@ -189,11 +191,12 @@ import { ConfigService } from './demo/service/configService';
         EmptyDemoComponent,
         FileDemoComponent,
         UtilsDemoComponent,
-        DocumentationComponent
+        DocumentationComponent,
+        JobDetailsComponent
     ],
     providers: [
         {provide: LocationStrategy, useClass: HashLocationStrategy},
-        CarService, CountryService, EventService, NodeService, ConfigService,
+        CarService, CountryService, EventService, NodeService, ConfigService, JobService,
         {provide: APP_INITIALIZER, deps:[ConfigService], useFactory: (config : ConfigService) => () => config.load(), multi: true}
     ],
     bootstrap: [AppComponent]

@@ -1,0 +1,70 @@
+<p-progressBar mode="indeterminate" [style]="{'height': '5px'}" *ngIf="!jobDescriptions"></p-progressBar>
+
+<br/><br/>
+
+<p-table [columns]="jobCols" rowExpandMode="single" [style]="{'margin-top':'20px'}" [value]="jobDescriptions" [lazy]=true [rows]="10" 
+[paginator]="true" [pageLinks]="3" [responsive]="true" (onLazyLoad)="loadJobsLazy($event)" dataKey="id" [resizableColumns]="true" 
+[totalRecords]="totalNumberOfJobs" (onRowExpand)="expandRow($event)">
+    <ng-template pTemplate="header" let-columns> 
+        <tr>
+            <th style="background:#03a9f4; color: white; width: 40px;"></th>
+            <th *ngFor="let col of columns" style="background:#03a9f4; color:white" class="header" pResizableColumn>
+                {{col.header}}
+            </th>
+        </tr>
+        <tr>
+            <th></th>
+            <th *ngFor="let col of columns">
+                <div *ngIf="col.field !== 'isDurable' && col.field !== 'requestRecovery' && col.field !== 'triggers'">
+                    <input pInputText type="text" (input)="filter($event.target.value)">
+                </div>
+                <p-dropdown *ngIf="col.field === 'isDurable'" appendTo="body" style="font-size:12px" [options]="isDurableOptions"
+                     [(ngModel)]="isDurableSelected" class="dropdown" [style]="{'width':'100%'}" [autoWidth]="false" (onChange)="filter($event.value,col.field,'equals')"></p-dropdown>
+                <p-dropdown *ngIf="col.field === 'requestRecovery'" appendTo="body" style="font-size:12px" [options]="requestRecoveryOptions"
+                [(ngModel)]="requestRecoverySelected" class="dropdown" [style]="{'width':'100%'}" [autoWidth]="false" (onChange)="filter($event.value,col.field,'equals')"></p-dropdown>
+            </th>
+        </tr>
+    </ng-template>>   
+    <ng-template pTemplate="body" let-rowData let-expanded="expanded" let-columns="columns">
+        <tr [pSelectableRow]="rowData">
+            <td style="width: 25px;text-align: center;" class="ui-resizable-column">
+                <div style="text-align: center">
+                    <a href="#" [pRowToggler]="rowData">
+                        <i [ngClass]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"></i>
+                    </a>
+                </div>
+            </td>
+            <td *ngFor="let col of columns" class="ui-resizable-column request-field">
+                <span *ngIf="col.field !== 'triggers'">
+                    {{rowData[col.field]}}
+                </span>
+            </td>
+        </tr>
+    </ng-template>
+
+    <ng-template pTemplate="rowexpansion" let-rowData let-columns="columns">
+        <tr>
+            <td [attr.colspan]="columns.length+1">
+                <div>
+                    <p-table [columns]="triggerCols" [value]="triggers">
+                        <ng-template pTemplate="header" let-columns> 
+                            <tr>
+                                <th *ngFor="let col of columns" style="background:#03a9f4; color:white">
+                                    {{col.header}}
+                                </th>
+                            </tr>
+                        </ng-template>
+                        <ng-template pTemplate="body" let-trigger let-columns="columns">
+                            <tr>
+                                <td *ngFor="let col of columns">
+                                    {{trigger[col.field]}}
+                                </td>
+                            </tr>
+                        </ng-template>
+                    </p-table>
+                </div>
+            </td>
+        </tr>
+    </ng-template>
+
+</p-table> 

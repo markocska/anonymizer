@@ -26,6 +26,7 @@ namespace Scrambler.Api.AutoMapper
                 .ForMember(x => x.CalendarName, opt => opt.MapFrom(x => x.CalendarName));
 
             CreateMap<JobKeyWithDescription, Scrambler.Api.Dtos.JobDescription>(MemberList.None)
+                 .ForMember(x => x.Id, opt => opt.MapFrom(x => x.JobGroup + x.JobName))
                  .ForMember(x => x.JobName, opt => opt.MapFrom(x => x.JobName))
                  .ForMember(x => x.JobGroup, opt => opt.MapFrom(x => x.JobGroup))
                  .ForMember(x => x.RequestRecovery, opt => opt.MapFrom(x => x.RequestRecovery))

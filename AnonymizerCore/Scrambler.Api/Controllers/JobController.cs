@@ -26,12 +26,14 @@ namespace Scrambler.Api.Controllers
             _mapper = mapper;
         }
 
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<JobKeyWithDescription>>> Get()
+        [HttpGet("all")]
+        public async Task<ActionResult<IEnumerable<JobKeyWithDescription>>> GetAll()
         {
             var jobKeysWithDescription = await _schedulingService.GetAllJobKeysWithDescription();
 
-            return Ok(_mapper.Map<List<JobKeyWithDescription>, List<JobDescription>>(jobKeysWithDescription));
+            var jobDescriptions = _mapper.Map<List<JobKeyWithDescription>, List<JobDescription>>(jobKeysWithDescription);
+
+            return Ok(new JobDescriptionReportResponse {JobDescriptions = jobDescriptions, TotalNumber = jobDescriptions.Count});
         }
 
         [HttpDelete]
