@@ -17,14 +17,20 @@ namespace Scrambler.Api.AutoMapper
                 .ForMember(x => x.TriggerGroup, opt => opt.MapFrom(x => x.Key.Group))
                 .ForMember(x => x.TriggerName, opt => opt.MapFrom(x => x.Key.Name))
                 .ForMember(x => x.Description, opt => opt.MapFrom(x => x.Description))
-                .ForMember(x => x.CalendarName, opt => opt.MapFrom(x => x.CalendarName));
+                .ForMember(x => x.CalendarName, opt => opt.MapFrom(x => x.CalendarName))
+                .ForMember(x => x.CronExpression, opt =>
+                {
+                    opt.PreCondition((ITrigger src) => src is ICronTrigger);
+                    opt.MapFrom(src => ((ICronTrigger)src).CronExpressionString);
+                });
 
             CreateMap<TriggerKeyWithDescription, Scrambler.Api.Dtos.TriggerDescription>(MemberList.None)
                 .ForMember(x => x.Id, opt => opt.MapFrom(x => x.TriggerGroup + x.TriggerName))
                 .ForMember(x => x.TriggerName, opt => opt.MapFrom(x => x.TriggerName))
                 .ForMember(x => x.TriggerGroup, opt => opt.MapFrom(x => x.TriggerGroup))
                 .ForMember(x => x.Description, opt => opt.MapFrom(x => x.Description))
-                .ForMember(x => x.CalendarName, opt => opt.MapFrom(x => x.CalendarName));
+                .ForMember(x => x.CalendarName, opt => opt.MapFrom(x => x.CalendarName))
+                .ForMember(x => x.CronExpression, opt => opt.MapFrom(x => x.CronExpression));
 
             CreateMap<JobKeyWithDescription, Scrambler.Api.Dtos.JobDescription>(MemberList.None)
                  .ForMember(x => x.Id, opt => opt.MapFrom(x => x.JobGroup + x.JobName))

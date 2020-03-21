@@ -12,5 +12,6 @@ namespace Scrambler.Api.Dtos
         public string TriggerName { get; set; }
         public string Description { get; set; }
         public string CalendarName { get; set; }
+        public string CronExpression { get; set; }
     }
 }

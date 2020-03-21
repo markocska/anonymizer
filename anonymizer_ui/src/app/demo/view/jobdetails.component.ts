@@ -43,7 +43,8 @@ export class JobDetailsComponent implements OnInit {
         {field:  'triggerName', header:'Trigger Name'},
         {field:  'triggerGroup', header:'Trigger Group Name'},
         {field:  'description', header:'Description'},
-        {field:  'calendarName', header:'Calendar Name'}
+        {field:  'calendarName', header:'Calendar Name'},
+        {field:  'cronExpression', header:'Cron Expression'}
     ];
     protected triggers: TriggerDescription[] = [];
 

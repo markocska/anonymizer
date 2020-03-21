@@ -4,4 +4,5 @@ export interface TriggerDescription {
     triggerName: string;
     description: string;
     calendarName: string;
+    cronExpression: string;
 }
