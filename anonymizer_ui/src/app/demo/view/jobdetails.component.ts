@@ -37,6 +37,7 @@ export class JobDetailsComponent implements OnInit {
         {field:  'isDurable', header:'Is Durable'}
     ];
     protected jobDescriptions: JobDescription[] = [];
+    protected jobDescriptionsWithoutFilter: JobDescription[] = [];
     protected totalNumberOfJobs: number;
 
     protected triggerCols: any[] = [
@@ -73,6 +74,7 @@ export class JobDetailsComponent implements OnInit {
         this.jobService.getAllJobDescriptions()
             .then(jobDescriptionsReportResponse => {
                 this.jobDescriptions = jobDescriptionsReportResponse.jobDescriptions; 
+                this.jobDescriptionsWithoutFilter = jobDescriptionsReportResponse.jobDescriptions;
                 this.totalNumberOfJobs = jobDescriptionsReportResponse.totalNumber;
             });
     }
@@ -82,6 +84,7 @@ export class JobDetailsComponent implements OnInit {
         this.jobService.getAllJobDescriptions()
             .then(jobDescriptionsReportResponse => {
                 this.jobDescriptions = jobDescriptionsReportResponse.jobDescriptions;
+                this.jobDescriptionsWithoutFilter = jobDescriptionsReportResponse.jobDescriptions;
                 this.totalNumberOfJobs = jobDescriptionsReportResponse.totalNumber;
             });
         
@@ -95,12 +98,20 @@ export class JobDetailsComponent implements OnInit {
         if (field === 'jobGroup') {
             this.jobGroupFilter = value;
             if (this.filterInProgress === false) {
-                console.log('filter really called');
                 this.filterInProgress = true;
                 setTimeout(() => {
                     this.filterCall(this.jobGroupFilter);
                 }, 1000);
         
+            }
+        }
+        else {
+            if (this.filterInProgress === false) {
+                this.filterInProgress = true;
+                setTimeout(() => {
+                    this.jobDescriptions = this.jobDescriptionsWithoutFilter.filter(element => element[field].toString().includes(value));
+                    this.filterInProgress = false;
+                }, 1000);
             }
         }
         
