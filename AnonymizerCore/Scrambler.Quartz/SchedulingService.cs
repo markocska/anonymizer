@@ -110,6 +110,7 @@ namespace Scrambler.Quartz
         public async Task<bool> DeleteJob(string jobName, string jobGroup)
         {
             var wasJobFoundAndDeleted = await _scheduler.DeleteJob(new JobKey(jobName, jobGroup));
+
             return wasJobFoundAndDeleted;
         }
 
@@ -150,6 +151,47 @@ namespace Scrambler.Quartz
             await _scheduler.ScheduleJob(associatedJobCopy, associatedTriggerCopyModified);
 
             return new SchedulingResult { IsSuccessful = true };
+        }
+
+        public async Task<SchedulingResult> AddJobSchedule(string jobGroup, string jobName, string cronExpression, string triggerDescription)
+        {
+            if (!CronExpression.IsValidExpression(cronExpression))
+            {
+                return new SchedulingResult { IsSuccessful = false, ErrorMessage = "The cron expression is invalid." };
+            }
+
+            var job = await _scheduler.GetJobDetail(new JobKey(jobName, jobGroup));
+
+            var trigger = (ICronTrigger)TriggerBuilder.Create()
+                .ForJob(job)
+                .WithDescription(triggerDescription)
+                .WithCronSchedule(cronExpression)
+                .Build();
+
+            try
+            {
+                await _scheduler.ScheduleJob(trigger);
+                //Console.WriteLine($"Trigger after: name: {trigger.Key.Name} group: {trigger.Key.Group}");
+            }
+            catch (ObjectAlreadyExistsException ex)
+            {
+                return new SchedulingResult
+                {
+                    IsSuccessful = false,
+                    ErrorMessage = ex.Message
+                };
+            }
+            catch (JobPersistenceException ex)
+            {
+                return new SchedulingResult
+                {
+                    IsSuccessful = false,
+                    ErrorMessage = ex.Message
+                };
+            }
+
+            return new SchedulingResult { IsSuccessful = true, JobKey = job.Key, TriggerKey = trigger.Key };
+
         }
 
         public async Task<SchedulingResult> ScheduleSqlScramblingJob(string jobName, string jobGroup, string triggerDescription,
