@@ -2,7 +2,7 @@
 
 <br/><br/>
 
-<p-table [columns]="jobCols" rowExpandMode="single" [style]="{'margin-top':'20px'}" [value]="jobDescriptions" [lazy]=true [rows]="10" 
+<p-table [columns]="jobCols" rowExpandMode="single" [style]="{'margin-top':'20px'}" [value]="jobDescriptions" [lazy]=false [rows]="10" 
 [paginator]="true" [pageLinks]="3" [responsive]="true" (onLazyLoad)="loadJobsLazy($event)" dataKey="id" [resizableColumns]="true" 
 [totalRecords]="totalNumberOfJobs" (onRowExpand)="expandRow($event)">
     <ng-template pTemplate="header" let-columns> 
@@ -31,7 +31,7 @@
             <th></th>
             <th *ngFor="let col of columns">
                 <div *ngIf="col.field !== 'isDurable' && col.field !== 'requestRecovery' && col.field !== 'triggers'">
-                    <input pInputText type="text" (input)="filter($event.target.value)">
+                    <input pInputText type="text" (keyup)="filter($event.target.value, col.field)">
                 </div>
                 <p-dropdown *ngIf="col.field === 'isDurable'" appendTo="body" style="font-size:12px" [options]="isDurableOptions"
                      [(ngModel)]="isDurableSelected" class="dropdown" [style]="{'width':'100%'}" [autoWidth]="false" (onChange)="filter($event.value,col.field,'equals')"></p-dropdown>

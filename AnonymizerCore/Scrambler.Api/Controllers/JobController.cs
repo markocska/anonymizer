@@ -33,7 +33,20 @@ namespace Scrambler.Api.Controllers
 
             var jobDescriptions = _mapper.Map<List<JobKeyWithDescription>, List<JobDescription>>(jobKeysWithDescription);
 
-            return Ok(new JobDescriptionReportResponse {JobDescriptions = jobDescriptions, TotalNumber = jobDescriptions.Count});
+            return Ok(new JobDescriptionReportResponse { JobDescriptions = jobDescriptions, TotalNumber = jobDescriptions.Count });
+        }
+
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<JobKeyWithDescription>>> Get([FromQuery] string groupName)
+        {
+
+            var jobKeysWithDescription = string.IsNullOrEmpty(groupName) ?
+                await _schedulingService.GetAllJobKeysWithDescription() :
+                await _schedulingService.GetJobKeysWithDescription(groupName);
+
+            var jobDescriptions = _mapper.Map<List<JobKeyWithDescription>, List<JobDescription>>(jobKeysWithDescription);
+
+            return Ok(new JobDescriptionReportResponse { JobDescriptions = jobDescriptions, TotalNumber = jobDescriptions.Count });
         }
 
         [HttpDelete]

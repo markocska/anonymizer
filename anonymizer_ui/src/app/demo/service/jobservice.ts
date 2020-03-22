@@ -10,8 +10,15 @@ export class JobService {
 
     constructor(private httpClient : HttpClient, private configService : ConfigService) {}
 
-    getAllJobDescriptions() : Promise<JobDescriptionReportResponse> {
+    public getAllJobDescriptions() : Promise<JobDescriptionReportResponse> {
         return this.httpClient.get<JobDescriptionReportResponse>(this.configService.getConfig('baseUrl') + '/job/all')
+            .toPromise()
+            .then(data => data as JobDescriptionReportResponse)
+            .then(data => data);
+    }
+
+    public getJobDescriptionsWithFilter(groupFilter: string) : Promise<JobDescriptionReportResponse> {
+        return this.httpClient.get<JobDescriptionReportResponse>(this.configService.getConfig('baseUrl') + '/job?groupName=' + groupFilter)
             .toPromise()
             .then(data => data as JobDescriptionReportResponse)
             .then(data => data);

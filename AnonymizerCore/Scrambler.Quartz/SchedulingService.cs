@@ -81,6 +81,32 @@ namespace Scrambler.Quartz
             return jobKeysWithDescription;
         }
 
+        public async Task<List<JobKeyWithDescription>> GetJobKeysWithDescription(string groupName)
+        {
+            var jobKeys = await _scheduler.GetJobKeys(GroupMatcher<JobKey>.GroupContains(groupName));
+
+            var jobKeysWithDescription = new List<JobKeyWithDescription>();
+
+            foreach (var jobKey in jobKeys)
+            {
+                var jobDetail = await _scheduler.GetJobDetail(jobKey);
+                var triggers = await _scheduler.GetTriggersOfJob(jobKey);
+
+                jobKeysWithDescription.Add(
+                    new JobKeyWithDescription
+                    {
+                        JobName = jobKey.Name,
+                        JobGroup = jobKey.Group,
+                        Description = jobDetail.Description,
+                        RequestRecovery = jobDetail.RequestsRecovery,
+                        IsDurable = jobDetail.Durable,
+                        Triggers = _mapper.Map<List<ITrigger>, List<TriggerKeyWithDescription>>(triggers.ToList())
+                    });
+            }
+
+            return jobKeysWithDescription;
+        }
+
         public async Task<bool> DeleteJob(string jobName, string jobGroup)
         {
             var wasJobFoundAndDeleted = await _scheduler.DeleteJob(new JobKey(jobName, jobGroup));

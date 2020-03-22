@@ -54,6 +54,17 @@ export class JobDetailsComponent implements OnInit {
     protected requestRecoveryOptions: SelectItem[] = BooleanSelectItems.booleanSelectItems;
     protected requestRecoverySelected: string;
 
+    protected filterCall : (jobFilter: string ) => void = (jobFilter) => {
+         this.jobService.getJobDescriptionsWithFilter(this.jobGroupFilter)
+            .then(jobDescriptionsReportResponse => {
+                this.jobDescriptions = jobDescriptionsReportResponse.jobDescriptions;
+                this.totalNumberOfJobs = jobDescriptionsReportResponse.totalNumber;
+            });
+        this.filterInProgress = false;
+    }
+    protected filterInProgress : boolean = false;
+    protected jobGroupFilter : string;
+
     constructor(private jobService : JobService) {
 
     }
@@ -64,7 +75,6 @@ export class JobDetailsComponent implements OnInit {
                 this.jobDescriptions = jobDescriptionsReportResponse.jobDescriptions; 
                 this.totalNumberOfJobs = jobDescriptionsReportResponse.totalNumber;
             });
-            
     }
 
     loadJobsLazy(event: LazyLoadEvent) {
@@ -82,7 +92,18 @@ export class JobDetailsComponent implements OnInit {
     }
 
     filter(value, field, mode) {
-
+        if (field === 'jobGroup') {
+            this.jobGroupFilter = value;
+            if (this.filterInProgress === false) {
+                console.log('filter really called');
+                this.filterInProgress = true;
+                setTimeout(() => {
+                    this.filterCall(this.jobGroupFilter);
+                }, 1000);
+        
+            }
+        }
+        
         // this.dpcReportRequest[field] = value;
         // if (this.selectedStatus != null) {
         //     this.dpcReportRequest['status'] = this.selectedStatus.code;
