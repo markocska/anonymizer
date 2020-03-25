@@ -8,6 +8,7 @@ import { TriggerDescription } from '../domain/triggerDescription';
 import { HttpErrorResponse } from '@angular/common/http';
 import {MessagesModule} from 'primeng/messages';
 import {MessageModule} from 'primeng/message';
+import { TriggerService } from '../service/triggerService';
 
 
 
@@ -31,7 +32,7 @@ import {MessageModule} from 'primeng/message';
 })
 export class JobDetailsComponent implements OnInit {
 
-    constructor(private jobService : JobService, private confirmationService: ConfirmationService) {
+    constructor(private jobService : JobService, private triggerService : TriggerService, private confirmationService: ConfirmationService) {
 
     }
 
@@ -151,8 +152,30 @@ export class JobDetailsComponent implements OnInit {
         });
     }
 
+    deleteTrigger(event: any, rowData: TriggerDescription, jobData: JobDescription) {
+        this.confirmationService.confirm({
+            message: `Are you sure you wish to delete the following trigger? <br/>  <strong> Group key: </strong> ${rowData.triggerGroup} <br/> 
+                <strong> Trigger key: </strong> ${rowData.triggerName}.`,
+            accept: () => {
+                this.triggerService.deleteTrigger(rowData.triggerGroup, rowData.triggerName)
+                    .then(() => {
+                        this.messages.push({severity:'success', summary:'Success', detail:'Trigger deleted successfully'});
+                        this.removeDeletedTriggerFromList(rowData.triggerGroup, rowData.triggerName, jobData);
+                    })
+                    .catch((error: HttpErrorResponse) => this.messages.push({severity:'error', summary:'Error', 
+                        detail:`Error while deleting the trigger. ${typeof error.error === 'string' ? 'Message: ' + error.error : ''}`}))
+            }
+        });
+    }
+
     removeDeletedJobFromList(jobGroup: string, jobKey: string) {
         this.jobDescriptionsWithoutFilter = this.jobDescriptionsWithoutFilter.filter(job => !(job.jobGroup === jobGroup && job.jobName === jobKey));
         this.jobDescriptions = this.jobDescriptions.filter(job => !(job.jobGroup === jobGroup && job.jobName === jobKey));
+    }
+
+    removeDeletedTriggerFromList(triggerGroup: string, triggerKey: string, jobData: JobDescription) {
+        this.triggers = this.triggers.filter(trigger => !(trigger.triggerGroup === triggerGroup && trigger.triggerName === triggerKey));
+        var jobToRemoveTriggerOf = this.jobDescriptionsWithoutFilter.filter(job => job.jobGroup === jobData.jobGroup && job.jobName === jobData.jobName)[0];
+        jobToRemoveTriggerOf.triggers = jobToRemoveTriggerOf.triggers.filter(trigger => !(trigger.triggerGroup === triggerGroup && trigger.triggerName === triggerKey));
     }
 }

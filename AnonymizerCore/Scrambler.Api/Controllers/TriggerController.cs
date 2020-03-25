@@ -21,7 +21,7 @@ namespace Scrambler.Api.Controllers
         }
 
         [HttpDelete]
-        public async Task<IActionResult> Delete([FromQuery] string triggerName, [FromQuery] string triggerGroup)
+        public async Task<IActionResult> Delete([FromQuery] string triggerGroup, [FromQuery] string triggerName)
         {
             var wasFoundAndDeleted = await _schedulingService.DeleteTrigger(triggerName, triggerGroup);
 
