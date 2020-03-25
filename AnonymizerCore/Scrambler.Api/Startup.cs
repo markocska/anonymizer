@@ -44,6 +44,7 @@ namespace Scrambler.Api
                 options.AddDefaultPolicy(builder =>
                 {
                     builder.AllowAnyOrigin();
+                    builder.AllowAnyMethod();
                 });
             });
 

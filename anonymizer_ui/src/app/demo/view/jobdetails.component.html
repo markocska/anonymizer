@@ -2,6 +2,9 @@
 
 <br/><br/>
 
+<p-messages [(value)]="messages"></p-messages>
+<p-confirmDialog header="Confirmation" icon="pi pi-exclamation-triangle"></p-confirmDialog>
+
 <p-table [columns]="jobCols" rowExpandMode="single" [style]="{'margin-top':'20px'}" [value]="jobDescriptions" [lazy]=false [rows]="10" 
 [paginator]="true" [pageLinks]="3" [responsive]="true" (onLazyLoad)="loadJobsLazy($event)" dataKey="id" [resizableColumns]="true" 
 [totalRecords]="totalNumberOfJobs" (onRowExpand)="expandRow($event)">
@@ -23,14 +26,17 @@
             <th style="background:#03a9f4; color:white" pResizableColumn>
                 Description
             </th>
-            <th style="background:#03a9f4; color:white"  class="absorbing-column" pResizableColumn>
+            <th style="background:#03a9f4; color:white"  pResizableColumn>
                 Is Durable
+            </th>
+            <th style="background:#03a9f4; color:white"  class="absorbing-column" pResizableColumn>
+                Operation
             </th>
         </tr>
         <tr>
             <th></th>
             <th *ngFor="let col of columns">
-                <div *ngIf="col.field !== 'isDurable' && col.field !== 'requestRecovery' && col.field !== 'triggers'">
+                <div *ngIf="col.field !== 'isDurable' && col.field !== 'requestRecovery' && col.field !== 'triggers' && col.field !== 'operation'">
                     <input pInputText type="text" (keyup)="filter($event.target.value, col.field)">
                 </div>
                 <p-dropdown *ngIf="col.field === 'isDurable'" appendTo="body" style="font-size:12px" [options]="isDurableOptions"
@@ -68,6 +74,12 @@
             </td>
             <td>
                     {{rowData['isDurable']}}
+            </td>
+            <td style="text-align:center">
+                <p >
+                    <p-button icon="pi pi-times" styleClass="ui-button-danger ui-corner-all"
+                    (click)="deleteJob($event, rowData)"></p-button>
+                </p>
             </td>
         </tr>
     </ng-template>

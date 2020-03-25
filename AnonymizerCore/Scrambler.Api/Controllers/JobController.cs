@@ -50,9 +50,9 @@ namespace Scrambler.Api.Controllers
         }
 
         [HttpDelete]
-        public async Task<IActionResult> Delete([FromQuery] string jobGroup, [FromQuery] string jobName)
-        {
-            var wasJobFoundAndDeleted = await _schedulingService.DeleteJob(jobName, jobGroup);
+        public async Task<IActionResult> Delete([FromQuery] string groupName, [FromQuery] string jobName)
+        { 
+            var wasJobFoundAndDeleted = await _schedulingService.DeleteJob(jobName, groupName);
 
             if (!wasJobFoundAndDeleted)
             {

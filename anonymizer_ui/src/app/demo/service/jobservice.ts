@@ -23,5 +23,11 @@ export class JobService {
             .then(data => data as JobDescriptionReportResponse)
             .then(data => data);
     }
+
+    public deleteJob(groupKey: string, jobKey: string) : Promise<any> {
+        return this.httpClient.delete(this.configService.getConfig('baseUrl') + '/job?groupName=' + groupKey + '&jobName=' + jobKey)
+            .toPromise();
+
+    }
  
 }

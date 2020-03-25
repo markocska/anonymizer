@@ -98,6 +98,7 @@ import {APP_INITIALIZER} from '@angular/core'
 import { ConfigService } from './demo/service/configService';
 import { JobDetailsComponent } from './demo/view/jobdetails.component';
 import { JobService } from './demo/service/jobservice';
+import { ConfirmationService } from 'primeng/api';
 
 @NgModule({
     imports: [
@@ -196,7 +197,7 @@ import { JobService } from './demo/service/jobservice';
     ],
     providers: [
         {provide: LocationStrategy, useClass: HashLocationStrategy},
-        CarService, CountryService, EventService, NodeService, ConfigService, JobService,
+        CarService, CountryService, EventService, NodeService, ConfigService, JobService, ConfirmationService,
         {provide: APP_INITIALIZER, deps:[ConfigService], useFactory: (config : ConfigService) => () => config.load(), multi: true}
     ],
     bootstrap: [AppComponent]

@@ -2,10 +2,12 @@ import { Component, OnInit } from '@angular/core';
 import {trigger, state, style, transition, animate} from '@angular/animations'
 import { JobDescription } from '../domain/jobDescription';
 import { JobService } from '../service/jobservice';
-import { SelectItem, LazyLoadEvent } from 'primeng/api';
+import { SelectItem, LazyLoadEvent, ConfirmationService, Message } from 'primeng/api';
 import { BooleanSelectItems } from '../utilities/booleanSelectItems';
 import { TriggerDescription } from '../domain/triggerDescription';
-
+import { HttpErrorResponse } from '@angular/common/http';
+import {MessagesModule} from 'primeng/messages';
+import {MessageModule} from 'primeng/message';
 
 
 
@@ -28,13 +30,20 @@ import { TriggerDescription } from '../domain/triggerDescription';
     ]
 })
 export class JobDetailsComponent implements OnInit {
-    
+
+    constructor(private jobService : JobService, private confirmationService: ConfirmationService) {
+
+    }
+
+    protected messages: any[] = [];
+
     protected jobCols: any[] = [
         {field:  'jobName', header:'Job Name'},
         {field:  'jobGroup', header:'Job Group Name'},
         {field:  'requestRecovery', header:'Request Recovery'},
         {field:  'description', header:'Description'},
-        {field:  'isDurable', header:'Is Durable'}
+        {field:  'isDurable', header:'Is Durable'},
+        {field:  'operation', header:'Operation'}
     ];
     protected jobDescriptions: JobDescription[] = [];
     protected jobDescriptionsWithoutFilter: JobDescription[] = [];
@@ -66,9 +75,6 @@ export class JobDetailsComponent implements OnInit {
     protected filterInProgress : boolean = false;
     protected jobGroupFilter : string;
 
-    constructor(private jobService : JobService) {
-
-    }
 
     ngOnInit() {
         this.jobService.getAllJobDescriptions()
@@ -124,5 +130,28 @@ export class JobDetailsComponent implements OnInit {
         // }
 
         // this.reportsService.getRequests(this.dpcReportRequest);
+    }
+
+   
+
+    deleteJob(event: any, rowData: JobDescription) {
+        this.confirmationService.confirm({
+            message: `Are you sure you wish to delete the following job? <br/>  <strong> Group key: </strong> ${rowData.jobGroup} <br/> 
+                <strong> Job key: </strong> ${rowData.jobName}.`,
+            accept: () => {
+                this.jobService.deleteJob(rowData.jobGroup, rowData.jobName)
+                    .then(() => {
+                        this.messages.push({severity:'success', summary:'Success', detail:'Job deleted successfully'});
+                        this.removeDeletedJobFromList(rowData.jobGroup, rowData.jobName);
+                    })
+                    .catch((error: HttpErrorResponse) => this.messages.push({severity:'error', summary:'Error', 
+                        detail:`Error while deleting the job. ${typeof error.error === 'string' ? 'Message: ' + error.error : ''}`}))
+            }
+        });
+    }
+
+    removeDeletedJobFromList(jobGroup: string, jobKey: string) {
+        this.jobDescriptionsWithoutFilter = this.jobDescriptionsWithoutFilter.filter(job => !(job.jobGroup === jobGroup && job.jobName === jobKey));
+        this.jobDescriptions = this.jobDescriptions.filter(job => !(job.jobGroup === jobGroup && job.jobName === jobKey));
     }
 }
