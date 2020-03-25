@@ -98,8 +98,26 @@
                         </ng-template>
                         <ng-template pTemplate="body" let-trigger let-columns="columns">
                             <tr>
-                                <td *ngFor="let col of columns">
-                                    {{trigger[col.field]}}
+                                <td>
+                                    {{trigger['triggerName']}}
+                                </td>
+                                <td>
+                                    {{trigger['triggerGroup']}}
+                                </td>
+                                <td>
+                                    {{trigger['description']}}
+                                </td>
+                                <td>
+                                    {{trigger['calendarName']}}
+                                </td>
+                                <td>
+                                    {{trigger['cronExpression']}}
+                                </td>
+                                <td style="text-align:center">
+                                    <p >
+                                        <p-button icon="pi pi-times" styleClass="ui-button-danger ui-button-rounded"
+                                        (click)="deleteJob($event, rowData)"></p-button>
+                                    </p>
                                 </td>
                             </tr>
                         </ng-template>
