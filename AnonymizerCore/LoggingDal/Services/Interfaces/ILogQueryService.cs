@@ -2,11 +2,12 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace LoggingDal.Services.Interfaces
 {
     public interface ILogQueryService
     {
-        List<Logs> GetLogs(string severity, string jobKey, string groupKey, DateTimeOffset fromDate, DateTimeOffset toDate);
+        Task<List<Logs>> GetLogs(string severity, string jobKey, string groupKey, string description, DateTimeOffset fromDate, DateTimeOffset toDate);
     }
 }
