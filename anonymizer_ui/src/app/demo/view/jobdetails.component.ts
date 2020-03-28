@@ -9,6 +9,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import {MessagesModule} from 'primeng/messages';
 import {MessageModule} from 'primeng/message';
 import { TriggerService } from '../service/triggerService';
+import { CreateTrigger } from '../domain/createTrigger';
 
 
 
@@ -76,7 +77,11 @@ export class JobDetailsComponent implements OnInit {
     }
     protected filterInProgress : boolean = false;
     protected jobGroupFilter : string;
+    
 
+    protected displayCreateTriggerDialog : boolean = false;
+    protected triggerToCreate : CreateTrigger = {jobName :"", jobGroup: "", triggerDescription: "", cronExpression: ""};
+    protected expandedJob : JobDescription;
 
     ngOnInit() {
         this.jobService.getAllJobDescriptions()
@@ -87,7 +92,7 @@ export class JobDetailsComponent implements OnInit {
             });
     }
 
-    loadJobsLazy(event: LazyLoadEvent) {
+    protected loadJobsLazy(event: LazyLoadEvent) : void {
 
         this.jobService.getAllJobDescriptions()
             .then(jobDescriptionsReportResponse => {
@@ -98,11 +103,12 @@ export class JobDetailsComponent implements OnInit {
         
     }
 
-    expandRow(event: any) {
-        this.triggers = this.jobDescriptions.filter(x => x.id === event.data.id)[0].triggers;
+    protected expandRow(event: any) : void {
+        this.expandedJob = this.jobDescriptions.filter(x => x.id === event.data.id)[0];
+        this.triggers = this.expandedJob.triggers;
     }
 
-    filter(value, field, mode) {
+    protected filter(value, field, mode) : void {
         if (field === 'jobGroup') {
             this.jobGroupFilter = value;
             if (this.filterInProgress === false) {
@@ -136,7 +142,7 @@ export class JobDetailsComponent implements OnInit {
 
    
 
-    deleteJob(event: any, rowData: JobDescription) {
+    protected deleteJob(event: any, rowData: JobDescription) : void {
         this.confirmationService.confirm({
             message: `Are you sure you wish to delete the following job? <br/>  <strong> Group key: </strong> ${rowData.jobGroup} <br/> 
                 <strong> Job key: </strong> ${rowData.jobName}.`,
@@ -152,7 +158,7 @@ export class JobDetailsComponent implements OnInit {
         });
     }
 
-    deleteTrigger(event: any, rowData: TriggerDescription, jobData: JobDescription) {
+    protected deleteTrigger(event: any, rowData: TriggerDescription, jobData: JobDescription) : void {
         this.confirmationService.confirm({
             message: `Are you sure you wish to delete the following trigger? <br/>  <strong> Group key: </strong> ${rowData.triggerGroup} <br/> 
                 <strong> Trigger key: </strong> ${rowData.triggerName}.`,
@@ -168,14 +174,24 @@ export class JobDetailsComponent implements OnInit {
         });
     }
 
-    removeDeletedJobFromList(jobGroup: string, jobKey: string) {
+    protected removeDeletedJobFromList(jobGroup: string, jobKey: string) : void {
         this.jobDescriptionsWithoutFilter = this.jobDescriptionsWithoutFilter.filter(job => !(job.jobGroup === jobGroup && job.jobName === jobKey));
         this.jobDescriptions = this.jobDescriptions.filter(job => !(job.jobGroup === jobGroup && job.jobName === jobKey));
     }
 
-    removeDeletedTriggerFromList(triggerGroup: string, triggerKey: string, jobData: JobDescription) {
+    protected removeDeletedTriggerFromList(triggerGroup: string, triggerKey: string, jobData: JobDescription) : void {
         this.triggers = this.triggers.filter(trigger => !(trigger.triggerGroup === triggerGroup && trigger.triggerName === triggerKey));
         var jobToRemoveTriggerOf = this.jobDescriptionsWithoutFilter.filter(job => job.jobGroup === jobData.jobGroup && job.jobName === jobData.jobName)[0];
         jobToRemoveTriggerOf.triggers = jobToRemoveTriggerOf.triggers.filter(trigger => !(trigger.triggerGroup === triggerGroup && trigger.triggerName === triggerKey));
+    }
+
+    protected showDialogToAddTrigger() : void {
+        this.triggerToCreate.jobGroup = this.expandedJob.jobGroup;
+        this.triggerToCreate.jobName = this.expandedJob.jobName;
+        this.displayCreateTriggerDialog = true;
+    }
+
+    protected saveTrigger() : void {
+
     }
 }

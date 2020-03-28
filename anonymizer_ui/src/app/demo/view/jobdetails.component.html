@@ -121,10 +121,56 @@
                                 </td>
                             </tr>
                         </ng-template>
-                    </p-table>
+                        <ng-template pTemplate="summary" let-rowData>
+                            <div style="text-align:left">
+                                <button type="button" pButton icon="pi pi-plus" (click)="showDialogToAddTrigger(rowData)" label="Add"></button>
+                            </div>
+                        </ng-template> 
+                        </p-table>
                 </div>
             </td>
         </tr>
     </ng-template>
-
 </p-table> 
+
+<p-dialog header="Create Trigger" [(visible)]="displayCreateTriggerDialog" [focusOnShow]="false" [responsive]="true" showEffect="fade" [modal]="true"  [style]="{width: '300px'}">
+    <div class="ui-g ui-fluid" *ngIf="triggerToCreate">
+        <div class="ui-g-12">
+            <div class="ui-g-4">
+                <label for="vin"><strong>Job Group</strong></label>
+            </div>
+            <div class="ui-g-8">
+                {{triggerToCreate.jobGroup}}
+            </div>
+        </div>
+        <div class="ui-g-12">
+            <div class="ui-g-4">
+                <label for="year"><strong>Job Name</strong></label>
+            </div>
+            <div class="ui-g-8">
+                {{triggerToCreate.jobName}}
+            </div>
+        </div>
+        <div class="ui-g-12">
+            <div class="ui-g-4">
+                <label for="brand"><strong>Trigger Description</strong></label>
+            </div>
+            <div class="ui-g-8">
+                <input pInputText id="brand" [(ngModel)]="triggerToCreate.triggerDescription" />
+            </div>
+        </div>
+        <div class="ui-g-12">
+            <div class="ui-g-4">
+                <label for="color"><strong>Cron Expression</strong></label>
+            </div>
+            <div class="ui-g-8">
+                <input pInputText id="color" [(ngModel)]="triggerToCreate.cronExpression" />
+            </div>
+        </div>
+    </div>
+    <p-footer>
+        <div class="ui-dialog-buttonpane ui-helper-clearfix">
+            <button type="button" pButton icon="pi pi-check" (click)="saveTrigger()" label="Save"></button>
+        </div>
+    </p-footer>
+</p-dialog>
