@@ -10,6 +10,7 @@ import {MessagesModule} from 'primeng/messages';
 import {MessageModule} from 'primeng/message';
 import { TriggerService } from '../service/triggerService';
 import { CreateTrigger } from '../domain/createTrigger';
+import { TriggerSuccessfullyCreated } from '../domain/triggerSuccessfullyCrested';
 
 
 
@@ -192,6 +193,28 @@ export class JobDetailsComponent implements OnInit {
     }
 
     protected saveTrigger() : void {
+        this.triggerService.createTrigger(this.triggerToCreate)
+            .then((successResponse : TriggerSuccessfullyCreated) => {
+                this.messages.push({severity: 'success', summary:'Success', detail: 'Trigger created successfully'});
+                this.addCreatedTriggerToList(successResponse);
+            })
+            .catch((error: HttpErrorResponse) => this.messages.push({severity:'error', summary:'Error', 
+                detail:`Error while creating the trigger. ${typeof error.error === 'string' ? 'Message ' + error.error : '' }`}))
+    }
 
+    protected addCreatedTriggerToList(createdTrigger: TriggerSuccessfullyCreated) : void {
+        let newTrigger = {id: createdTrigger.id, triggerGroup : createdTrigger.triggerGroup, triggerName: createdTrigger.triggerName,
+            description: createdTrigger.triggerDescription, cronExpression: createdTrigger.cronExpression, calendarName: createdTrigger.calendar};
+
+        this.triggers.push(newTrigger);
+
+        this.jobDescriptionsWithoutFilter.filter(job => job.jobGroup === createdTrigger.jobGroup && job.jobName === createdTrigger.jobName)[0]
+            .triggers.push(newTrigger);
+
+        this.cancelCreateTriggerDialog();
+    }
+
+    protected cancelCreateTriggerDialog() : void {
+        this.displayCreateTriggerDialog = false;
     }
 }

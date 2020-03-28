@@ -190,7 +190,7 @@ namespace Scrambler.Quartz
                 };
             }
 
-            return new SchedulingResult { IsSuccessful = true, JobKey = job.Key, TriggerKey = trigger.Key };
+            return new SchedulingResult { IsSuccessful = true, JobKey = job.Key, TriggerKey = trigger.Key, TriggerDescription = trigger.Description,CronExpression = trigger.CronExpressionString, Calendar = trigger.CalendarName };
 
         }
 

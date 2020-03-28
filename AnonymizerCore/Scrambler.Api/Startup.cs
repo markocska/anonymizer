@@ -45,6 +45,7 @@ namespace Scrambler.Api
                 {
                     builder.AllowAnyOrigin();
                     builder.AllowAnyMethod();
+                    builder.AllowAnyHeader();
                 });
             });
 

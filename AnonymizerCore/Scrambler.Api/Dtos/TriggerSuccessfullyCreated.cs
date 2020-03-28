@@ -10,6 +10,9 @@ namespace Scrambler.Api.Dtos
     {
         [Required]
         [StringLength(200, MinimumLength = 1, ErrorMessage = "{0} must be between {2} and {1}")]
+        public string Id { get; set; }
+        [Required]
+        [StringLength(200, MinimumLength = 1, ErrorMessage = "{0} must be between {2} and {1}")]
         public string JobName { get; set; }
         [Required]
         [StringLength(200, MinimumLength = 1, ErrorMessage = "{0} must be between {2} and {1}")]
@@ -20,5 +23,10 @@ namespace Scrambler.Api.Dtos
         [Required]
         [StringLength(200, MinimumLength = 1, ErrorMessage = "{0} must be between {2} and {1}")]
         public string TriggerGroup { get; set; }
+        public string TriggerDescription { get; set; }
+        [Required]
+        [StringLength(200, MinimumLength = 1, ErrorMessage = "{0} must be between {2} and {1}")]
+        public string CronExpression { get; set; }
+        public string Calendar { get; set; }
     }
 }

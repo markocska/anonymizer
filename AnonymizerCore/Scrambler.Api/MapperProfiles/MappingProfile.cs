@@ -40,6 +40,16 @@ namespace Scrambler.Api.AutoMapper
                  .ForMember(x => x.Description, opt => opt.MapFrom(x => x.Description))
                  .ForMember(x => x.IsDurable, opt => opt.MapFrom(x => x.IsDurable))
                  .ForMember(x => x.Triggers, opt => opt.MapFrom(x => x.Triggers));
+
+            CreateMap<Scrambler.Quartz.SchedulingResult, Scrambler.Api.Dtos.TriggerSuccessfullyCreated>(MemberList.None)
+             .ForMember(x => x.Id, opt => opt.MapFrom(x => x.TriggerKey.Group + x.TriggerKey.Name))
+             .ForMember(x => x.JobGroup, opt => opt.MapFrom(x => x.JobKey.Group))
+             .ForMember(x => x.JobName, opt => opt.MapFrom(x => x.JobKey.Name))
+             .ForMember(x => x.TriggerGroup, opt => opt.MapFrom(x => x.TriggerKey.Group))
+             .ForMember(x => x.TriggerName, opt => opt.MapFrom(x => x.TriggerKey.Name))
+             .ForMember(x => x.TriggerDescription, opt => opt.MapFrom(x => x.TriggerDescription))
+             .ForMember(x => x.CronExpression, opt => opt.MapFrom(x => x.CronExpression))
+             .ForMember(x => x.Calendar, opt => opt.MapFrom(x => x.Calendar));
         }
 
     }
