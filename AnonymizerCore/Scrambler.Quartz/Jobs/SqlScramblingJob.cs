@@ -4,6 +4,7 @@ using Quartz.Logging;
 using Scrambler.Quartz.Configuration;
 using Scrambler.SqlServer;
 using Serilog;
+using Serilog.Context;
 using System;
 using System.Threading.Tasks;
 
@@ -29,9 +30,13 @@ namespace Scrambler.Quartz.Jobs
 
             try
             {
-                string configStr = context.MergedJobDataMap.GetString("configStr");
-                var scrambler = new SqlScramblingService(_loggerConfiguration);
-                scrambler.ScrambleFromConfigStr(configStr);
+                using (LogContext.PushProperty("JobKey", context.JobDetail.Key.Name))
+                using (LogContext.PushProperty("GroupKey", context.JobDetail.Key.Group))
+                {
+                    string configStr = context.MergedJobDataMap.GetString("configStr");
+                    var scrambler = new SqlScramblingService(_loggerConfiguration);
+                    scrambler.ScrambleFromConfigStr(configStr);
+                }
             }
             catch (Exception ex)
             {

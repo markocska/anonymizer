@@ -40,6 +40,20 @@ namespace LoggingDal.Model
                 entity.Property(e => e.JobKey).HasMaxLength(500);
 
                 entity.Property(e => e.Timestamp).HasColumnType("datetime");
+
+                entity.HasIndex(e => new { e.GroupKey, e.JobKey });
+
+                entity.HasIndex(e => new { e.GroupKey, e.JobKey, e.Severity });
+
+                entity.HasIndex(e => new { e.GroupKey, e.JobKey, e.Severity, e.Timestamp });
+
+                entity.HasIndex(e => new { e.GroupKey, e.JobKey, e.Timestamp });
+
+                entity.HasIndex(e => e.Timestamp);
+
+                entity.HasIndex(e => e.Severity);
+
+
             });
         }
     }

@@ -208,8 +208,8 @@ export class JobDetailsComponent implements OnInit {
 
         this.triggers.push(newTrigger);
 
-        this.jobDescriptionsWithoutFilter.filter(job => job.jobGroup === createdTrigger.jobGroup && job.jobName === createdTrigger.jobName)[0]
-            .triggers.push(newTrigger);
+        // this.jobDescriptionsWithoutFilter.filter(job => job.jobGroup === createdTrigger.jobGroup && job.jobName === createdTrigger.jobName)[0]
+        //     .triggers.push(newTrigger);
 
         this.cancelCreateTriggerDialog();
     }
