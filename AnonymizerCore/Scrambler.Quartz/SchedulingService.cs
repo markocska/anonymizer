@@ -54,6 +54,20 @@ namespace Scrambler.Quartz
             return jobKeys;
         }
 
+        public async Task<IEnumerable<string>> GetAllJobGroups()
+        {
+            var jobGroups = (await _scheduler.GetJobKeys(GroupMatcher<JobKey>.AnyGroup()))
+                .Select(k => k.Group).Distinct();
+
+            return jobGroups;
+        }
+
+        public async Task<IEnumerable<string>> GetAllJobKeysForJobGroup(string jobGroup)
+        {
+            var jobKeys = (await _scheduler.GetJobKeys(GroupMatcher<JobKey>.GroupEquals(jobGroup)))
+                .Select(k => k.Name).Distinct();
+            return jobKeys;
+        }
 
         public async Task<List<JobKeyWithDescription>> GetAllJobKeysWithDescription()
         {

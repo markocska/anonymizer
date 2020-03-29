@@ -21,5 +21,7 @@ namespace Scrambler.Quartz.Interfaces
         Task<List<JobKeyWithDescription>> GetJobKeysWithDescription(string groupName);
         Task<bool> DeleteJob(string jobName, string jobGroup);
         Task<bool> DeleteTrigger(string triggerName, string triggerGroup);
+        Task<IEnumerable<string>> GetAllJobGroups();
+        Task<IEnumerable<string>> GetAllJobKeysForJobGroup(string jobGroup);
     }
 }

@@ -1,6 +1,7 @@
 ﻿using LoggingDal.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Scrambler.Api.Dtos;
+using Serilog.Events;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -36,6 +37,12 @@ namespace Scrambler.Api.Controllers
                 });
 
             return Ok(logs);
+        }
+
+        [HttpGet("severity")]
+        public ActionResult<List<string>> GetSeverityLevelNames()
+        {
+           return Ok(Enum.GetNames(typeof(LogEventLevel)));
         }
     }
 }
