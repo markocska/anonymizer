@@ -18,7 +18,7 @@ namespace LoggingDal.Services
             _dbContext = context;
         }
 
-        public async Task<List<Logs>> GetLogs(string severity, string jobKey, string groupKey, string description, DateTimeOffset fromDate, DateTimeOffset toDate)
+        public async Task<List<Logs>> GetLogs(string severity, string jobKey, string groupKey, string description, DateTime? fromDate, DateTime? toDate)
         {
             IQueryable<Logs> query = _dbContext.Logs.Where(l => true);
 
