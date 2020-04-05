@@ -18,23 +18,30 @@ namespace LoggingDal.Services
             _dbContext = context;
         }
 
-        public async Task<List<Logs>> GetLogs(string severity, string jobKey, string groupKey, string description, DateTime? fromDate, DateTime? toDate)
+        public async Task<(List<Logs> logs, int totalNumber)> GetLogs(PaginationParams paginationParams, FilterParams filterParams)
         {
             IQueryable<Logs> query = _dbContext.Logs.Where(l => true);
 
-            if (!string.IsNullOrEmpty(groupKey)) { query = query.Where(l => l.GroupKey == groupKey); }
+            if (!string.IsNullOrEmpty(filterParams.GroupKey)) { query = query.Where(l => l.GroupKey == filterParams.GroupKey); }
 
-            if (!string.IsNullOrEmpty(jobKey)) { query = query.Where(l => l.JobKey == jobKey); }
+            if (!string.IsNullOrEmpty(filterParams.JobKey)) { query = query.Where(l => l.JobKey == filterParams.JobKey); }
 
-            if (!string.IsNullOrEmpty(severity)) { query = query.Where(l => l.Severity == severity); }
+            if (!string.IsNullOrEmpty(filterParams.Severity)) { query = query.Where(l => l.Severity == filterParams.Severity); }
 
-            if(!string.IsNullOrEmpty(description)) { query = query.Where(l => l.JobDescription.ToLower().Contains(description)); }
+            if(!string.IsNullOrEmpty(filterParams.Description)) { query = query.Where(l => l.JobDescription.ToLower().Contains(filterParams.Description)); }
             
-            if (fromDate != null) { query = query.Where(l => l.Timestamp >= fromDate); }
+            if (filterParams.FromDate != null) { query = query.Where(l => l.Timestamp >= filterParams.FromDate); }
 
-            if (toDate != null) { query = query.Where(l => l.Timestamp <= toDate); }
+            if (filterParams.ToDate != null) { query = query.Where(l => l.Timestamp <= filterParams.ToDate); }
 
-            return await query.ToListAsync();
+            var totalNumberTask = query.CountAsync();
+
+            query = query.Skip(paginationParams.PageNumber * paginationParams.Offset).Take(paginationParams.Offset);
+
+            var logs = await query.ToListAsync();
+            var totalNumber = await totalNumberTask;
+
+            return (logs: logs, totalNumber: totalNumber);
         }
     }
 }

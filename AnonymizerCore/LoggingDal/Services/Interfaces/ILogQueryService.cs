@@ -8,6 +8,6 @@ namespace LoggingDal.Services.Interfaces
 {
     public interface ILogQueryService
     {
-        Task<List<Logs>> GetLogs(string severity, string jobKey, string groupKey, string description, DateTime? fromDate, DateTime? toDate);
+        Task<(List<Logs> logs, int totalNumber)> GetLogs(PaginationParams paginationParams, FilterParams filterParams);
     }
 }

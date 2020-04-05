@@ -1,4 +1,4 @@
-export interface LogDto {
+export interface Log {
     id : number;
     groupKey: string;
     jobKey: string;

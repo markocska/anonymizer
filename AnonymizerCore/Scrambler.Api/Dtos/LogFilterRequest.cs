@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace Scrambler.Api.Dtos
 {
-    public class LogFilter 
+    public class LogFilterRequest
     {
         public string GroupKey { get; set; }
         public string JobKey { get; set; }
@@ -13,5 +13,6 @@ namespace Scrambler.Api.Dtos
         public string Severity { get; set; }
         public DateTime? FromDate { get; set; }
         public DateTime? ToDate { get; set; }
+        public PaginationParams PaginationParams { get; set; }
     }
 }

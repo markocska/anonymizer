@@ -21,28 +21,47 @@ namespace Scrambler.Api.Controllers
         }
 
         [HttpPost("filter")]
-        public async Task<ActionResult<LogDto>> GetLogsWithFilter([FromBody] LogFilter filter)
+        public async Task<ActionResult<Log>> GetLogsWithFilter([FromBody] LogFilterRequest filterRequest)
         {
             //For performance reasons we don't use Automapper here.
-            var logs = (await _logQueryService.GetLogs(filter.Severity, filter.JobKey, filter.GroupKey, filter.Description, filter.FromDate, filter.ToDate))
-                .Select(l => new LogDto
+            var logs = (await _logQueryService.GetLogs(
+                new LoggingDal.PaginationParams
                 {
-                    Id = l.Id,
-                    GroupKey = l.GroupKey,
-                    JobKey = l.JobKey,
-                    JobDescription = l.JobDescription,
-                    Message = l.Msg,
-                    Severity = l.Severity, 
-                    TimeStamp = l.Timestamp
-                });
+                    Offset = filterRequest.PaginationParams.Offset,
+                    PageNumber = filterRequest.PaginationParams.PageNumber
+                },
+                new LoggingDal.FilterParams
+                {
+                    GroupKey = filterRequest.GroupKey,
+                    JobKey = filterRequest.JobKey,
+                    Description = filterRequest.Description,
+                    FromDate = filterRequest.FromDate,
+                    ToDate = filterRequest.ToDate,
+                    Severity = filterRequest.Severity
+                }));
 
-            return Ok(logs);
+
+            return Ok(
+                new LogReportResponse
+                {
+                    TotalNumber = logs.totalNumber,
+                    Logs = logs.logs.Select(l => new Log
+                    {
+                        Id = l.Id,
+                        GroupKey = l.GroupKey,
+                        JobKey = l.JobKey,
+                        JobDescription = l.JobDescription,
+                        Message = l.Msg,
+                        Severity = l.Severity,
+                        TimeStamp = l.Timestamp
+                    })
+                });
         }
 
         [HttpGet("severity")]
         public ActionResult<List<string>> GetSeverityLevelNames()
         {
-           return Ok(Enum.GetNames(typeof(LogEventLevel)));
+            return Ok(Enum.GetNames(typeof(LogEventLevel)));
         }
     }
 }

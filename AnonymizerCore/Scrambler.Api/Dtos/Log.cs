@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace Scrambler.Api.Dtos
 {
-    public class LogDto
+    public class Log
     {
         public int Id { get; set; }
         public string Message { get; set; }

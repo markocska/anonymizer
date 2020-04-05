@@ -1,7 +1,9 @@
 import { OnInit, Component } from '@angular/core';
 import { LogService } from '../service/logservice';
-import { LogDto } from '../domain/logDto';
-import { SelectItem } from 'primeng/api';
+import { Log } from '../domain/log';
+import { SelectItem, LazyLoadEvent } from 'primeng/api';
+import { DateRange } from '@fullcalendar/core';
+import { LogFilterRequest } from '../domain/logFilterRequest';
 
 @Component({
     selector: 'logs',
@@ -22,13 +24,32 @@ export class LogComponent implements OnInit {
         {field:  'timeStamp', header:'TimeStamp'}
     ]
 
-    protected logs : LogDto[] = [];
+    protected logs : Log[] = [];
     protected numberOfLogs : number;
 
     protected groupDropdownOptions : SelectItem[] = [];
     protected jobNameDropdownOptions : SelectItem[] = [];
     protected severityDropdownOptions : SelectItem[] = [];
+    
+    protected groupKeyFilter : string = null;
+    protected jobKeyFilter : string = null;
     protected jobDescriptionFilter : string = null;
+    protected severityFilter : string = null;
+    protected timeStampDateRangeFilter : DateRange;
+
+    protected logFilterRequest : LogFilterRequest =
+    {   
+        groupKey: null,
+        jobKey: null,
+        fromDate: null,
+        toDate: null,
+        severity: null,
+        description: null,
+        paginationParams: {
+            pageNumber: null,
+            offset: null
+        }
+    };
     
     ngOnInit(): void {
         this.logservice.getAllGroupNames()
@@ -44,8 +65,16 @@ export class LogComponent implements OnInit {
             .then(severityLevels => {
                 this.severityDropdownOptions =
                     [{label: "Select severity", value: null}, ...severityLevels.map(x => ({label: x, value: x}))]
-            })
-        
+            });
+    }
+
+    protected loadLogsLazy(event : LazyLoadEvent) : void { 
+        this.logFilterRequest.paginationParams = 
+            {
+                pageNumber:  (event.first / event.rows) + 1,
+                offset: 10
+            }
+        console.log(this.logFilterRequest);
     }
     
 }

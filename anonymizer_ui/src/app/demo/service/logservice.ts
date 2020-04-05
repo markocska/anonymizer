@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { ConfigService } from './configService';
-import { LogFilter } from '../domain/logFilter';
-import { LogDto } from '../domain/logDto';
+import { LogFilterRequest } from '../domain/logFilterRequest';
+import { Log } from '../domain/log';
 
 @Injectable()
 export class LogService {
@@ -11,10 +11,10 @@ export class LogService {
 
     }
 
-    public getLogs(logFilter: LogFilter) : Promise<LogDto[]> {
+    public getLogs(logFilter: LogFilterRequest) : Promise<Log[]> {
         return this.httpClient.post(this.configService.getConfig('baseUrl') + '/log/filter', logFilter)
             .toPromise()
-            .then(data => data as LogDto[])
+            .then(data => data as Log[])
             .then(data => data);
     }
 
