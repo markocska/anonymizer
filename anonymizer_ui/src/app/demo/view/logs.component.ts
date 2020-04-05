@@ -69,12 +69,17 @@ export class LogComponent implements OnInit {
     }
 
     protected loadLogsLazy(event : LazyLoadEvent) : void { 
+        console.log(event);
         this.logFilterRequest.paginationParams = 
             {
                 pageNumber:  (event.first / event.rows) + 1,
                 offset: 10
             }
         console.log(this.logFilterRequest);
+    }
+
+    protected filter(value, field, mode) : void {
+
     }
     
 }

@@ -90,7 +90,8 @@ export class AppMenuComponent implements OnInit {
                 ]
             },
             {label: 'Documentation', icon: 'fa fa-fw fa-book', routerLink: ['/documentation']},
-            {label: 'Job Details', icon: 'fa fa-fw fa-book', routerLink: ['/jobdetails']}
+            {label: 'Job Details', icon: 'fa fa-fw fa-book', routerLink: ['/jobdetails']},
+            {label: 'Logs', icon: 'fa fa-fw fa-gg', routerLink: ['/logs']}
         ];
     }
 }

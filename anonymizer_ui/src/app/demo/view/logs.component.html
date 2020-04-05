@@ -1,6 +1,6 @@
 <p-table [columns]="logCols" rowExpandMode="single" [style]="{'margin-top':'20px'}" [value]="logs" [lazy]=true [rows]="10" 
 [paginator]="true" [pageLinks]="3" [responsive]="true" (onLazyLoad)="loadLogsLazy($event)" dataKey="id" [resizableColumns]="true" 
-[totalRecords]="totalNumberOfLogs" >
+[totalRecords]="numberOfLogs" >
     <ng-template pTemplate="header" let-columns> 
         <tr>
             <!-- <th style="background:#03a9f4; color: white; width: 40px;"></th> -->
@@ -30,21 +30,21 @@
             <!-- <th></th> -->
             <th> 
                 <p-dropdown appendTo="body" style="font-size:12px" [options]="groupDropdownOptions"
-                [(ngModel)]="logFilterRequest.groupKey" class="dropdown" [style]="{'width':'100%'}" [autoWidth]="false" (onChange)="filter($event.value,col.field,'equals')"></p-dropdown>
+                [(ngModel)]="logFilterRequest.groupKey" class="dropdown" [style]="{'width':'100%'}" [autoWidth]="false" (onChange)="filter($event.value,'groupKey','equals')"></p-dropdown>
             </th>
             <th> 
-                <p-dropdown appendTo="body" style="font-size:12px" [options]="jobKeyOptions"
-                [(ngModel)]="logFilterRequest.jobKey" class="dropdown" [style]="{'width':'100%'}" [autoWidth]="false" (onChange)="filter($event.value,col.field,'equals')"></p-dropdown>
+                <p-dropdown appendTo="body" style="font-size:12px" [options]="jobNameDropdownOptions"
+                [(ngModel)]="logFilterRequest.jobKey" class="dropdown" [style]="{'width':'100%'}" [autoWidth]="false" (onChange)="filter($event.value,'jobKey','equals')"></p-dropdown>
             </th>
             <th> 
-                <input pInputText type="text" (keyup)="filter($event.target.value, col.field)">
+                <input pInputText type="text" (keyup)="filter($event.target.value, 'jobDescription')">
             </th>
             <th>
 
             </th>
             <th> 
-                <p-dropdown appendTo="body" style="font-size:12px" [options]="severityOptions"
-                [(ngModel)]="logFilterRequest.severity" [showTime]="true" class="dropdown" [style]="{'width':'100%'}" [autoWidth]="false" (onChange)="filter($event.value,col.field,'equals')"></p-dropdown>
+                <p-dropdown appendTo="body" style="font-size:12px" [options]="severityDropdownOptions"
+                [(ngModel)]="logFilterRequest.severity" class="dropdown" [style]="{'width':'100%'}" [autoWidth]="false" (onChange)="filter($event.value,'severity','equals')"></p-dropdown>
             </th>
             <th> 
                 <p-calendar [(ngModel)]="timeStampDateRangeFilter" [showTime]="true" selectionMode="range" [readonlyInput]="true"></p-calendar>
