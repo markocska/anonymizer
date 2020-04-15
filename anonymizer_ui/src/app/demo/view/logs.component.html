@@ -37,7 +37,7 @@
                 [(ngModel)]="logFilterRequest.jobKey" class="dropdown" [style]="{'width':'100%'}" [autoWidth]="false" (onChange)="filter($event.value,'jobKey','equals')"></p-dropdown>
             </th>
             <th> 
-                <input pInputText type="text" (keyup)="filter($event.target.value, 'jobDescription')">
+                <input pInputText type="text" [(ngModel)]="logFilterRequest.description" (keyup)="filter($event.target.value, 'jobDescription')">
             </th>
             <th>
 
@@ -47,7 +47,7 @@
                 [(ngModel)]="logFilterRequest.severity" class="dropdown" [style]="{'width':'100%'}" [autoWidth]="false" (onChange)="filter($event.value,'severity','equals')"></p-dropdown>
             </th>
             <th> 
-                <p-calendar [(ngModel)]="timeStampDateRangeFilter" [showTime]="true" selectionMode="range" [readonlyInput]="true"></p-calendar>
+                <p-calendar [(ngModel)]="timeStampDateRangeFilter" appendTo="body"  selectionMode="range"  [readonlyInput]="false" ></p-calendar>
             </th>
         </tr>
     </ng-template>>   

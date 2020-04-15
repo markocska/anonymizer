@@ -11,7 +11,7 @@ import { LogFilterRequest } from '../domain/logFilterRequest';
 })
 export class LogComponent implements OnInit {
     
-    constructor(private logservice : LogService) {
+    constructor(private logService : LogService) {
 
     }
 
@@ -52,7 +52,7 @@ export class LogComponent implements OnInit {
     };
     
     ngOnInit(): void {
-        this.logservice.getAllGroupNames()
+        this.logService.getAllGroupNames()
             .then(groupNames => {
                 this.groupDropdownOptions = 
                     [{label: "Select a group", value: null}, ... groupNames.map(x => ({label: x, value: x}))];
@@ -61,7 +61,7 @@ export class LogComponent implements OnInit {
         
         this.jobNameDropdownOptions.push({label:"Select a job", value: null});
 
-        this.logservice.getAllLogSeverityLevels()
+        this.logService.getAllLogSeverityLevels()
             .then(severityLevels => {
                 this.severityDropdownOptions =
                     [{label: "Select severity", value: null}, ...severityLevels.map(x => ({label: x, value: x}))]
@@ -69,17 +69,17 @@ export class LogComponent implements OnInit {
     }
 
     protected loadLogsLazy(event : LazyLoadEvent) : void { 
-        console.log(event);
+        // console.log(event);
         this.logFilterRequest.paginationParams = 
             {
                 pageNumber:  (event.first / event.rows) + 1,
                 offset: 10
             }
-        console.log(this.logFilterRequest);
+        // this.logService.getLogs(this.logFilterRequest)
     }
 
     protected filter(value, field, mode) : void {
-
+        console.log(this.logFilterRequest);
     }
     
 }
