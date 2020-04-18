@@ -24,6 +24,7 @@ namespace Scrambler.Api.Controllers
         public async Task<ActionResult<Log>> GetLogsWithFilter([FromBody] LogFilterRequest filterRequest)
         {
             //For performance reasons we don't use Automapper here.
+
             var logs = (await _logQueryService.GetLogs(
                 new LoggingDal.PaginationParams
                 {

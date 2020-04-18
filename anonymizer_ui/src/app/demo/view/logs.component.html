@@ -23,7 +23,10 @@
                 Severity
             </th>
             <th style="background:#03a9f4; color:white"  class="absorbing-column" pResizableColumn>
-                TimeStamp
+                Date From
+            </th>
+            <th style="background:#03a9f4; color:white"  class="absorbing-column" pResizableColumn>
+                Date To
             </th>
         </tr>
         <tr>
@@ -47,8 +50,11 @@
                 [(ngModel)]="logFilterRequest.severity" class="dropdown" [style]="{'width':'100%'}" [autoWidth]="false" (onChange)="filter($event.value,'severity','equals')"></p-dropdown>
             </th>
             <th> 
-                <p-calendar [(ngModel)]="timeStampDateRangeFilter" appendTo="body"  selectionMode="range"  [readonlyInput]="false" ></p-calendar>
+                <p-calendar [(ngModel)]="timeStampDateRangeFilter" showTime="true" appendTo="body" selectionMode="range" (onClose)="filter($event,'timestamp')" [readonlyInput]="false" ></p-calendar>
             </th>
+            <!-- <th> 
+                <p-calendar [(ngModel)]="timeStampDateRangeFilter" appendTo="body" selectionMode="range" (onClose)="filter($event,'timestamp')" [readonlyInput]="false" ></p-calendar>
+            </th> -->
         </tr>
     </ng-template>>   
     <ng-template pTemplate="body" let-rowData let-expanded="expanded" let-columns="columns">

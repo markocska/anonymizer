@@ -2,12 +2,13 @@ import { OnInit, Component } from '@angular/core';
 import { LogService } from '../service/logservice';
 import { Log } from '../domain/log';
 import { SelectItem, LazyLoadEvent } from 'primeng/api';
-import { DateRange } from '@fullcalendar/core';
+import { DateRange, DateMarker } from '@fullcalendar/core';
 import { LogFilterRequest } from '../domain/logFilterRequest';
 
 @Component({
     selector: 'logs',
-    templateUrl: './logs.component.html'
+    templateUrl: './logs.component.html',
+    styleUrls:['./logs.component.css']
 })
 export class LogComponent implements OnInit {
     
@@ -35,7 +36,8 @@ export class LogComponent implements OnInit {
     protected jobKeyFilter : string = null;
     protected jobDescriptionFilter : string = null;
     protected severityFilter : string = null;
-    protected timeStampDateRangeFilter : DateRange;
+    protected timeStampDateRangeFilter : Date[];
+
 
     protected logFilterRequest : LogFilterRequest =
     {   
@@ -79,7 +81,19 @@ export class LogComponent implements OnInit {
     }
 
     protected filter(value, field, mode) : void {
-        console.log(this.logFilterRequest);
+        switch(field) {
+            case 'timestamp':
+                console.log(this.timeStampDateRangeFilter);
+                console.log(this.timeStampDateRangeFilter[0]);
+                this.logFilterRequest.fromDate = new Date(this.timeStampDateRangeFilter[0]);
+                this.logFilterRequest.toDate = this.timeStampDateRangeFilter[1];
+                break;
+            case 'fromDate':
+                break;
+            case 'toDate':
+                break;
+        }
+        this.logService.getLogs(this.logFilterRequest);
     }
     
 }
