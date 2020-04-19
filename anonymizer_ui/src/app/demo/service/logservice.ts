@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { ConfigService } from './configService';
 import { LogFilterRequest } from '../domain/logFilterRequest';
 import { Log } from '../domain/log';
+import { LogReportResponse } from '../domain/logReportResponse';
 
 @Injectable()
 export class LogService {
@@ -11,10 +12,10 @@ export class LogService {
 
     }
 
-    public getLogs(logFilter: LogFilterRequest) : Promise<Log[]> {
+    public getLogs(logFilter: LogFilterRequest) : Promise<LogReportResponse> {
         return this.httpClient.post(this.configService.getConfig('baseUrl') + '/log/filter', logFilter)
             .toPromise()
-            .then(data => data as Log[])
+            .then(data => data as LogReportResponse)
             .then(data => data);
     }
 

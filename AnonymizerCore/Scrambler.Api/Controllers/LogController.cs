@@ -21,7 +21,7 @@ namespace Scrambler.Api.Controllers
         }
 
         [HttpPost("filter")]
-        public async Task<ActionResult<Log>> GetLogsWithFilter([FromBody] LogFilterRequest filterRequest)
+        public async Task<ActionResult<LogReportResponse>> GetLogsWithFilter([FromBody] LogFilterRequest filterRequest)
         {
             //For performance reasons we don't use Automapper here.
 

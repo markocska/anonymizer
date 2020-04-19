@@ -36,7 +36,7 @@ namespace LoggingDal.Services
 
             var totalNumberTask = query.CountAsync();
 
-            query = query.Skip(paginationParams.PageNumber * paginationParams.Offset).Take(paginationParams.Offset);
+            query = query.Skip((paginationParams.PageNumber-1) * paginationParams.Offset).Take(paginationParams.Offset);
 
             var logs = await query.ToListAsync();
             var totalNumber = await totalNumberTask;

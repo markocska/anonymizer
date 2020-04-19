@@ -1,6 +1,6 @@
-<p-table [columns]="logCols" rowExpandMode="single" [style]="{'margin-top':'20px'}" [value]="logs" [lazy]=true [rows]="10" 
-[paginator]="true" [pageLinks]="3" [responsive]="true" (onLazyLoad)="loadLogsLazy($event)" dataKey="id" [resizableColumns]="true" 
-[totalRecords]="numberOfLogs" >
+<p-table [columns]="logCols" rowExpandMode="single" [style]="{'margin-top':'20px'}" [value]="logs" [lazy]="true" [rows]="10" 
+[paginator]="true" [pageLinks]="3" (onLazyLoad)="loadLogsLazy($event)" dataKey="id" [autoLayout]="true" 
+[totalRecords]="numberOfLogs" [loading]="loading">
     <ng-template pTemplate="header" let-columns> 
         <tr>
             <!-- <th style="background:#03a9f4; color: white; width: 40px;"></th> -->
@@ -23,21 +23,21 @@
                 Severity
             </th>
             <th style="background:#03a9f4; color:white"  class="absorbing-column" pResizableColumn>
-                Date From
+                Timestamp
             </th>
-            <th style="background:#03a9f4; color:white"  class="absorbing-column" pResizableColumn>
+            <!-- <th style="background:#03a9f4; color:white"  class="absorbing-column" pResizableColumn>
                 Date To
-            </th>
+            </th> -->
         </tr>
         <tr>
             <!-- <th></th> -->
             <th> 
                 <p-dropdown appendTo="body" style="font-size:12px" [options]="groupDropdownOptions"
-                [(ngModel)]="logFilterRequest.groupKey" class="dropdown" [style]="{'width':'100%'}" [autoWidth]="false" (onChange)="filter($event.value,'groupKey','equals')"></p-dropdown>
+                [(ngModel)]="logFilterRequest.groupKey" class="dropdown" [style]="{'width':'100%'}" (onChange)="filter($event.value,'groupKey','equals')"></p-dropdown>
             </th>
             <th> 
                 <p-dropdown appendTo="body" style="font-size:12px" [options]="jobNameDropdownOptions"
-                [(ngModel)]="logFilterRequest.jobKey" class="dropdown" [style]="{'width':'100%'}" [autoWidth]="false" (onChange)="filter($event.value,'jobKey','equals')"></p-dropdown>
+                [(ngModel)]="logFilterRequest.jobKey" class="dropdown" [style]="{'width':'100%'}" (onChange)="filter($event.value,'jobKey','equals')"></p-dropdown>
             </th>
             <th> 
                 <input pInputText type="text" [(ngModel)]="logFilterRequest.description" (keyup)="filter($event.target.value, 'jobDescription')">
@@ -47,7 +47,7 @@
             </th>
             <th> 
                 <p-dropdown appendTo="body" style="font-size:12px" [options]="severityDropdownOptions"
-                [(ngModel)]="logFilterRequest.severity" class="dropdown" [style]="{'width':'100%'}" [autoWidth]="false" (onChange)="filter($event.value,'severity','equals')"></p-dropdown>
+                [(ngModel)]="logFilterRequest.severity" class="dropdown" [style]="{'width':'100%'}"  (onChange)="filter($event.value,'severity','equals')"></p-dropdown>
             </th>
             <th> 
                 <p-calendar [(ngModel)]="timeStampDateRangeFilter" showTime="true" appendTo="body" selectionMode="range" (onClose)="filter($event,'timestamp')" [readonlyInput]="false" ></p-calendar>
@@ -87,7 +87,7 @@
                     {{rowData['severity']}}
             </td>
             <td>
-                    {{rowData['timestamp']}}
+                    {{rowData['timeStamp'] | date : 'full' }}
             </td>
         </tr>
     </ng-template>

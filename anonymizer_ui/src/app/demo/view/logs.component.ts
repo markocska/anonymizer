@@ -16,6 +16,8 @@ export class LogComponent implements OnInit {
 
     }
 
+    protected loading: boolean;
+
     protected logCols : any[] = [
         {field:  'groupKey', header:'Group Name'},
         {field:  'jobKey', header:'Job Name'},
@@ -30,6 +32,7 @@ export class LogComponent implements OnInit {
 
     protected groupDropdownOptions : SelectItem[] = [];
     protected jobNameDropdownOptions : SelectItem[] = [];
+    protected readonly jobNameDefault : SelectItem =  {label: "Select a job", value: null};
     protected severityDropdownOptions : SelectItem[] = [];
     
     protected groupKeyFilter : string = null;
@@ -54,6 +57,7 @@ export class LogComponent implements OnInit {
     };
     
     ngOnInit(): void {
+        this.loading = true;
         this.logService.getAllGroupNames()
             .then(groupNames => {
                 this.groupDropdownOptions = 
@@ -68,6 +72,7 @@ export class LogComponent implements OnInit {
                 this.severityDropdownOptions =
                     [{label: "Select severity", value: null}, ...severityLevels.map(x => ({label: x, value: x}))]
             });
+        this.loading = false;
     }
 
     protected loadLogsLazy(event : LazyLoadEvent) : void { 
@@ -77,23 +82,45 @@ export class LogComponent implements OnInit {
                 pageNumber:  (event.first / event.rows) + 1,
                 offset: 10
             }
-        // this.logService.getLogs(this.logFilterRequest)
+
+        this.loading = true;
+        this.logService.getLogs(this.logFilterRequest)
+            .then(logs => {
+                this.logs = logs.logs;
+                this.numberOfLogs = logs.totalNumber;
+            });
+        this.loading = false;
     }
 
     protected filter(value, field, mode) : void {
         switch(field) {
+            case 'groupKey':
+                if (value) {
+                    this.logService.getAllJobKeysForJobGroup(value)
+                    .then(jobKeys => {
+                        this.jobNameDropdownOptions = 
+                            [this.jobNameDefault, ... jobKeys.map(x => ({label: x, value: x}))];
+                    });
+                }
+                else {
+                    this.jobNameDropdownOptions = [this.jobNameDefault]
+                }
+                break;
             case 'timestamp':
-                console.log(this.timeStampDateRangeFilter);
-                console.log(this.timeStampDateRangeFilter[0]);
-                this.logFilterRequest.fromDate = new Date(this.timeStampDateRangeFilter[0]);
-                this.logFilterRequest.toDate = this.timeStampDateRangeFilter[1];
-                break;
-            case 'fromDate':
-                break;
-            case 'toDate':
+                if (this.timeStampDateRangeFilter) {
+                    this.logFilterRequest.fromDate = new Date(this.timeStampDateRangeFilter[0]);
+                    this.logFilterRequest.toDate = this.timeStampDateRangeFilter[1];
+                }
                 break;
         }
-        this.logService.getLogs(this.logFilterRequest);
+
+        this.loading = true;
+        this.logService.getLogs(this.logFilterRequest)
+            .then(logs => {
+                this.logs = logs.logs;
+                this.numberOfLogs = logs.totalNumber;
+            });
+        this.loading = false;
     }
     
 }
