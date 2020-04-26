@@ -54,7 +54,7 @@ namespace Scrambler.Api.Controllers
                         JobDescription = l.JobDescription,
                         Message = l.Msg,
                         Severity = l.Severity,
-                        TimeStamp = l.Timestamp
+                        TimeStamp = l.Timestamp 
                     })
                 });
         }

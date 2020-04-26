@@ -22,21 +22,21 @@ namespace LoggingDal.Services
         {
             IQueryable<Logs> query = _dbContext.Logs.Where(l => true);
 
+            if (!string.IsNullOrEmpty(filterParams.Description)) { query = query.Where(l => l.JobDescription.ToLower().Contains(filterParams.Description)); }
+
             if (!string.IsNullOrEmpty(filterParams.GroupKey)) { query = query.Where(l => l.GroupKey == filterParams.GroupKey); }
 
             if (!string.IsNullOrEmpty(filterParams.JobKey)) { query = query.Where(l => l.JobKey == filterParams.JobKey); }
 
             if (!string.IsNullOrEmpty(filterParams.Severity)) { query = query.Where(l => l.Severity == filterParams.Severity); }
 
-            if(!string.IsNullOrEmpty(filterParams.Description)) { query = query.Where(l => l.JobDescription.ToLower().Contains(filterParams.Description)); }
-            
             if (filterParams.FromDate != null) { query = query.Where(l => l.Timestamp >= filterParams.FromDate); }
 
             if (filterParams.ToDate != null) { query = query.Where(l => l.Timestamp <= filterParams.ToDate); }
 
             var totalNumberTask = query.CountAsync();
 
-            query = query.Skip((paginationParams.PageNumber-1) * paginationParams.Offset).Take(paginationParams.Offset);
+            query = query.OrderByDescending(x => x.Timestamp).Skip((paginationParams.PageNumber-1) * paginationParams.Offset).Take(paginationParams.Offset);
 
             var logs = await query.ToListAsync();
             var totalNumber = await totalNumberTask;

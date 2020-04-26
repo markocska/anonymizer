@@ -39,19 +39,29 @@ namespace LoggingDal.Model
 
                 entity.Property(e => e.JobKey).HasMaxLength(500);
 
-                entity.Property(e => e.Timestamp).HasColumnType("datetime");
+                entity.Property(e => e.Timestamp).HasColumnType("datetime")
+                    .HasConversion(v => v, v => v.HasValue ? DateTime.SpecifyKind(v.Value, DateTimeKind.Utc) : v);
 
-                entity.HasIndex(e => new { e.GroupKey, e.JobKey });
+                //entity.HasIndex(e => new { e.GroupKey, e.JobKey });
 
-                entity.HasIndex(e => new { e.GroupKey, e.JobKey, e.Severity });
+                //entity.HasIndex(e => new { e.GroupKey, e.JobKey, e.Severity });
 
                 entity.HasIndex(e => new { e.GroupKey, e.JobKey, e.Severity, e.Timestamp });
 
-                entity.HasIndex(e => new { e.GroupKey, e.JobKey, e.Timestamp });
+                entity.HasIndex(e => new { e.GroupKey, e.JobKey, e.Timestamp});
 
-                entity.HasIndex(e => e.Timestamp);
+                entity.HasIndex(e => new { e.JobDescription, e.Severity, e.Timestamp });
 
-                entity.HasIndex(e => e.Severity);
+                entity.HasIndex(e => new { e.JobDescription, e.Timestamp });
+
+                entity.HasIndex(e => new { e.JobDescription, e.GroupKey, e.Severity, e.Timestamp });
+
+                entity.HasIndex(e => new { e.JobDescription, e.GroupKey, e.Timestamp });
+
+                entity.HasIndex(e => new { e.Timestamp, e.Severity });
+
+                entity.HasIndex(e => new { e.Severity, e.Timestamp });
+
 
 
             });

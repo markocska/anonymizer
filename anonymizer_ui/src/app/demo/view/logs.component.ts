@@ -1,9 +1,10 @@
 import { OnInit, Component } from '@angular/core';
 import { LogService } from '../service/logservice';
 import { Log } from '../domain/log';
-import { SelectItem, LazyLoadEvent } from 'primeng/api';
+import { SelectItem, LazyLoadEvent, SortEvent } from 'primeng/api';
 import { DateRange, DateMarker } from '@fullcalendar/core';
 import { LogFilterRequest } from '../domain/logFilterRequest';
+import { DATE_PROPS } from '@fullcalendar/core/structs/event';
 
 @Component({
     selector: 'logs',
@@ -40,6 +41,8 @@ export class LogComponent implements OnInit {
     protected jobDescriptionFilter : string = null;
     protected severityFilter : string = null;
     protected timeStampDateRangeFilter : Date[];
+
+    protected timezoneOffset : string = '+0200';
 
 
     protected logFilterRequest : LogFilterRequest =
@@ -121,6 +124,10 @@ export class LogComponent implements OnInit {
                 this.numberOfLogs = logs.totalNumber;
             });
         this.loading = false;
+    }
+
+    protected sortByTimeStamp(event: SortEvent) : void {
+        console.log(event);
     }
     
 }

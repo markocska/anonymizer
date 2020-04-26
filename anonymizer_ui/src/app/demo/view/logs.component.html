@@ -1,6 +1,6 @@
 <p-table [columns]="logCols" rowExpandMode="single" [style]="{'margin-top':'20px'}" [value]="logs" [lazy]="true" [rows]="10" 
-[paginator]="true" [pageLinks]="3" (onLazyLoad)="loadLogsLazy($event)" dataKey="id" [autoLayout]="true" 
-[totalRecords]="numberOfLogs" [loading]="loading">
+[paginator]="true" [pageLinks]="3" (onLazyLoad)="loadLogsLazy($event)" dataKey="id" [autoLayout]="true" resizableColumns="true" columnResizeMode="fit"
+[totalRecords]="numberOfLogs" [loading]="loading" [customSort]="true" (sortFunction)="sortByTimeStamp($event)>
     <ng-template pTemplate="header" let-columns> 
         <tr>
             <!-- <th style="background:#03a9f4; color: white; width: 40px;"></th> -->
@@ -22,8 +22,9 @@
             <th style="background:#03a9f4; color:white"  pResizableColumn>
                 Severity
             </th>
-            <th style="background:#03a9f4; color:white"  class="absorbing-column" pResizableColumn>
+            <th style="background:#03a9f4; color:white"  class="absorbing-column" pResizableColumn [pSortableColumn]="'timeStamp'">
                 Timestamp
+                <p-sortIcon [field]="'timeStamp'" ariaLabel="Activate to sort" ariaLabelDesc="Activate to sort in descending order" ariaLabelAsc="Activate to sort in ascending order"></p-sortIcon>
             </th>
             <!-- <th style="background:#03a9f4; color:white"  class="absorbing-column" pResizableColumn>
                 Date To
@@ -87,7 +88,7 @@
                     {{rowData['severity']}}
             </td>
             <td>
-                    {{rowData['timeStamp'] | date : 'full' }}
+                    {{rowData['timeStamp'] | date : 'medium' }}
             </td>
         </tr>
     </ng-template>
