@@ -10,6 +10,7 @@ namespace LoggingDal
         public string JobKey { get; set; }
         public string Description { get; set; }
         public string Severity { get; set; }
+        public bool IsAscending { get; set; }
         public DateTime? FromDate { get; set; }
         public DateTime? ToDate { get; set; }
     }

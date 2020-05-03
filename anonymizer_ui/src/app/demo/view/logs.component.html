@@ -1,6 +1,6 @@
 <p-table [columns]="logCols" rowExpandMode="single" [style]="{'margin-top':'20px'}" [value]="logs" [lazy]="true" [rows]="10" 
 [paginator]="true" [pageLinks]="3" (onLazyLoad)="loadLogsLazy($event)" dataKey="id" [autoLayout]="true" resizableColumns="true" columnResizeMode="fit"
-[totalRecords]="numberOfLogs" [loading]="loading" [customSort]="true" (sortFunction)="sortByTimeStamp($event)>
+[totalRecords]="numberOfLogs" [loading]="loading" >
     <ng-template pTemplate="header" let-columns> 
         <tr>
             <!-- <th style="background:#03a9f4; color: white; width: 40px;"></th> -->

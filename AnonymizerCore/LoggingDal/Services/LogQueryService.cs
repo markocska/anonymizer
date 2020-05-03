@@ -34,9 +34,18 @@ namespace LoggingDal.Services
 
             if (filterParams.ToDate != null) { query = query.Where(l => l.Timestamp <= filterParams.ToDate); }
 
+            if (filterParams.IsAscending)
+            {
+                query = query.OrderBy(x => x.Timestamp);
+            }
+            else
+            {
+                query = query.OrderByDescending(x => x.Timestamp);
+            }
+
             var totalNumberTask = query.CountAsync();
 
-            query = query.OrderByDescending(x => x.Timestamp).Skip((paginationParams.PageNumber-1) * paginationParams.Offset).Take(paginationParams.Offset);
+            query = query.Skip((paginationParams.PageNumber-1) * paginationParams.Offset).Take(paginationParams.Offset);
 
             var logs = await query.ToListAsync();
             var totalNumber = await totalNumberTask;

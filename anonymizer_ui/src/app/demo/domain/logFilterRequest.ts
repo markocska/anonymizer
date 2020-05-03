@@ -5,6 +5,7 @@ export interface LogFilterRequest {
     jobKey: string;
     description: string;
     severity: string;
+    isAscending: boolean;
     fromDate: Date;
     toDate: Date;
     paginationParams: PaginationParams;

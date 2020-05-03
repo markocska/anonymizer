@@ -13,6 +13,7 @@ namespace Scrambler.Api.Dtos
         public string Severity { get; set; }
         public DateTime? FromDate { get; set; }
         public DateTime? ToDate { get; set; }
+        public bool IsAscending { get; set; }
         public PaginationParams PaginationParams { get; set; }
     }
 }

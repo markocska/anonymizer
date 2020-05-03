@@ -38,7 +38,8 @@ namespace Scrambler.Api.Controllers
                     Description = filterRequest.Description,
                     FromDate = filterRequest.FromDate,
                     ToDate = filterRequest.ToDate,
-                    Severity = filterRequest.Severity
+                    Severity = filterRequest.Severity,
+                    IsAscending = filterRequest.IsAscending
                 }));
 
 

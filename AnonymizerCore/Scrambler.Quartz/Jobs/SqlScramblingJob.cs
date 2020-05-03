@@ -32,6 +32,7 @@ namespace Scrambler.Quartz.Jobs
             {
                 using (LogContext.PushProperty("JobKey", context.JobDetail.Key.Name))
                 using (LogContext.PushProperty("GroupKey", context.JobDetail.Key.Group))
+                using (LogContext.PushProperty("JobDescription", context.JobDetail.Description))
                 {
                     string configStr = context.MergedJobDataMap.GetString("configStr");
                     var scrambler = new SqlScramblingService(_loggerConfiguration);

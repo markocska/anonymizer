@@ -52,6 +52,7 @@ export class LogComponent implements OnInit {
         fromDate: null,
         toDate: null,
         severity: null,
+        isAscending: false,
         description: null,
         paginationParams: {
             pageNumber: null,
@@ -79,12 +80,18 @@ export class LogComponent implements OnInit {
     }
 
     protected loadLogsLazy(event : LazyLoadEvent) : void { 
-        // console.log(event);
         this.logFilterRequest.paginationParams = 
             {
                 pageNumber:  (event.first / event.rows) + 1,
                 offset: 10
             }
+
+        if (event.sortField === 'timeStamp' && event.sortOrder === 1) {
+            this.logFilterRequest.isAscending = true;
+        }
+        else {
+            this.logFilterRequest.isAscending = false;
+        }
 
         this.loading = true;
         this.logService.getLogs(this.logFilterRequest)
@@ -113,6 +120,10 @@ export class LogComponent implements OnInit {
                 if (this.timeStampDateRangeFilter) {
                     this.logFilterRequest.fromDate = new Date(this.timeStampDateRangeFilter[0]);
                     this.logFilterRequest.toDate = this.timeStampDateRangeFilter[1];
+                }
+            case 'jobDescription': 
+                if (value) {
+                    this.logFilterRequest.jobKey = this.jobNameDefault.value;
                 }
                 break;
         }
