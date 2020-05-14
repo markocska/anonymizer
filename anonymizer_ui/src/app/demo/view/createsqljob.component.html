@@ -49,9 +49,9 @@
     </div>
 </div>
        
-<p-tabView>
+<p-tabView (onChange)="handleDatabaseTabClick($event)">
     <p-tabPanel header="{{getDbName(database, i)}}" *ngFor="let database of jobToCreate.jobConfig.databases; let i = index" [selected]="i == 0" 
-        [closable]="i !== (jobToCreate.jobConfig.databases.length - 1)">
+        [closable]="i !== (jobToCreate.jobConfig.databases.length - 1)" >
         <div class="ui-g">
                 <div class="ui-g-12">
                     <div class="card no-margin">

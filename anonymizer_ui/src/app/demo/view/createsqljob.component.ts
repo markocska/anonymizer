@@ -49,4 +49,14 @@ export class CreateSqlJobComponent {
         }
 
     }
+
+    protected handleDatabaseTabClick(event) {
+        if (event.index === (this.jobToCreate.jobConfig.databases.length - 1)) {
+            this.jobToCreate.jobConfig.databases.push({
+                connectionString: null,
+                version: null,
+                tables: []
+            });
+        }
+    }
 }
