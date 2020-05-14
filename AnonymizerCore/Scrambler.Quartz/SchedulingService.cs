@@ -44,6 +44,11 @@ namespace Scrambler.Quartz
 
             _scheduler = scheduler;
 
+            //_scheduler.Start();
+        }
+
+        public void StartScheduler()
+        {
             _scheduler.Start();
         }
 

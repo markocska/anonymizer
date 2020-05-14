@@ -23,5 +23,7 @@ namespace Scrambler.Quartz.Interfaces
         Task<bool> DeleteTrigger(string triggerName, string triggerGroup);
         Task<IEnumerable<string>> GetAllJobGroups();
         Task<IEnumerable<string>> GetAllJobKeysForJobGroup(string jobGroup);
+
+        void StartScheduler();
     }
 }

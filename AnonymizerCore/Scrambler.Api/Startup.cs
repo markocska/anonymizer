@@ -70,6 +70,9 @@ namespace Scrambler.Api
             }, ServiceLifetime.Singleton);
 
             services.AddSingleton<ILogQueryService, LogQueryService>();
+
+            var schedulerService = services.BuildServiceProvider().GetService<ISchedulingService>();
+            schedulerService.StartScheduler();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
