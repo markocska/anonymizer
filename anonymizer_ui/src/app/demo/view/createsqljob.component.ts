@@ -3,6 +3,7 @@ import { CreateScheduledJob } from '../domain/createScheduledJob';
 import { JobSchedulingService } from '../service/jobschedulingservice';
 import { SelectItem } from 'primeng/api';
 import { DatabaseConfig } from '../domain/databaseConfig/databaseConfig';
+import { TableConfig } from '../domain/databaseConfig/tableConfig';
 
 
 @Component({
@@ -27,12 +28,43 @@ export class CreateSqlJobComponent {
                 {
                     connectionString: null,
                     version: null,
-                    tables: []
+                    tables: [{
+                        fullTableName: null,
+                        contantColumns: [],
+                        pairedColumnsInsideTable: [],
+                        pairedColumnsOutsideTable: [],
+                        scrambledColumns: [],
+                        where: null
+                    },
+                    {
+                        fullTableName: null,
+                        contantColumns: [],
+                        pairedColumnsInsideTable: [],
+                        pairedColumnsOutsideTable: [],
+                        scrambledColumns: [],
+                        where: null
+                    }
+                ]
                 },
                 {
                     connectionString: null,
                     version: null,
-                    tables: []
+                    tables: [{
+                        fullTableName: null,
+                        contantColumns: [],
+                        pairedColumnsInsideTable: [],
+                        pairedColumnsOutsideTable: [],
+                        scrambledColumns: [],
+                        where: null
+                    },
+                    {
+                        fullTableName: null,
+                        contantColumns: [],
+                        pairedColumnsInsideTable: [],
+                        pairedColumnsOutsideTable: [],
+                        scrambledColumns: [],
+                        where: null
+                    }]
                 }
             ]
         }
@@ -50,12 +82,55 @@ export class CreateSqlJobComponent {
 
     }
 
+    protected getTableName(database : DatabaseConfig, index : number) {
+
+        if (index === (database.tables.length - 1) && index !== 0) {
+            return "+";
+        }
+
+        else {
+            return `Table Config ${index}`;
+        }
+
+    }
+
+
     protected handleDatabaseTabClick(event) {
         if (event.index === (this.jobToCreate.jobConfig.databases.length - 1)) {
             this.jobToCreate.jobConfig.databases.push({
                 connectionString: null,
                 version: null,
-                tables: []
+                tables: [{
+                    fullTableName: null,
+                    contantColumns: [],
+                    pairedColumnsInsideTable: [],
+                    pairedColumnsOutsideTable: [],
+                    scrambledColumns: [],
+                    where: null
+                },
+                {
+                    fullTableName: null,
+                    contantColumns: [],
+                    pairedColumnsInsideTable: [],
+                    pairedColumnsOutsideTable: [],
+                    scrambledColumns: [],
+                    where: null
+                }
+            ]
+            });
+        }
+    }
+
+    protected handleTableTabClick(database: DatabaseConfig, event) {
+        if (event.index === (database.tables.length - 1)) {
+           database.tables.push(
+            {
+                fullTableName: null,
+                contantColumns: [],
+                pairedColumnsInsideTable: [],
+                pairedColumnsOutsideTable: [],
+                scrambledColumns: [],
+                where: null
             });
         }
     }

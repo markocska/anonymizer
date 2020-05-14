@@ -71,6 +71,23 @@
                     </div>
                </div>
         </div>
+        <p-tabView (onChange)="handleTableTabClick(database,$event)">
+            <p-tabPanel header="{{getTableName(database, j)}}" *ngFor="let table of database.tables; let j = index" [selected]="j == 0" 
+                [closable]="j !== (database.tables.length - 1)" >
+                <div class="ui-g">
+                        <div class="ui-g-12">
+                            <div class="card no-margin">
+                                <div class="ui-g-12 ui-md-2">
+                                    <label for="tableName">Full table name </label>
+                                </div>
+                                <div class="ui-g-12 ui-md-4">
+                                    <input pInputText id="tableName" type="text" [(ngModel)]="table.fullTableName" />
+                                </div>
+                            </div>
+                       </div> 
+                </div>
+            </p-tabPanel>
+        </p-tabView>
     </p-tabPanel>
 </p-tabView>
  
