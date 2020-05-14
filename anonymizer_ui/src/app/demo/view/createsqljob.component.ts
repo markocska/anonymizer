@@ -122,6 +122,7 @@ export class CreateSqlJobComponent {
     }
 
     protected handleTableTabClick(database: DatabaseConfig, event) {
+        console.log(database.tables);
         if (event.index === (database.tables.length - 1)) {
            database.tables.push(
             {

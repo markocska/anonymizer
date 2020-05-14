@@ -104,6 +104,7 @@ import { LogComponent } from './demo/view/logs.component';
 import { LogService } from './demo/service/logservice';
 import { CreateSqlJobComponent } from './demo/view/createsqljob.component';
 import { JobSchedulingService } from './demo/service/jobschedulingservice';
+import { ScrambledColumnsComponent } from './demo/view/scrambledcolumns.component';
 
 @NgModule({
     imports: [
@@ -200,7 +201,8 @@ import { JobSchedulingService } from './demo/service/jobschedulingservice';
         DocumentationComponent,
         JobDetailsComponent,
         LogComponent,
-        CreateSqlJobComponent
+        CreateSqlJobComponent,
+        ScrambledColumnsComponent
     ],
     providers: [
         {provide: LocationStrategy, useClass: HashLocationStrategy},LogService,

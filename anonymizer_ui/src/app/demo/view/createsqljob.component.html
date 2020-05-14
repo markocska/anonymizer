@@ -83,6 +83,9 @@
                                 <div class="ui-g-12 ui-md-4">
                                     <input pInputText id="tableName" type="text" [(ngModel)]="table.fullTableName" />
                                 </div>
+                                <div class="ui-g-12 ui-md-6">
+                                    <scrambled-columns [tableConfig]="table"></scrambled-columns>
+                                </div>
                             </div>
                        </div> 
                 </div>
