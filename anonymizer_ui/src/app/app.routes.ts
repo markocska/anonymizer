@@ -16,6 +16,7 @@ import {UtilsDemoComponent} from './demo/view/utilsdemo.component';
 import {DocumentationComponent} from './demo/view/documentation.component';
 import { JobDetailsComponent } from './demo/view/jobdetails.component';
 import { LogComponent } from './demo/view/logs.component';
+import { CreateSqlJobComponent } from './demo/view/createsqljob.component';
 
 export const routes: Routes = [
     {path: '', component: DashboardDemoComponent},
@@ -33,7 +34,8 @@ export const routes: Routes = [
     {path: 'utils', component: UtilsDemoComponent},
     {path: 'documentation', component: DocumentationComponent},
     {path: 'jobdetails', component: JobDetailsComponent},
-    {path: 'logs', component: LogComponent}
+    {path: 'logs', component: LogComponent},
+    {path: 'createjob', component: CreateSqlJobComponent}
 ];
 
 export const AppRoutes: ModuleWithProviders = RouterModule.forRoot(routes, {scrollPositionRestoration: 'enabled'});

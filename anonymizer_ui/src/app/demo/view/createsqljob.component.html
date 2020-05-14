@@ -1,0 +1,79 @@
+<div class="ui-fluid">
+<div class="ui-g">
+    <div class="ui-g-12">
+        <div class="ui-messages ui-widget ui-corner-all ui-messages-success" style="margin: 0 0 1em 0">
+            <span class="ui-messages-icon fa fa-fw fa-2x fa-check"></span>
+            <ul>
+                <li>
+                    <span class="ui-messages-summary" style="font-size:16px">Create sql scrambling job</span>
+                </li>
+            </ul>
+        </div>
+        <div class="card no-margin">
+            <h1>Job parameters</h1>
+            <div class="ui-g form-group">
+                <div class="ui-g-12 ui-md-2">
+                    <label for="jobGroup">Job Group </label>
+                </div>
+                <div class="ui-g-12 ui-md-4">
+                    <input pInputText id="jobGroup" type="text" [(ngModel)]="jobToCreate.jobGroup" />
+                </div>
+                <div class="ui-g-12 ui-md-2">
+                    <label for="jobName">Job Name </label>
+                </div>
+                <div class="ui-g-12 ui-md-4">
+                    <input pInputText id="jobName" type="text" [(ngModel)]="jobToCreate.jobName" />
+                </div>
+
+                <div class="ui-g-12 ui-md-2">
+                    <label for="jobDescription">Job Description </label>
+                </div>
+                <div class="ui-g-12 ui-md-4">
+                    <textarea [rows]="3" [cols]="30" pInputTextarea id="jobDescription" autoResize="autoResize" [(ngModel)]="jobToCreate.description" > </textarea>
+                </div>
+                <div class="ui-g-12 ui-md-2">
+                    <label for="cronExpression">Cron Expression </label>
+                </div>
+                <div class="ui-g-12 ui-md-4">
+                    <input pInputText id="cronExpression" type="text" [(ngModel)]="jobToCreate.cronExpression" />
+                </div>
+
+                <div class="ui-g-12 ui-md-2">
+                    <label for="triggerDescription">Trigger Description </label>
+                </div>
+                <div class="ui-g-12 ui-md-4">
+                    <textarea [rows]="3" [cols]="30" pInputTextarea id="triggerDescription" autoResize="autoResize" [(ngModel)]="jobToCreate.triggerDescription" ></textarea>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+       
+<p-tabView>
+    <p-tabPanel header="{{getDbName(database, i)}}" *ngFor="let database of jobToCreate.jobConfig.databases; let i = index" [selected]="i == 0" 
+        [closable]="i !== (jobToCreate.jobConfig.databases.length - 1)">
+        <div class="ui-g">
+                <div class="ui-g-12">
+                    <div class="card no-margin">
+                        <div class="ui-g-12 ui-md-2">
+                            <label for="dbType">Database type</label>
+                        </div>
+                        <div class="ui-g-12 ui-md-4">
+                            <p-dropdown id="dbType" [options]="dbTypes" [(ngModel)]="chosenDbType"></p-dropdown>
+                        </div>
+
+                        <div class="ui-g-12 ui-md-2">
+                            <label for="connectionString">Connection String </label>
+                        </div>
+                        <div class="ui-g-12 ui-md-4">
+                            <input pInputText id="connectionString" type="text" [(ngModel)]="database.connectionString" />
+                        </div>
+                    </div>
+               </div>
+        </div>
+    </p-tabPanel>
+</p-tabView>
+ 
+
+
+</div>

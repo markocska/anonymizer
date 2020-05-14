@@ -102,6 +102,8 @@ import { ConfirmationService } from 'primeng/api';
 import { TriggerService } from './demo/service/triggerService';
 import { LogComponent } from './demo/view/logs.component';
 import { LogService } from './demo/service/logservice';
+import { CreateSqlJobComponent } from './demo/view/createsqljob.component';
+import { JobSchedulingService } from './demo/service/jobschedulingservice';
 
 @NgModule({
     imports: [
@@ -197,11 +199,12 @@ import { LogService } from './demo/service/logservice';
         UtilsDemoComponent,
         DocumentationComponent,
         JobDetailsComponent,
-        LogComponent
+        LogComponent,
+        CreateSqlJobComponent
     ],
     providers: [
         {provide: LocationStrategy, useClass: HashLocationStrategy},LogService,
-        CarService, CountryService, EventService, NodeService, ConfigService, JobService, TriggerService, ConfirmationService,
+        CarService, CountryService, EventService, NodeService, ConfigService, JobService, TriggerService, ConfirmationService, JobSchedulingService,
         {provide: APP_INITIALIZER, deps:[ConfigService], useFactory: (config : ConfigService) => () => config.load(), multi: true}
     ],
     bootstrap: [AppComponent]

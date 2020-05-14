@@ -21,7 +21,7 @@ namespace Scrambler.Api.Dtos
         public string CronExpression { get; set; }
         [Required]
         [StringLength(5000, ErrorMessage = "{0} must be between {2} and {1}")]
-        public string Description { get; set; }
+        public string Description { get; set; } 
         [Required(ErrorMessage = "A scrambling job must contain a scrambling config.")]
         public DatabasesConfig JobConfig { get; set; }
     }
