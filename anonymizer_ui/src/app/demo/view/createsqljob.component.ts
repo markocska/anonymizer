@@ -30,7 +30,7 @@ export class CreateSqlJobComponent {
                     version: null,
                     tables: [{
                         fullTableName: null,
-                        contantColumns: [],
+                        constantColumns: [],
                         pairedColumnsInsideTable: [],
                         pairedColumnsOutsideTable: [],
                         scrambledColumns: [],
@@ -38,7 +38,7 @@ export class CreateSqlJobComponent {
                     },
                     {
                         fullTableName: null,
-                        contantColumns: [],
+                        constantColumns: [],
                         pairedColumnsInsideTable: [],
                         pairedColumnsOutsideTable: [],
                         scrambledColumns: [],
@@ -51,7 +51,7 @@ export class CreateSqlJobComponent {
                     version: null,
                     tables: [{
                         fullTableName: null,
-                        contantColumns: [],
+                        constantColumns: [],
                         pairedColumnsInsideTable: [],
                         pairedColumnsOutsideTable: [],
                         scrambledColumns: [],
@@ -59,7 +59,7 @@ export class CreateSqlJobComponent {
                     },
                     {
                         fullTableName: null,
-                        contantColumns: [],
+                        constantColumns: [],
                         pairedColumnsInsideTable: [],
                         pairedColumnsOutsideTable: [],
                         scrambledColumns: [],
@@ -102,7 +102,7 @@ export class CreateSqlJobComponent {
                 version: null,
                 tables: [{
                     fullTableName: null,
-                    contantColumns: [],
+                    constantColumns: [],
                     pairedColumnsInsideTable: [],
                     pairedColumnsOutsideTable: [],
                     scrambledColumns: [],
@@ -110,7 +110,7 @@ export class CreateSqlJobComponent {
                 },
                 {
                     fullTableName: null,
-                    contantColumns: [],
+                    constantColumns: [],
                     pairedColumnsInsideTable: [],
                     pairedColumnsOutsideTable: [],
                     scrambledColumns: [],
@@ -127,7 +127,7 @@ export class CreateSqlJobComponent {
            database.tables.push(
             {
                 fullTableName: null,
-                contantColumns: [],
+                constantColumns: [],
                 pairedColumnsInsideTable: [],
                 pairedColumnsOutsideTable: [],
                 scrambledColumns: [],

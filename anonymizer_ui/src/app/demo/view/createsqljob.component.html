@@ -83,8 +83,19 @@
                                 <div class="ui-g-12 ui-md-4">
                                     <input pInputText id="tableName" type="text" [(ngModel)]="table.fullTableName" />
                                 </div>
+                                <div class="ui-g-12 ui-md-2">
+                                    <label for="whereFilter">Where filter </label>
+                                </div>
+                                <div class="ui-g-12 ui-md-4">
+                                    <input pInputText id="whereFilter" type="text" [(ngModel)]="table.where" />
+                                </div>
+                                <div class="ui-g-12 ui-md-12">
+                                </div>
                                 <div class="ui-g-12 ui-md-6">
                                     <scrambled-columns [tableConfig]="table"></scrambled-columns>
+                                </div>
+                                <div class="ui-g-12 ui-md-6">
+                                    <constant-columns [tableConfig]="table"></constant-columns>
                                 </div>
                             </div>
                        </div> 

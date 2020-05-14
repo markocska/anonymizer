@@ -6,7 +6,7 @@ export interface TableConfig {
     fullTableName : string;
     where : string;
     scrambledColumns : Array<ScrambledColumnConfig>;
-    contantColumns : Array<ConstantColumnConfig>;
+    constantColumns : Array<ConstantColumnConfig>;
     pairedColumnsInsideTable : Array<Array<string>>;
     pairedColumnsOutsideTable : Array<PairedColumnsOutsideTableConfig>;
 }

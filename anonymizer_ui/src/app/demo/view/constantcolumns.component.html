@@ -1,0 +1,50 @@
+<p-table [columns]="cols" [value]="tableConfig.constantColumns" selectionMode="single" [(selection)]="selectedConstantColumnConfig" (onRowSelect)="onRowSelect($event)" [paginator]="true" [rows]="5">
+    <ng-template pTemplate="caption">
+        Constant Columns
+    </ng-template>
+    <ng-template pTemplate="header" let-columns>
+        <tr>
+            <th *ngFor="let col of columns" [pSortableColumn]="col.field">
+                {{col.header}}
+                <p-sortIcon [field]="col.field"></p-sortIcon>
+            </th>
+        </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-rowData let-columns="columns">
+        <tr [pSelectableRow]="rowData">
+            <td *ngFor="let col of columns">
+                {{rowData[col.field]}}
+            </td>
+        </tr>
+    </ng-template>
+    <ng-template pTemplate="summary" let-rowData>
+        <div style="text-align:left">
+            <button type="button" pButton icon="pi pi-plus" (click)="showDialogToAdd()" label="Add"></button>
+        </div>
+    </ng-template>    
+</p-table>
+
+<p-dialog header="Constant column details" [(visible)]="displayDialog" [focusOnShow]="false" [responsive]="true" showEffect="fade" [modal]="true"  [style]="{width: '400px'}">
+    <div class="ui-g ui-fluid" *ngIf="constantColumnConfigToSave">
+        <div class="ui-g-12">
+            <div class="ui-g-2">
+                <label for="name">Name</label>
+            </div>
+            <div class="ui-g-4">
+                <input pInputText id="name" [(ngModel)]="constantColumnConfigToSave.name" autofocus />
+            </div>
+            <div class="ui-g-2">
+                <label for="name">Value</label>
+            </div>
+            <div class="ui-g-4">
+                <input pInputText id="name" [(ngModel)]="constantColumnConfigToSave.value" autofocus />
+            </div>
+        </div>
+    </div>
+    <p-footer>
+        <div class="ui-dialog-buttonpane ui-helper-clearfix">
+            <button type="button" pButton icon="pi pi-times" (click)="delete()" label="Delete"></button>
+            <button type="button" pButton icon="pi pi-check" (click)="save()" label="Save"></button>
+        </div>
+    </p-footer>
+</p-dialog>
