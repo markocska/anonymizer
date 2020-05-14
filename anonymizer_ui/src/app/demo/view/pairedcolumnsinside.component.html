@@ -1,0 +1,27 @@
+<p-table [columns]="cols" [value]="tableConfig.pairedColumnsInsideTable" selectionMode="single" [(selection)]="selectedPairedColumnsInside"  [paginator]="true" [rows]="5">
+    <ng-template pTemplate="caption">
+        Paired Columns Inside Table
+    </ng-template>
+    <ng-template pTemplate="header" let-columns>
+        <tr>
+            <th *ngFor="let col of columns" [pSortableColumn]="col.field">
+                {{col.header}}
+                <p-sortIcon [field]="col.field"></p-sortIcon>
+            </th>
+        </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-rowData let-columns="columns">
+        <tr [pSelectableRow]="rowData">
+            <td *ngFor="let col of columns">
+                {{rowData.join()}}
+            </td>
+        </tr>
+    </ng-template>
+    <ng-template pTemplate="summary" let-rowData>
+        <div style="text-align:left">
+            <p-multiSelect [options]="getScrambledColumns()" [(ngModel)]="selectedScrambledColumns"></p-multiSelect>
+            <button type="button" pButton icon="pi pi-plus" (click)="saveNewPairedColumns()" label="Add"></button>
+            <button type="button" pButton icon="pi pi-plus" (click)="delete()" label="Delete"></button>
+        </div>
+    </ng-template>    
+</p-table>
