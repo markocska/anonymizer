@@ -19,7 +19,7 @@
     </ng-template>
     <ng-template pTemplate="summary" let-rowData>
         <div style="text-align:left">
-            <button type="button" pButton icon="pi pi-plus" (click)="showDialogToAdd()" label="Add"></button>
+            <p-button type="button" icon="pi pi-plus" styleClass="ui-button-success" (click)="showDialogToAdd()" label="Add"></p-button>
         </div>
     </ng-template>    
 </p-table>
@@ -43,8 +43,8 @@
     </div>
     <p-footer>
         <div class="ui-dialog-buttonpane ui-helper-clearfix">
-            <button type="button" pButton icon="pi pi-times" (click)="delete()" label="Delete"></button>
-            <button type="button" pButton icon="pi pi-check" (click)="save()" label="Save"></button>
+            <p-button type="button" icon="pi pi-times" styleClass="ui-button-danger" (click)="delete()" label="Delete"></p-button>
+            <p-button type="button" icon="pi pi-check" styleClass="ui-button-success" (click)="save()" label="Save"></p-button>
         </div>
     </p-footer>
 </p-dialog>

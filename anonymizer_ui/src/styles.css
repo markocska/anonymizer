@@ -1,1 +1,20 @@
 /* You can add global styles to this file, and also import other style files */
+
+body .ui-table .ui-table-thead > tr > th {
+    color: #333333;
+    background-color: #f4f4f4;
+}
+
+body .ui-table .ui-table-caption, body .ui-table  {
+    color: white;
+    background-color: #464850;
+}
+
+body .ui-tabview.ui-tabview-top .ui-tabview-nav li.ui-state-active {
+    background-color: #464850;
+}
+
+body .ui-paginator .ui-paginator-pages .ui-paginator-page.ui-state-active {
+    background-color: #464850;
+    color: #ffffff;
+}

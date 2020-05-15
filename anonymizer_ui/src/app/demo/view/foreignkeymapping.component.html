@@ -33,8 +33,8 @@
     </ng-template>
     <ng-template pTemplate="summary" let-rowData>
         <div style="text-align:left">
-            <button type="button" pButton icon="pi pi-plus" (click)="addNewForeignKeyMapping()" label="Add"></button>
-            <button type="button" pButton icon="pi pi-plus" (click)="delete()" label="Delete"></button>
+            <p-button type="button" icon="pi pi-plus" styleClass="ui-button-success" (click)="addNewForeignKeyMapping()" label="Add"></p-button>
+            <p-button type="button" icon="pi pi-times" styleClass="ui-button-danger" (click)="delete()" label="Delete"></p-button>
         </div>
     </ng-template>    
 </p-table>

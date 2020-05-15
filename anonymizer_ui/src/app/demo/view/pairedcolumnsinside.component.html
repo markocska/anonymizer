@@ -20,8 +20,8 @@
     <ng-template pTemplate="summary" let-rowData>
         <div style="text-align:left">
             <p-multiSelect [options]="getScrambledColumns()" [(ngModel)]="selectedScrambledColumns"></p-multiSelect>
-            <button type="button" pButton icon="pi pi-plus" (click)="saveNewPairedColumns()" label="Add"></button>
-            <button type="button" pButton icon="pi pi-plus" (click)="delete()" label="Delete"></button>
+            <p-button type="button" icon="pi pi-plus" styleClass="ui-button-success" (click)="saveNewPairedColumns()" label="Add"></p-button>
+            <p-button type="button" icon="pi pi-times" styleClass="ui-button-danger" (click)="delete()" label="Delete"></p-button>
         </div>
     </ng-template>    
 </p-table>

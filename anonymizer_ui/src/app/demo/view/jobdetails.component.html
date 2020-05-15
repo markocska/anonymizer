@@ -10,26 +10,26 @@
 [totalRecords]="totalNumberOfJobs" (onRowExpand)="expandRow($event)">
     <ng-template pTemplate="header" let-columns> 
         <tr>
-            <th style="background:#03a9f4; color: white; width: 40px;"></th>
+            <th style="background:#464850; color: white; width: 40px;"></th>
             <!-- <th *ngFor="let col of columns" style="background:#03a9f4; color:white" class="header" pResizableColumn>
                 {{col.header}}
             </th> -->
-            <th style="background:#03a9f4; color:white"  pResizableColumn>
+            <th style="background:#464850; color:white"  pResizableColumn>
                 Job Name
             </th>
-            <th style="background:#03a9f4; color:white"  pResizableColumn>
+            <th style="background:#464850; color:white"  pResizableColumn>
                 Job Group Name
             </th>
-            <th style="background:#03a9f4; color:white" pResizableColumn>
+            <th style="background:#464850; color:white" pResizableColumn>
                 Request Recovery
             </th>
-            <th style="background:#03a9f4; color:white" pResizableColumn>
+            <th style="background:#464850; color:white" pResizableColumn>
                 Description
             </th>
-            <th style="background:#03a9f4; color:white"  pResizableColumn>
+            <th style="background:#464850; color:white"  pResizableColumn>
                 Is Durable
             </th>
-            <th style="background:#03a9f4; color:white"  class="absorbing-column" pResizableColumn>
+            <th style="background:#464850; color:white"  class="absorbing-column" pResizableColumn>
                 Operation
             </th>
         </tr>
@@ -91,7 +91,7 @@
                     <p-table [columns]="triggerCols" [value]="triggers" dataKey="id">
                         <ng-template pTemplate="header" let-columns> 
                             <tr>
-                                <th *ngFor="let col of columns" style="background:#03a9f4; color:white">
+                                <th *ngFor="let col of columns" >
                                     {{col.header}}
                                 </th>
                             </tr>
