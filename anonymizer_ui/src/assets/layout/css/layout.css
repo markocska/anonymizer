@@ -74,7 +74,7 @@ a {
   right: 0;
   left: 250px;
   height: 50px;
-  background-color: #0388e5;
+  background-color: #3D3F45;
   padding: 0.7em 1.5em 0em 1.5em;
   box-sizing: border-box;
   color: #ffffff;
@@ -1011,7 +1011,7 @@ h2 {
 }
 .landing-wrapper .landing-header {
   height: 80px;
-  background-color: #0388e5;
+  background-color: #3D3F45;
   position: fixed;
   left: 0;
   width: 100%;
@@ -1285,7 +1285,7 @@ h2 {
   }
   .landing-wrapper .landing-header {
     height: 80px;
-    background-color: #0388e5;
+    background-color: #3D3F45;
   }
   .landing-wrapper .landing-header .landing-header-content {
     width: 100%;
