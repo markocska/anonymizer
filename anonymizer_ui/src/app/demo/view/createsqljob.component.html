@@ -103,6 +103,11 @@
                             </div>
                        </div> 
                 </div>
+                <p-tabView (onChange)="handlePairedColumnsOutsideTabClick(table,$event)">
+                    <p-tabPanel header="{{getPairedColumnsOutsideName(table, z)}}" *ngFor="let pairedColumnOutside of table.pairedColumnsOutsideTable; let z = index" [selected]="z == 0" 
+                        [closable]="z !== (table.pairedColumnsOutsideTable.length - 1)" >
+                    </p-tabPanel>
+                </p-tabView>
             </p-tabPanel>
         </p-tabView>
     </p-tabPanel>

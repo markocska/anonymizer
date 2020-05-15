@@ -32,7 +32,16 @@ export class CreateSqlJobComponent {
                         fullTableName: null,
                         constantColumns: [],
                         pairedColumnsInsideTable: [],
-                        pairedColumnsOutsideTable: [],
+                        pairedColumnsOutsideTable: [
+                            {
+                                columnMapping: [],
+                                sourceDestMapping: [],
+                            },
+                            {
+                                columnMapping: [],
+                                sourceDestMapping: []
+                            }
+                        ],
                         scrambledColumns: [],
                         where: null
                     },
@@ -40,7 +49,16 @@ export class CreateSqlJobComponent {
                         fullTableName: null,
                         constantColumns: [],
                         pairedColumnsInsideTable: [],
-                        pairedColumnsOutsideTable: [],
+                        pairedColumnsOutsideTable: [
+                            {
+                                columnMapping: [],
+                                sourceDestMapping: []
+                            },
+                            {
+                                columnMapping: [],
+                                sourceDestMapping: []
+                            }
+                        ],
                         scrambledColumns: [],
                         where: null
                     }
@@ -53,7 +71,16 @@ export class CreateSqlJobComponent {
                         fullTableName: null,
                         constantColumns: [],
                         pairedColumnsInsideTable: [],
-                        pairedColumnsOutsideTable: [],
+                        pairedColumnsOutsideTable: [
+                            {
+                                columnMapping: [],
+                                sourceDestMapping: []
+                            },
+                            {
+                                columnMapping: [],
+                                sourceDestMapping: []
+                            }
+                        ],
                         scrambledColumns: [],
                         where: null
                     },
@@ -61,7 +88,16 @@ export class CreateSqlJobComponent {
                         fullTableName: null,
                         constantColumns: [],
                         pairedColumnsInsideTable: [],
-                        pairedColumnsOutsideTable: [],
+                        pairedColumnsOutsideTable: [
+                            {
+                                columnMapping: [],
+                                sourceDestMapping: []
+                            },
+                            {
+                                columnMapping: [],
+                                sourceDestMapping: []
+                            }
+                        ],
                         scrambledColumns: [],
                         where: null
                     }]
@@ -94,6 +130,18 @@ export class CreateSqlJobComponent {
 
     }
 
+    protected getPairedColumnsOutsideName(table : TableConfig, index : number) {
+
+        if (index === (table.pairedColumnsOutsideTable.length - 1) && index !== 0) {
+            return "+";
+        }
+
+        else {
+            return `Paired column outside ${index}`;
+        }
+
+    }
+
 
     protected handleDatabaseTabClick(event) {
         if (event.index === (this.jobToCreate.jobConfig.databases.length - 1)) {
@@ -104,7 +152,16 @@ export class CreateSqlJobComponent {
                     fullTableName: null,
                     constantColumns: [],
                     pairedColumnsInsideTable: [],
-                    pairedColumnsOutsideTable: [],
+                    pairedColumnsOutsideTable: [
+                        {
+                            columnMapping: [],
+                            sourceDestMapping: []
+                        },
+                        {
+                            columnMapping: [],
+                            sourceDestMapping: []
+                        }
+                    ],
                     scrambledColumns: [],
                     where: null
                 },
@@ -112,7 +169,16 @@ export class CreateSqlJobComponent {
                     fullTableName: null,
                     constantColumns: [],
                     pairedColumnsInsideTable: [],
-                    pairedColumnsOutsideTable: [],
+                    pairedColumnsOutsideTable: [
+                        {
+                            columnMapping: [],
+                            sourceDestMapping: []
+                        },
+                        {
+                            columnMapping: [],
+                            sourceDestMapping: []
+                        }
+                    ],
                     scrambledColumns: [],
                     where: null
                 }
@@ -129,9 +195,28 @@ export class CreateSqlJobComponent {
                 fullTableName: null,
                 constantColumns: [],
                 pairedColumnsInsideTable: [],
-                pairedColumnsOutsideTable: [],
+                pairedColumnsOutsideTable: [
+                    {
+                        columnMapping: [],
+                        sourceDestMapping: []
+                    },
+                    {
+                        columnMapping: [],
+                        sourceDestMapping: []
+                    }
+                ],
                 scrambledColumns: [],
                 where: null
+            });
+        }
+    }
+
+    protected handlePairedColumnsOutsideTabClick(table: TableConfig, event) {
+        if (event.index === (table.pairedColumnsOutsideTable.length - 1)) {
+           table.pairedColumnsOutsideTable.push(
+            {
+                columnMapping: [],
+                sourceDestMapping: []
             });
         }
     }
