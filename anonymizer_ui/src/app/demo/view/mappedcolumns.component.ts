@@ -55,18 +55,19 @@ export class MappedColumnsComponent implements OnInit {
     }
 
     onRowSelect(event) {
+        console.log(event);
         this.newMappedColumnsConfig = false;
-        // this.mappedColumnsConfigToSave = this.clone(event.data);
+        this.mappedColumnsConfigToSave = this.clone(event.data);
         this.displayDialog = true;
     }
 
-    // clone(c: string[]) : string[] {
-    //     let constantColumnConfigClone = {name: null, value:null};
+    clone(c: string[]) : string[] {
+        let stringArrayCopy = [];
 
-    //     for (let prop in c) {
-    //         constantColumnConfigClone[prop] = c[prop]; 
-    //     }
+        for (let elem of c) {
+            stringArrayCopy.push(elem); 
+        }
 
-    //     return constantColumnConfigClone;
-    // }
+        return stringArrayCopy
+    }
 }

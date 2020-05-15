@@ -27,19 +27,19 @@
     </ng-template>    
 </p-table>
 
-<p-dialog header="Mapped column details" [(visible)]="displayDialog" [focusOnShow]="false" [responsive]="true" showEffect="fade" [modal]="true"  [style]="{width: '400px'}">
-    <div class="ui-g ui-fluid" *ngIf="mappedColumnsConfigToSave">
+<p-dialog header="Mapped column details" [(visible)]="displayDialog" [focusOnShow]="false" [responsive]="true" showEffect="fade" [modal]="true"  [style]="{width: '600px'}">
+    <div class="ui-g" *ngIf="mappedColumnsConfigToSave">
         <div class="ui-g-12">
-            <div class="ui-g-2">
+            <div class="ui-g-2 ui-md-2">
                 <label for="sourceColumn">Source Column</label>
             </div>
-            <div class="ui-g-4">
+            <div class="ui-g-4 ui-md-4">
                 <input pInputText id="sourceColumn" [(ngModel)]="mappedColumnsConfigToSave[0]" autofocus />
             </div>
-            <div class="ui-g-2">
+            <div class="ui-g-2 ui-md-2">
                 <label for="destinationColumn">Destination Column</label>
             </div>
-            <div class="ui-g-4">
+            <div class="ui-g-4 ui-md-4">
                 <input pInputText id="destinationColumn" [(ngModel)]="mappedColumnsConfigToSave[1]" autofocus />
             </div>
         </div>

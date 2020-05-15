@@ -70,17 +70,37 @@ export class SourceDestMappingComponent implements OnInit {
 
     onRowSelect(event) {
         this.newSelectedSourceDestMappingStep = false;
-        // this.mappedColumnsConfigToSave = this.clone(event.data);
+        // this.sourceDestMappingStepToSave = this.clone(event.data);
         this.displayDialog = true;
     }
 
-    // clone(c: string[]) : string[] {
-    //     let constantColumnConfigClone = {name: null, value:null};
+    // clone(sourceDestMapping: SourceDestMappingStepConfig) : SourceDestMappingStepConfig {
+    //     let sourceDestMappingClone : SourceDestMappingStepConfig = {
+    //         destinationConnectionString: null,
+    //         destinationFullTableName: null,
+    //         destinationLinkedInstance: null,
+    //         foreignKeyMapping: []
+    //     };
 
-    //     for (let prop in c) {
-    //         constantColumnConfigClone[prop] = c[prop]; 
+    //     for (let prop in sourceDestMapping) {
+    //         if (prop !== 'foreignKeyMapping') {
+    //             sourceDestMappingClone[prop] = sourceDestMapping[prop]; 
+    //         }
+    //         else {
+    //             sourceDestMappingClone[prop] = this.cloneStringArray(sourceDestMapping.foreignKeyMapping);
+    //         }
     //     }
 
     //     return constantColumnConfigClone;
+    // }
+
+    // cloneStringArray(c: string[]) : string[] {
+    //     let stringArrayCopy = [];
+
+    //     for (let elem of c) {
+    //         stringArrayCopy.push(elem); 
+    //     }
+
+    //     return stringArrayCopy
     // }
 }

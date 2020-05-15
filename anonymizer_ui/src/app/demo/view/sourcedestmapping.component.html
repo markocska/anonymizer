@@ -33,26 +33,33 @@
     </ng-template>    
 </p-table>
 
-<p-dialog header="Mapping step details" [(visible)]="displayDialog" [focusOnShow]="false" [responsive]="true" showEffect="fade" [modal]="true"  [style]="{width: '500px'}">
-    <div class="ui-g ui-fluid" *ngIf="sourceDestMappingStepToSave">
+<p-dialog header="Mapping step details" [(visible)]="displayDialog" [focusOnShow]="false" [responsive]="true" showEffect="fade" [modal]="true"  [style]="{width: '600px'}">
+    <div class="ui-g" *ngIf="sourceDestMappingStepToSave">
         <div class="ui-g-12">
-            <div class="ui-g-4 ui-md-4">
-                <label for="destConString">Destination Connection String</label>
+            <div class="ui-g-12">
+                <div class="ui-g-4 ui-md-4">
+                    <label for="destConString">Destination Connection String</label>
+                </div>
+                
+                <div class="ui-g-8 ui-md-8">
+                    <input pInputText id="destConString" [(ngModel)]="sourceDestMappingStepToSave.destinationConnectionString" autofocus />
+                </div>
             </div>
-            <div class="ui-g-8 ui-md-8">
-                <input pInputText id="destConString" [(ngModel)]="sourceDestMappingStepToSave.destinationConnectionString" autofocus />
+            <div class="ui-g-12">
+                <div class="ui-g-4 ui-md-4">
+                    <label for="destFullTableName">Destination Full Table Name</label>
+                </div>
+                <div class="ui-g-8 ui-md-8">
+                    <input pInputText id="destFullTableName" [(ngModel)]="sourceDestMappingStepToSave.destinationFullTableName" autofocus />
+                </div>
             </div>
-            <div class="ui-g-4 ui-md-4">
-                <label for="destFullTableName">Destination Full Table Name</label>
-            </div>
-            <div class="ui-g-8 ui-md-8">
-                <input pInputText id="destFullTableName" [(ngModel)]="sourceDestMappingStepToSave.destinationFullTableName" autofocus />
-            </div>
-            <div class="ui-g-4 ui-md-4">
-                <label for="destLinkedInstance">Destination Linked Instance</label>
-            </div>
-            <div class="ui-g-8 ui-md-4">
-                <input pInputText id="destLinkedInstance" [(ngModel)]="sourceDestMappingStepToSave.destinationLinkedInstance" autofocus />
+            <div class="ui-g-12">
+                <div class="ui-g-4 ui-md-4">
+                    <label for="destLinkedInstance">Destination Linked Instance</label>
+                </div>
+                <div class="ui-g-8 ui-md-8">
+                    <input pInputText id="destLinkedInstance" [(ngModel)]="sourceDestMappingStepToSave.destinationLinkedInstance" autofocus />
+                </div>
             </div>
         </div>
     </div>
