@@ -12,28 +12,53 @@
     </ng-template>
     <ng-template pTemplate="body" let-rowData let-columns="columns">
         <tr [pSelectableRow]="rowData">
-            <td >
-                {{rowData['destinationConnectionString']}}
+            
+            <td pEditableColumn>
+                <p-cellEditor>
+                    <ng-template pTemplate="input">
+                        <input pInputText type="text" [(ngModel)]="rowData['destinationConnectionString']" />
+                    </ng-template>
+                    <ng-template pTemplate="output">
+                        {{rowData['destinationConnectionString']}}
+                    </ng-template>
+                </p-cellEditor>
             </td>
-            <td >
-                {{rowData['destinationFullTableName']}}
+            
+            <td pEditableColumn>
+                <p-cellEditor>
+                    <ng-template pTemplate="input">
+                        <input pInputText type="text" [(ngModel)]="rowData['destinationFullTableName']" />
+                    </ng-template>
+                    <ng-template pTemplate="output">
+                        {{rowData['destinationFullTableName']}}
+                    </ng-template>
+                </p-cellEditor>
             </td>
-            <td >
-                {{rowData['destinationLinkedInstance']}}
+            <td pEditableColumn>
+                <p-cellEditor>
+                    <ng-template pTemplate="input">
+                        <input pInputText type="text" [(ngModel)]="rowData['destinationLinkedInstance']" />
+                    </ng-template>
+                    <ng-template pTemplate="output">
+                        {{rowData['destinationLinkedInstance']}}
+                    </ng-template>
+                </p-cellEditor>
             </td>
-            <td >
+            <td pEditableColumn>
                 <!-- {{rowData['destinationFullTableName']}} -->
             </td>
+            
         </tr>
     </ng-template>
     <ng-template pTemplate="summary" let-rowData>
         <div style="text-align:left">
-            <button type="button" pButton icon="pi pi-plus" (click)="showDialogToAdd()" label="Add"></button>
+            <button type="button" pButton icon="pi pi-plus" (click)="AddNewSourceDestMapping()" label="Add"></button>
+            <button type="button" pButton icon="pi pi-plus" (click)="delete()" label="Delete"></button>
         </div>
     </ng-template>    
 </p-table>
 
-<p-dialog header="Mapping step details" [(visible)]="displayDialog" [focusOnShow]="false" [responsive]="true" showEffect="fade" [modal]="true"  [style]="{width: '600px'}">
+<!-- <p-dialog header="Mapping step details" [(visible)]="displayDialog" [focusOnShow]="false" [responsive]="true" showEffect="fade" [modal]="true"  [style]="{width: '600px'}">
     <div class="ui-g" *ngIf="sourceDestMappingStepToSave">
         <div class="ui-g-12">
             <div class="ui-g-12">
@@ -69,4 +94,4 @@
             <button type="button" pButton icon="pi pi-check" (click)="save()" label="Save"></button>
         </div>
     </p-footer>
-</p-dialog>
+</p-dialog> -->
