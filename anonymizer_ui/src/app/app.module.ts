@@ -98,6 +98,7 @@ import { ConstantColumnsComponent } from './demo/view/constantcolumns.component'
 import { PairedColumnsInsideComponent } from './demo/view/pairedcolumnsinside.component';
 import { MappedColumnsComponent } from './demo/view/mappedcolumns.component';
 import { SourceDestMappingComponent } from './demo/view/sourcedestmapping.component';
+import { ForeignKeyMappingComponent } from './demo/view/foreignkeymapping.component';
 
 @NgModule({
     imports: [
@@ -187,7 +188,8 @@ import { SourceDestMappingComponent } from './demo/view/sourcedestmapping.compon
         ConstantColumnsComponent,
         PairedColumnsInsideComponent,
         MappedColumnsComponent,
-        SourceDestMappingComponent
+        SourceDestMappingComponent,
+        ForeignKeyMappingComponent
     ],
     providers: [
         {provide: LocationStrategy, useClass: HashLocationStrategy},LogService,

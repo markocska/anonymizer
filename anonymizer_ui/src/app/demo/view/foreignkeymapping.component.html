@@ -1,0 +1,41 @@
+<p-table [columns]="cols" [value]="sourceDestMappingConfig.foreignKeyMapping" selectionMode="single" [(selection)]="selectedMappedColumns"  [paginator]="true" [rows]="5">
+    <ng-template pTemplate="header" let-columns>
+        <tr>
+            <th *ngFor="let col of columns" [pSortableColumn]="col.field">
+                {{col.header}}
+                <p-sortIcon [field]="col.field"></p-sortIcon>
+            </th>
+        </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-rowData let-columns="columns">
+        <tr [pSelectableRow]="rowData">
+            <td pEditableColumn>
+                <p-cellEditor>
+                    <ng-template pTemplate="input">
+                        <input pInputText type="text" [(ngModel)]="rowData[0]" />
+                    </ng-template>
+                    <ng-template pTemplate="output">
+                        {{rowData[0]}}
+                    </ng-template>
+                </p-cellEditor>
+            </td>
+            <td pEditableColumn>
+                <p-cellEditor>
+                    <ng-template pTemplate="input">
+                        <input pInputText type="text" [(ngModel)]="rowData[1]" />
+                    </ng-template>
+                    <ng-template pTemplate="output">
+                        {{rowData[1]}}
+                    </ng-template>
+                </p-cellEditor>
+            </td>
+        </tr>
+    </ng-template>
+    <ng-template pTemplate="summary" let-rowData>
+        <div style="text-align:left">
+            <button type="button" pButton icon="pi pi-plus" (click)="addNewForeignKeyMapping()" label="Add"></button>
+            <button type="button" pButton icon="pi pi-plus" (click)="delete()" label="Delete"></button>
+        </div>
+    </ng-template>    
+</p-table>
+

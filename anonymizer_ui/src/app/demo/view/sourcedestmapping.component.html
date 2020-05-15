@@ -45,7 +45,7 @@
                 </p-cellEditor>
             </td>
             <td pEditableColumn>
-                <!-- {{rowData['destinationFullTableName']}} -->
+                <foreignkey-mapping [sourceDestMappingConfig]="rowData"></foreignkey-mapping>
             </td>
             
         </tr>
