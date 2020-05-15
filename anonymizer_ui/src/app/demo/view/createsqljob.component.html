@@ -106,6 +106,15 @@
                 <p-tabView (onChange)="handlePairedColumnsOutsideTabClick(table,$event)">
                     <p-tabPanel header="{{getPairedColumnsOutsideName(table, z)}}" *ngFor="let pairedColumnOutside of table.pairedColumnsOutsideTable; let z = index" [selected]="z == 0" 
                         [closable]="z !== (table.pairedColumnsOutsideTable.length - 1)" >
+                        <div class="ui-g">
+                            <div class="ui-g-12">
+                                <div class="card no-margin">
+                                    <div class="ui-g-12 ui-md-6">
+                                        <mapped-columns [pairedColumnsOutsideConfig]="pairedColumnOutside"></mapped-columns>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </p-tabPanel>
                 </p-tabView>
             </p-tabPanel>

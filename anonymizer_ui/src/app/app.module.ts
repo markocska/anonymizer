@@ -107,6 +107,7 @@ import { JobSchedulingService } from './demo/service/jobschedulingservice';
 import { ScrambledColumnsComponent } from './demo/view/scrambledcolumns.component';
 import { ConstantColumnsComponent } from './demo/view/constantcolumns.component';
 import { PairedColumnsInsideComponent } from './demo/view/pairedcolumnsinside.component';
+import { MappedColumnsComponent } from './demo/view/mappedcolumns.component';
 
 @NgModule({
     imports: [
@@ -206,7 +207,8 @@ import { PairedColumnsInsideComponent } from './demo/view/pairedcolumnsinside.co
         CreateSqlJobComponent,
         ScrambledColumnsComponent,
         ConstantColumnsComponent,
-        PairedColumnsInsideComponent
+        PairedColumnsInsideComponent,
+        MappedColumnsComponent
     ],
     providers: [
         {provide: LocationStrategy, useClass: HashLocationStrategy},LogService,
