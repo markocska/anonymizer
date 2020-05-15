@@ -1,0 +1,86 @@
+import {Component, OnInit, Input} from '@angular/core';
+import { TableConfig } from '../domain/databaseConfig/tableConfig';
+import { ConstantColumnConfig } from '../domain/databaseConfig/constantColumnConfig';
+import { PairedColumnsOutsideTableConfig } from '../domain/databaseConfig/pairedColumnsOutsideTableConfig';
+import { SourceDestMappingStepConfig } from '../domain/databaseConfig/sourceDestMappingStepConfig';
+
+@Component({
+    selector:'sourcedest-mapping',
+    templateUrl: './sourcedestmapping.component.html'
+})
+export class SourceDestMappingComponent implements OnInit {
+    displayDialog: boolean;
+
+    sourceDestMappingStepToSave : SourceDestMappingStepConfig = {
+        destinationConnectionString: null,
+        destinationFullTableName: null,
+        destinationLinkedInstance: null,
+        foreignKeyMapping: []
+    };
+
+    selectedSourceDestMappingStep : SourceDestMappingStepConfig;
+
+    newSelectedSourceDestMappingStep : boolean;
+
+    @Input()
+    pairedColumnsOutsideConfig: PairedColumnsOutsideTableConfig;
+
+    cols: any[];
+
+    ngOnInit() {
+        this.cols = [
+            {field:'destinationConnectionString', header:'Destination Connection String'},
+            {field:'destinationFullTableName', header:'Destination Full Table Name'},
+            {field:'destinationLinkedInstance', header:'Destination Linked Instance'},
+            {field:'foreignKeyMapping', header:'Foreign Key Mapping'}
+        ];
+    }
+
+    showDialogToAdd() {
+        this.newSelectedSourceDestMappingStep = true;
+        this.sourceDestMappingStepToSave = {
+            destinationConnectionString: null,
+            destinationFullTableName: null,
+            destinationLinkedInstance: null,
+            foreignKeyMapping: []
+        }
+        this.displayDialog = true;
+    }
+
+    save() {
+
+        if (this.newSelectedSourceDestMappingStep){
+            this.pairedColumnsOutsideConfig.sourceDestMapping.push(this.sourceDestMappingStepToSave);
+        }
+        else {
+            this.pairedColumnsOutsideConfig.sourceDestMapping[this.pairedColumnsOutsideConfig.sourceDestMapping.indexOf(this.selectedSourceDestMappingStep)] 
+                = this.sourceDestMappingStepToSave;
+        }
+
+        this.sourceDestMappingStepToSave = null;
+        this.displayDialog = false;
+    }
+
+    delete() {
+        let index = this.pairedColumnsOutsideConfig.sourceDestMapping.indexOf(this.selectedSourceDestMappingStep);
+        this.pairedColumnsOutsideConfig.sourceDestMapping = this.pairedColumnsOutsideConfig.sourceDestMapping.filter((val,i) => i != index);
+        this.sourceDestMappingStepToSave = null;
+        this.displayDialog = false;
+    }
+
+    onRowSelect(event) {
+        this.newSelectedSourceDestMappingStep = false;
+        // this.mappedColumnsConfigToSave = this.clone(event.data);
+        this.displayDialog = true;
+    }
+
+    // clone(c: string[]) : string[] {
+    //     let constantColumnConfigClone = {name: null, value:null};
+
+    //     for (let prop in c) {
+    //         constantColumnConfigClone[prop] = c[prop]; 
+    //     }
+
+    //     return constantColumnConfigClone;
+    // }
+}

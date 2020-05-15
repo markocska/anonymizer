@@ -1,0 +1,65 @@
+<p-table [columns]="cols" [value]="pairedColumnsOutsideConfig.sourceDestMapping" selectionMode="single" [(selection)]="selectedSourceDestMappingStep" (onRowSelect)="onRowSelect($event)" [paginator]="true" [rows]="5">
+    <ng-template pTemplate="caption">
+        Mapping Steps
+    </ng-template>
+    <ng-template pTemplate="header" let-columns>
+        <tr>
+            <th *ngFor="let col of columns" [pSortableColumn]="col.field">
+                {{col.header}}
+                <p-sortIcon [field]="col.field"></p-sortIcon>
+            </th>
+        </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-rowData let-columns="columns">
+        <tr [pSelectableRow]="rowData">
+            <td >
+                {{rowData['destinationConnectionString']}}
+            </td>
+            <td >
+                {{rowData['destinationFullTableName']}}
+            </td>
+            <td >
+                {{rowData['destinationLinkedInstance']}}
+            </td>
+            <td >
+                <!-- {{rowData['destinationFullTableName']}} -->
+            </td>
+        </tr>
+    </ng-template>
+    <ng-template pTemplate="summary" let-rowData>
+        <div style="text-align:left">
+            <button type="button" pButton icon="pi pi-plus" (click)="showDialogToAdd()" label="Add"></button>
+        </div>
+    </ng-template>    
+</p-table>
+
+<p-dialog header="Mapping step details" [(visible)]="displayDialog" [focusOnShow]="false" [responsive]="true" showEffect="fade" [modal]="true"  [style]="{width: '500px'}">
+    <div class="ui-g ui-fluid" *ngIf="sourceDestMappingStepToSave">
+        <div class="ui-g-12">
+            <div class="ui-g-4 ui-md-4">
+                <label for="destConString">Destination Connection String</label>
+            </div>
+            <div class="ui-g-8 ui-md-8">
+                <input pInputText id="destConString" [(ngModel)]="sourceDestMappingStepToSave.destinationConnectionString" autofocus />
+            </div>
+            <div class="ui-g-4 ui-md-4">
+                <label for="destFullTableName">Destination Full Table Name</label>
+            </div>
+            <div class="ui-g-8 ui-md-8">
+                <input pInputText id="destFullTableName" [(ngModel)]="sourceDestMappingStepToSave.destinationFullTableName" autofocus />
+            </div>
+            <div class="ui-g-4 ui-md-4">
+                <label for="destLinkedInstance">Destination Linked Instance</label>
+            </div>
+            <div class="ui-g-8 ui-md-4">
+                <input pInputText id="destLinkedInstance" [(ngModel)]="sourceDestMappingStepToSave.destinationLinkedInstance" autofocus />
+            </div>
+        </div>
+    </div>
+    <p-footer>
+        <div class="ui-dialog-buttonpane ui-helper-clearfix">
+            <button type="button" pButton icon="pi pi-times" (click)="delete()" label="Delete"></button>
+            <button type="button" pButton icon="pi pi-check" (click)="save()" label="Save"></button>
+        </div>
+    </p-footer>
+</p-dialog>

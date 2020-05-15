@@ -97,6 +97,7 @@ import { ScrambledColumnsComponent } from './demo/view/scrambledcolumns.componen
 import { ConstantColumnsComponent } from './demo/view/constantcolumns.component';
 import { PairedColumnsInsideComponent } from './demo/view/pairedcolumnsinside.component';
 import { MappedColumnsComponent } from './demo/view/mappedcolumns.component';
+import { SourceDestMappingComponent } from './demo/view/sourcedestmapping.component';
 
 @NgModule({
     imports: [
@@ -185,7 +186,8 @@ import { MappedColumnsComponent } from './demo/view/mappedcolumns.component';
         ScrambledColumnsComponent,
         ConstantColumnsComponent,
         PairedColumnsInsideComponent,
-        MappedColumnsComponent
+        MappedColumnsComponent,
+        SourceDestMappingComponent
     ],
     providers: [
         {provide: LocationStrategy, useClass: HashLocationStrategy},LogService,
