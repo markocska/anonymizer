@@ -51,6 +51,11 @@
                 <div class="ui-g-12 ui-md-4">
                     <p-dropdown id="dbType" [options]="dbTypes" [(ngModel)]="chosenDbType"></p-dropdown>
                 </div>
+                
+                <div class="ui-g-12 ui-md-2">
+                    <p-button type="button" icon="pi pi-plus" styleClass="ui-button-success" (click)="createJobButtonClickHandler()" label="CREATE JOB"></p-button>
+                </div>
+
             </div>
         </div>
     </div>
@@ -128,3 +133,21 @@
 
 
 </div>
+
+
+<p-dialog header="Success" [(visible)]="showJobCreatedSuccessfullyDialog">
+    <p style="color:green"><b>The job has been created successfully.</b></p>
+    <br /><br />
+    <div style="text-align: center">
+        <button type="button" pButton (click)="showJobCreatedSuccessfullyDialog=false" label="Ok"></button>
+    </div>
+</p-dialog>
+
+<p-dialog header="Error" [(visible)]="showErrorWhileCreatingJobDialog">
+    <p style="color:red"><b>Error while creating job.</b></p>
+    <b>Error message: {{errorWhileCreatingJobErrorMessage}}</b>
+    <br /><br />
+    <div style="text-align: center">
+        <button type="button" pButton (click)="showErrorWhileCreatingJobDialog=false" label="Ok"></button>
+    </div>
+</p-dialog>

@@ -173,6 +173,8 @@ export class JobDetailsComponent implements OnInit {
                         detail:`Error while deleting the trigger. ${typeof error.error === 'string' ? 'Message: ' + error.error : ''}`}))
             }
         });
+
+    
     }
 
     protected removeDeletedJobFromList(jobGroup: string, jobKey: string) : void {
@@ -184,6 +186,9 @@ export class JobDetailsComponent implements OnInit {
         this.triggers = this.triggers.filter(trigger => !(trigger.triggerGroup === triggerGroup && trigger.triggerName === triggerKey));
         var jobToRemoveTriggerOf = this.jobDescriptionsWithoutFilter.filter(job => job.jobGroup === jobData.jobGroup && job.jobName === jobData.jobName)[0];
         jobToRemoveTriggerOf.triggers = jobToRemoveTriggerOf.triggers.filter(trigger => !(trigger.triggerGroup === triggerGroup && trigger.triggerName === triggerKey));
+        if (jobToRemoveTriggerOf.triggers.length === 0) {
+            this.removeDeletedJobFromList(jobToRemoveTriggerOf.jobGroup, jobToRemoveTriggerOf.jobName);
+        }
     }
 
     protected showDialogToAddTrigger() : void {

@@ -12,16 +12,12 @@ export class JobSchedulingService {
 
     public createSqlServerJob(createScheduledJob : CreateScheduledJob) : Promise<JobSuccessfullyCreated> {
         return this.httpClient.post<JobSuccessfullyCreated>(this.configService.getConfig('baseUrl') + '/jobscheduling/sql', createScheduledJob)
-            .toPromise()
-            .then(data => data as JobSuccessfullyCreated)
-            .then(data => data);
+            .toPromise();
     }
 
     public createMySqlServerJob(createdScheduledJob : CreateScheduledJob) : Promise<JobSuccessfullyCreated> {
         return this.httpClient.post<JobSuccessfullyCreated>(this.configService.getConfig('baseUrl') + '/jobscheduling/mysql', createdScheduledJob)
-            .toPromise()
-            .then(data => data as JobSuccessfullyCreated)
-            .then(data => data);
+            .toPromise();
     }
 
 }

@@ -6,6 +6,7 @@ import { DatabaseConfig } from '../domain/databaseConfig/databaseConfig';
 import { TableConfig } from '../domain/databaseConfig/tableConfig';
 import { DatabaseConfigInitializerService } from '../utilities/databasesConfigInitializerService';
 import { HttpErrorResponse } from '@angular/common/http';
+import {ErrorResponse} from '../domain/errorResponse';
 
 
 @Component({
@@ -16,7 +17,7 @@ export class CreateSqlJobComponent implements OnInit {
 
     constructor(private jobSchedulingService : JobSchedulingService, private databaseConfigIniatializer : DatabaseConfigInitializerService) {}
 
-    protected dbTypes : SelectItem[] = [{label:"Sql server", value: "SQLSERVER"}, {label:"MySql/Aurora", value:"MYSQL"}]
+    protected dbTypes : SelectItem[] = [{label:"Select database type", value:""},{label:"Sql server", value: "SQLSERVER"}, {label:"MySql/Aurora", value:"MYSQL"}]
     protected chosenDbType : string = null;
 
     jobToCreate: CreateScheduledJob = {
@@ -57,13 +58,21 @@ export class CreateSqlJobComponent implements OnInit {
         }
 
         if (this.chosenDbType === 'SQLSERVER') {
+           console.log('sql server');
             this.jobSchedulingService.createSqlServerJob(this.jobToCreate)
                 .then(result => {
                     this.showJobCreatedSuccessfullyDialog = true;
                 })
                 .catch((error: HttpErrorResponse) => {
-                    this.errorWhileCreatingJobErrorMessage = error.error;
-                    this.showErrorWhileCreatingJobDialog;
+                    console.log(error);
+                    let errorMessage = "";
+                    if (error.error instanceof Object) {
+                        for(let errorProp in error.error.errors) {
+                            errorMessage += error.error.errors[errorProp][0] + " ";
+                        }
+                    }
+                    this.errorWhileCreatingJobErrorMessage = errorMessage;
+                    this.showErrorWhileCreatingJobDialog = true;
                 });
         }
         else if (this.chosenDbType === 'MYSQL') {
@@ -72,6 +81,7 @@ export class CreateSqlJobComponent implements OnInit {
                 this.showJobCreatedSuccessfullyDialog = true;
             })
             .catch((error: HttpErrorResponse) => {
+                console.log(error.error);
                 this.errorWhileCreatingJobErrorMessage = error.error;
                 this.showErrorWhileCreatingJobDialog;
             });
