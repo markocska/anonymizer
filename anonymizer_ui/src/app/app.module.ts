@@ -99,6 +99,7 @@ import { PairedColumnsInsideComponent } from './demo/view/pairedcolumnsinside.co
 import { MappedColumnsComponent } from './demo/view/mappedcolumns.component';
 import { SourceDestMappingComponent } from './demo/view/sourcedestmapping.component';
 import { ForeignKeyMappingComponent } from './demo/view/foreignkeymapping.component';
+import { DatabaseConfigInitializerService } from './demo/utilities/databasesConfigInitializerService';
 
 @NgModule({
     imports: [
@@ -194,6 +195,7 @@ import { ForeignKeyMappingComponent } from './demo/view/foreignkeymapping.compon
     providers: [
         {provide: LocationStrategy, useClass: HashLocationStrategy},LogService,
         CarService, CountryService, EventService, NodeService, ConfigService, JobService, TriggerService, ConfirmationService, JobSchedulingService,
+        DatabaseConfigInitializerService,
         {provide: APP_INITIALIZER, deps:[ConfigService], useFactory: (config : ConfigService) => () => config.load(), multi: true}
     ],
     bootstrap: [AppComponent]

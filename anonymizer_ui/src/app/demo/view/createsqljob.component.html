@@ -44,6 +44,13 @@
                 <div class="ui-g-12 ui-md-4">
                     <textarea [rows]="3" [cols]="30" pInputTextarea id="triggerDescription" autoResize="autoResize" [(ngModel)]="jobToCreate.triggerDescription" ></textarea>
                 </div>
+
+                <div class="ui-g-12 ui-md-2">
+                    <label for="dbType">Database type</label>
+                </div>
+                <div class="ui-g-12 ui-md-4">
+                    <p-dropdown id="dbType" [options]="dbTypes" [(ngModel)]="chosenDbType"></p-dropdown>
+                </div>
             </div>
         </div>
     </div>
@@ -54,18 +61,11 @@
         [closable]="i !== (jobToCreate.jobConfig.databases.length - 1)" >
         <div class="ui-g">
                 <div class="ui-g-12">
-                    <div class="card no-margin">
-                        <div class="ui-g-12 ui-md-2">
-                            <label for="dbType">Database type</label>
-                        </div>
-                        <div class="ui-g-12 ui-md-4">
-                            <p-dropdown id="dbType" [options]="dbTypes" [(ngModel)]="chosenDbType"></p-dropdown>
-                        </div>
-
+                    <div class="card no-margin">    
                         <div class="ui-g-12 ui-md-2">
                             <label for="connectionString">Connection String </label>
                         </div>
-                        <div class="ui-g-12 ui-md-4">
+                        <div class="ui-g-12 ui-md-6">
                             <input pInputText id="connectionString" type="text" [(ngModel)]="database.connectionString" />
                         </div>
                     </div>

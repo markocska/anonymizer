@@ -1,18 +1,20 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CreateScheduledJob } from '../domain/createScheduledJob';
 import { JobSchedulingService } from '../service/jobschedulingservice';
 import { SelectItem } from 'primeng/api';
 import { DatabaseConfig } from '../domain/databaseConfig/databaseConfig';
 import { TableConfig } from '../domain/databaseConfig/tableConfig';
+import { DatabaseConfigInitializerService } from '../utilities/databasesConfigInitializerService';
+import { HttpErrorResponse } from '@angular/common/http';
 
 
 @Component({
     selector:'createsqljob',
     templateUrl:'./createsqljob.component.html'
 })
-export class CreateSqlJobComponent {
+export class CreateSqlJobComponent implements OnInit {
 
-    constructor(jobSchedulingService : JobSchedulingService) {}
+    constructor(private jobSchedulingService : JobSchedulingService, private databaseConfigIniatializer : DatabaseConfigInitializerService) {}
 
     protected dbTypes : SelectItem[] = [{label:"Sql server", value: "SQLSERVER"}, {label:"MySql/Aurora", value:"MYSQL"}]
     protected chosenDbType : string = null;
@@ -23,87 +25,66 @@ export class CreateSqlJobComponent {
         description: null,
         cronExpression: null,
         triggerDescription: null,
-        jobConfig: {
-            databases: [
-                {
-                    connectionString: null,
-                    version: null,
-                    tables: [{
-                        fullTableName: null,
-                        constantColumns: [],
-                        pairedColumnsInsideTable: [],
-                        pairedColumnsOutsideTable: [
-                            {
-                                columnMapping: [],
-                                sourceDestMapping: [],
-                            },
-                            {
-                                columnMapping: [],
-                                sourceDestMapping: []
-                            }
-                        ],
-                        scrambledColumns: [],
-                        where: null
-                    },
-                    {
-                        fullTableName: null,
-                        constantColumns: [],
-                        pairedColumnsInsideTable: [],
-                        pairedColumnsOutsideTable: [
-                            {
-                                columnMapping: [],
-                                sourceDestMapping: []
-                            },
-                            {
-                                columnMapping: [],
-                                sourceDestMapping: []
-                            }
-                        ],
-                        scrambledColumns: [],
-                        where: null
-                    }
-                ]
-                },
-                {
-                    connectionString: null,
-                    version: null,
-                    tables: [{
-                        fullTableName: null,
-                        constantColumns: [],
-                        pairedColumnsInsideTable: [],
-                        pairedColumnsOutsideTable: [
-                            {
-                                columnMapping: [],
-                                sourceDestMapping: []
-                            },
-                            {
-                                columnMapping: [],
-                                sourceDestMapping: []
-                            }
-                        ],
-                        scrambledColumns: [],
-                        where: null
-                    },
-                    {
-                        fullTableName: null,
-                        constantColumns: [],
-                        pairedColumnsInsideTable: [],
-                        pairedColumnsOutsideTable: [
-                            {
-                                columnMapping: [],
-                                sourceDestMapping: []
-                            },
-                            {
-                                columnMapping: [],
-                                sourceDestMapping: []
-                            }
-                        ],
-                        scrambledColumns: [],
-                        where: null
-                    }]
-                }
-            ]
+        jobConfig: null
+    }
+
+    protected showJobCreatedSuccessfullyDialog : boolean = false;
+    
+    protected showErrorWhileCreatingJobDialog : boolean = false;
+    protected errorWhileCreatingJobErrorMessage : string = null;
+
+
+    ngOnInit() {
+        this.jobToCreate.jobConfig = this.databaseConfigIniatializer.initializeDatabasesConfig();
+    }
+
+    protected createJobButtonClickHandler() {
+        let lastDatabaseIndex = this.jobToCreate.jobConfig.databases.length - 1;
+
+        this.jobToCreate.jobConfig.databases = 
+            this.jobToCreate.jobConfig.databases.filter((value, index) => index !== lastDatabaseIndex);
+
+        for(let database of this.jobToCreate.jobConfig.databases) {
+            let lastTableIndex = database.tables.length - 1;
+
+            database.tables = database.tables.filter((value, index) => index !== lastTableIndex);
+
+            for(let table of database.tables) {
+                let lastPairedColumnOutsideIndex = table.pairedColumnsOutsideTable.length - 1;
+
+                table.pairedColumnsOutsideTable = table.pairedColumnsOutsideTable.filter((value, index) => index !== lastPairedColumnOutsideIndex);
+            }
         }
+
+        if (this.chosenDbType === 'SQLSERVER') {
+            this.jobSchedulingService.createSqlServerJob(this.jobToCreate)
+                .then(result => {
+                    this.showJobCreatedSuccessfullyDialog = true;
+                })
+                .catch((error: HttpErrorResponse) => {
+                    this.errorWhileCreatingJobErrorMessage = error.error;
+                    this.showErrorWhileCreatingJobDialog;
+                });
+        }
+        else if (this.chosenDbType === 'MYSQL') {
+            this.jobSchedulingService.createMySqlServerJob(this.jobToCreate)
+            .then(result => {
+                this.showJobCreatedSuccessfullyDialog = true;
+            })
+            .catch((error: HttpErrorResponse) => {
+                this.errorWhileCreatingJobErrorMessage = error.error;
+                this.showErrorWhileCreatingJobDialog;
+            });
+        }
+
+        this.jobToCreate = {
+            jobGroup: null,
+            jobName: null,
+            description: null,
+            cronExpression: null,
+            triggerDescription: null,
+            jobConfig: this.databaseConfigIniatializer.initializeDatabasesConfig()
+        };
     }
 
     protected getDbName(database : DatabaseConfig, index : number) {
