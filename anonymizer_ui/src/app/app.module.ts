@@ -78,22 +78,22 @@ import {AppMenuComponent, AppSubMenuComponent} from './app.menu.component';
 
 
 import {APP_INITIALIZER} from '@angular/core'
-import { ConfigService } from './demo/service/configService';
-import { JobDetailsComponent } from './demo/view/jobdetails.component';
-import { JobService } from './demo/service/jobservice';
+import { ConfigService } from './scrambler/service/configService';
+import { JobDetailsComponent } from './scrambler/view/jobdetails.component';
+import { JobService } from './scrambler/service/jobservice';
 import { ConfirmationService } from 'primeng/api';
-import { TriggerService } from './demo/service/triggerService';
-import { LogComponent } from './demo/view/logs.component';
-import { LogService } from './demo/service/logservice';
-import { CreateSqlJobComponent } from './demo/view/createsqljob.component';
-import { JobSchedulingService } from './demo/service/jobschedulingservice';
-import { ScrambledColumnsComponent } from './demo/view/scrambledcolumns.component';
-import { ConstantColumnsComponent } from './demo/view/constantcolumns.component';
-import { PairedColumnsInsideComponent } from './demo/view/pairedcolumnsinside.component';
-import { MappedColumnsComponent } from './demo/view/mappedcolumns.component';
-import { SourceDestMappingComponent } from './demo/view/sourcedestmapping.component';
-import { ForeignKeyMappingComponent } from './demo/view/foreignkeymapping.component';
-import { DatabaseConfigInitializerService } from './demo/utilities/databasesConfigInitializerService';
+import { TriggerService } from './scrambler/service/triggerService';
+import { LogComponent } from './scrambler/view/logs.component';
+import { LogService } from './scrambler/service/logservice';
+import { CreateSqlJobComponent } from './scrambler/view/createsqljob.component';
+import { JobSchedulingService } from './scrambler/service/jobschedulingservice';
+import { ScrambledColumnsComponent } from './scrambler/view/scrambledcolumns.component';
+import { ConstantColumnsComponent } from './scrambler/view/constantcolumns.component';
+import { PairedColumnsInsideComponent } from './scrambler/view/pairedcolumnsinside.component';
+import { MappedColumnsComponent } from './scrambler/view/mappedcolumns.component';
+import { SourceDestMappingComponent } from './scrambler/view/sourcedestmapping.component';
+import { ForeignKeyMappingComponent } from './scrambler/view/foreignkeymapping.component';
+import { DatabaseConfigInitializerService } from './scrambler/utilities/databasesConfigInitializerService';
 
 @NgModule({
     imports: [

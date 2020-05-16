@@ -1,8 +1,8 @@
 import {Routes, RouterModule} from '@angular/router';
 import {ModuleWithProviders} from '@angular/core';
-import { JobDetailsComponent } from './demo/view/jobdetails.component';
-import { LogComponent } from './demo/view/logs.component';
-import { CreateSqlJobComponent } from './demo/view/createsqljob.component';
+import { JobDetailsComponent } from './scrambler/view/jobdetails.component';
+import { LogComponent } from './scrambler/view/logs.component';
+import { CreateSqlJobComponent } from './scrambler/view/createsqljob.component';
 
 export const routes: Routes = [
     {path: 'jobdetails', component: JobDetailsComponent},
