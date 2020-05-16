@@ -40,6 +40,11 @@ export class CreateSqlJobComponent implements OnInit {
     }
 
     protected createJobButtonClickHandler() {
+        if (!this.chosenDbType) {
+            this.errorWhileCreatingJobErrorMessage = "Please choose a database type";
+            this.showErrorWhileCreatingJobDialog = true;
+        }
+
         let lastDatabaseIndex = this.jobToCreate.jobConfig.databases.length - 1;
 
         this.jobToCreate.jobConfig.databases = 
