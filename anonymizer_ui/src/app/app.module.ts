@@ -75,14 +75,8 @@ import { VirtualScrollerModule } from 'primeng/virtualscroller';
 
 import {AppComponent} from './app.component';
 import {AppMenuComponent, AppSubMenuComponent} from './app.menu.component';
-import {SampleDemoComponent} from './demo/view/sampledemo.component';
-import {FormsDemoComponent} from './demo/view/formsdemo.component';
-import {MenusDemoComponent} from './demo/view/menusdemo.component';
 
-import {CarService} from './demo/service/carservice';
-import {CountryService} from './demo/service/countryservice';
-import {EventService} from './demo/service/eventservice';
-import {NodeService} from './demo/service/nodeservice';
+
 import {APP_INITIALIZER} from '@angular/core'
 import { ConfigService } from './demo/service/configService';
 import { JobDetailsComponent } from './demo/view/jobdetails.component';
@@ -179,9 +173,6 @@ import { DatabaseConfigInitializerService } from './demo/utilities/databasesConf
         AppComponent,
         AppMenuComponent,
         AppSubMenuComponent,
-        SampleDemoComponent,
-        FormsDemoComponent,
-        MenusDemoComponent,
         JobDetailsComponent,
         LogComponent,
         CreateSqlJobComponent,
@@ -194,7 +185,7 @@ import { DatabaseConfigInitializerService } from './demo/utilities/databasesConf
     ],
     providers: [
         {provide: LocationStrategy, useClass: HashLocationStrategy},LogService,
-        CarService, CountryService, EventService, NodeService, ConfigService, JobService, TriggerService, ConfirmationService, JobSchedulingService,
+     ConfigService, JobService, TriggerService, ConfirmationService, JobSchedulingService,
         DatabaseConfigInitializerService,
         {provide: APP_INITIALIZER, deps:[ConfigService], useFactory: (config : ConfigService) => () => config.load(), multi: true}
     ],
