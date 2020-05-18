@@ -1,4 +1,5 @@
-<p-table [columns]="cols" [value]="pairedColumnsOutsideConfig.sourceDestMapping" selectionMode="single" [(selection)]="selectedSourceDestMappingStep" (onRowSelect)="onRowSelect($event)" [paginator]="true" [rows]="5">
+<p-table [columns]="cols" [value]="pairedColumnsOutsideConfig.sourceDestMapping" selectionMode="single" [(selection)]="selectedSourceDestMappingStep" (onRowSelect)="onRowSelect($event)" [paginator]="true" [rows]="5"
+    [responsive]="true" resizableColumns="true" >
     <ng-template pTemplate="caption">
         Mapping Steps
     </ng-template>

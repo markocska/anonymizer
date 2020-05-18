@@ -1,0 +1,13 @@
+p-table {
+    table-layout: auto;
+    border-collapse: collapse;
+    width: 100%;
+    word-wrap:break-word !important;
+    overflow-wrap: break-word !important;
+
+}
+p-table td {
+    border: 1px solid #ccc;
+    word-wrap:break-word !important;
+    overflow-wrap: break-word !important;
+}

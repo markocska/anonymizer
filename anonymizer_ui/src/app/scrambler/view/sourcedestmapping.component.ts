@@ -6,7 +6,8 @@ import { SourceDestMappingStepConfig } from '../domain/databaseConfig/sourceDest
 
 @Component({
     selector:'sourcedest-mapping',
-    templateUrl: './sourcedestmapping.component.html'
+    templateUrl: './sourcedestmapping.component.html',
+    styleUrls: ['./sourcedestmapping.component.css']
 })
 export class SourceDestMappingComponent implements OnInit {
     displayDialog: boolean;
