@@ -30,7 +30,7 @@ namespace Scrambler.SqlServer.Validators
 
             try
             {
-                _sqlHelper.ExecuteQueryWithoutParams(connectionString, $"select * from {tableConfig.FullTableName} where {tableConfig.Where};");
+                _sqlHelper.ExecuteQueryWithoutParams(connectionString, $"select top (1)* from {tableConfig.FullTableName} where {tableConfig.Where};");
                 return true;
             }
             catch(SqlException ex)

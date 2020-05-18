@@ -28,7 +28,7 @@ namespace Scrambler.MySql.Validators
 
             try
             {
-                _sqlHelper.ExecuteQueryWithoutParams(connectionString, $"select * from {tableConfig.FullTableName} where {tableConfig.Where};");
+                _sqlHelper.ExecuteQueryWithoutParams(connectionString, $"select * from {tableConfig.FullTableName} where {tableConfig.Where} limit 1;");
                 return true;
             }
             catch (MySqlException ex)
