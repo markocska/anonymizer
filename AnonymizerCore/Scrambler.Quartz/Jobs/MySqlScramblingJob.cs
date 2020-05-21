@@ -2,6 +2,7 @@
 using Scrambler.MySql;
 using Serilog;
 using Serilog.Context;
+using Serilog.Core;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -11,11 +12,11 @@ namespace Scrambler.Quartz.Jobs
 {
     public class MySqlScramblingJob : IJob
     {
-        private readonly LoggerConfiguration _loggerConfiguration;
+        private readonly Logger _logger;
 
-        public MySqlScramblingJob(LoggerConfiguration loggerConfiguration)
+        public MySqlScramblingJob(Logger logger)
         {
-            _loggerConfiguration = loggerConfiguration;
+            _logger = logger;
         }
 
         public string ConfigStr { get; set; }
@@ -33,7 +34,7 @@ namespace Scrambler.Quartz.Jobs
                 using (LogContext.PushProperty("JobDescription", context.JobDetail.Description))
                 {
                     string configStr = context.MergedJobDataMap.GetString("configStr");
-                    var scrambler = new MySqlScramblingService(_loggerConfiguration);
+                    var scrambler = new MySqlScramblingService(_logger);
                     scrambler.ScrambleFromConfigStr(configStr);
                 }
             }

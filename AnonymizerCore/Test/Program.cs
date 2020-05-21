@@ -16,12 +16,12 @@ namespace Test
             //var scrambler = new SqlScramblingService(logConfig);
             //scrambler.ScrambleFromConfigStr(config);
 
-            var logConfig = new LoggerConfiguration()
-                .WriteTo.Console();
+            var logger = new LoggerConfiguration()
+                .WriteTo.Console().CreateLogger();
 
             var mySqlconfig = File.ReadAllText(".\\mySqlscrambleConfig.json");
 
-            var mySqlScrambler = new MySqlScramblingService(logConfig);
+            var mySqlScrambler = new MySqlScramblingService(logger);
             mySqlScrambler.ScrambleFromConfigStr(mySqlconfig);
 
             Console.ReadKey();

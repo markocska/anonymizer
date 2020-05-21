@@ -11,6 +11,7 @@ using Scrambler.Quartz.JobFactory;
 using Scrambler.Quartz.Jobs;
 using Scrambler.Quartz.Model;
 using Serilog;
+using Serilog.Core;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -22,14 +23,14 @@ namespace Scrambler.Quartz
         public IScheduler _scheduler { get; set; }
 
         public IMapper _mapper { get; set; }
-        public SchedulingService(LoggerConfiguration loggerConfiguration, SchedulerConfiguration schedulerConfig, IMapper mapper)
+        public SchedulingService(Logger logger, SchedulerConfiguration schedulerConfig, IMapper mapper)
         {
-            Log.Logger = loggerConfiguration.CreateLogger();
+            Log.Logger = logger;
 
             _mapper = mapper;
 
             var services = new ServiceCollection();
-            services.AddTransient(s => loggerConfiguration);
+            services.AddTransient(s => logger);
             services.AddTransient(s => schedulerConfig);
             services.AddTransient<SqlScramblingJob>();
             services.AddTransient<MySqlScramblingJob>();

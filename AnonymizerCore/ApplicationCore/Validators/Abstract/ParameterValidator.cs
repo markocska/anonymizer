@@ -90,9 +90,14 @@ namespace Scrambler.Validators.Abstract
                 throw new ArgumentNullException("Constant and scrambled column lists can not be both empty.");
             }
 
-            if (scrambledColumns == null || constantColumns == null)
+            if ((scrambledColumns == null || constantColumns == null))
             {
                 return false;
+            }
+
+            if(scrambledColumns.Count() == 0 || constantColumns.Count() == 0)
+            {
+                return true;
             }
 
             bool isThereADuplicationConflict = false;
@@ -122,6 +127,11 @@ namespace Scrambler.Validators.Abstract
                 return true;
             }
 
+            if (pairedColumnsInside.Count == 0)
+            {
+                return true;
+            }
+
             var pairedColumns = pairedColumnsInside.SelectMany(pd => pd, (listOfLists, list) => list).Distinct();
 
             var allColumns = schemaTable
@@ -145,6 +155,16 @@ namespace Scrambler.Validators.Abstract
         protected bool DoAllPairedColumnsOutsideExist(string connectionString, TableConfig tableConfig)
         {
             if (tableConfig.PairedColumnsOutsideTable == null)
+            {
+                return true;
+            }
+
+            if (tableConfig.PairedColumnsOutsideTable.Count == 0)
+            {
+                return true;
+            }
+
+            if (tableConfig.PairedColumnsOutsideTable.First().ColumnMapping.Count == 0)
             {
                 return true;
             }
@@ -225,6 +245,7 @@ namespace Scrambler.Validators.Abstract
         private bool DoAllSourceTableFrnKeyMapColsExist(string connectionString, TableConfig tableConfig,
             PairedColumnsOutsideTableConfig pairedColumnsOutsideConfig)
         {
+
             var columnsInSourceTable = pairedColumnsOutsideConfig.ColumnMapping.GetSubListElementsOfIndex(0)
                    .Concat(pairedColumnsOutsideConfig.SourceDestMapping.First().ForeignKeyMapping
                        .GetSubListElementsOfIndex(0));

@@ -13,11 +13,11 @@ namespace Scrambler.Quartz.Jobs
 {
     public class SqlScramblingJob : IJob
     {
-        private readonly LoggerConfiguration _loggerConfiguration;
+        private readonly Serilog.Core.Logger _logger;
 
-        public SqlScramblingJob(LoggerConfiguration loggerConfiguration)
+        public SqlScramblingJob(Serilog.Core.Logger logger)
         {
-            _loggerConfiguration = loggerConfiguration;
+            _logger= logger;
         }
 
         public string ConfigStr { get; set; }
@@ -35,7 +35,7 @@ namespace Scrambler.Quartz.Jobs
                 using (LogContext.PushProperty("JobDescription", context.JobDetail.Description))
                 {
                     string configStr = context.MergedJobDataMap.GetString("configStr");
-                    var scrambler = new SqlScramblingService(_loggerConfiguration);
+                    var scrambler = new SqlScramblingService(_logger);
                     scrambler.ScrambleFromConfigStr(configStr);
                 }
             }

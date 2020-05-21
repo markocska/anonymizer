@@ -60,7 +60,7 @@ namespace Scrambler.Api
 
             services.AddSingleton(x => CreateSchedulerConfig());
 
-            services.AddSingleton(x => CreateLoggerConfig());
+            services.AddSingleton(x => CreateLoggerConfig().CreateLogger());
 
             services.AddSingleton<ISchedulingService, SchedulingService>();
 
