@@ -92,7 +92,9 @@ namespace Scrambler.Api
             AppDomain.CurrentDomain.ProcessExit += (s, e) => Log.CloseAndFlush();
             app.UseCors();
             app.UseHttpsRedirection();
+            app.UseStaticFiles();
             app.UseMvc();
+            
 
             JsonConvert.DefaultSettings = () =>
             {

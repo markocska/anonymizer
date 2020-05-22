@@ -17,9 +17,9 @@ export class LogComponent implements OnInit {
 
     }
 
-    protected loading: boolean;
+    public loading: boolean;
 
-    protected logCols : any[] = [
+    public logCols : any[] = [
         {field:  'groupKey', header:'Group Name'},
         {field:  'jobKey', header:'Job Name'},
         {field:  'jobDescription', header:'Job Description'},
@@ -28,24 +28,24 @@ export class LogComponent implements OnInit {
         {field:  'timeStamp', header:'TimeStamp'}
     ]
 
-    protected logs : Log[] = [];
-    protected numberOfLogs : number;
+    public logs : Log[] = [];
+    public numberOfLogs : number;
 
-    protected groupDropdownOptions : SelectItem[] = [];
-    protected jobNameDropdownOptions : SelectItem[] = [];
-    protected readonly jobNameDefault : SelectItem =  {label: "Select a job", value: null};
-    protected severityDropdownOptions : SelectItem[] = [];
+    public groupDropdownOptions : SelectItem[] = [];
+    public jobNameDropdownOptions : SelectItem[] = [];
+    public readonly jobNameDefault : SelectItem =  {label: "Select a job", value: null};
+    public severityDropdownOptions : SelectItem[] = [];
     
-    protected groupKeyFilter : string = null;
-    protected jobKeyFilter : string = null;
-    protected jobDescriptionFilter : string = null;
-    protected severityFilter : string = null;
-    protected timeStampDateRangeFilter : Date[];
+    public groupKeyFilter : string = null;
+    public jobKeyFilter : string = null;
+    public jobDescriptionFilter : string = null;
+    public severityFilter : string = null;
+    public timeStampDateRangeFilter : Date[];
 
-    protected timezoneOffset : string = '+0200';
+    public timezoneOffset : string = '+0200';
 
 
-    protected logFilterRequest : LogFilterRequest =
+    public logFilterRequest : LogFilterRequest =
     {   
         groupKey: null,
         jobKey: null,
@@ -79,7 +79,7 @@ export class LogComponent implements OnInit {
         this.loading = false;
     }
 
-    protected loadLogsLazy(event : LazyLoadEvent) : void { 
+    public loadLogsLazy(event : LazyLoadEvent) : void { 
         this.logFilterRequest.paginationParams = 
             {
                 pageNumber:  (event.first / event.rows) + 1,
@@ -102,7 +102,7 @@ export class LogComponent implements OnInit {
         this.loading = false;
     }
 
-    protected filter(value, field, mode) : void {
+    public filter(value, field, mode) : void {
         switch(field) {
             case 'groupKey':
                 if (value) {
@@ -137,7 +137,7 @@ export class LogComponent implements OnInit {
         this.loading = false;
     }
 
-    protected sortByTimeStamp(event: SortEvent) : void {
+    public sortByTimeStamp(event: SortEvent) : void {
         console.log(event);
     }
     

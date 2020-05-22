@@ -38,9 +38,9 @@ export class JobDetailsComponent implements OnInit {
 
     }
 
-    protected messages: any[] = [];
+    public messages: any[] = [];
 
-    protected jobCols: any[] = [
+    public jobCols: any[] = [
         {field:  'jobName', header:'Job Name'},
         {field:  'jobGroup', header:'Job Group Name'},
         {field:  'requestRecovery', header:'Request Recovery'},
@@ -48,11 +48,11 @@ export class JobDetailsComponent implements OnInit {
         {field:  'isDurable', header:'Is Durable'},
         {field:  'operation', header:'Operation'}
     ];
-    protected jobDescriptions: JobDescription[] = [];
-    protected jobDescriptionsWithoutFilter: JobDescription[] = [];
-    protected totalNumberOfJobs: number;
+    public jobDescriptions: JobDescription[] = [];
+    public jobDescriptionsWithoutFilter: JobDescription[] = [];
+    public totalNumberOfJobs: number;
 
-    protected triggerCols: any[] = [
+    public triggerCols: any[] = [
         {field:  'triggerName', header:'Trigger Name'},
         {field:  'triggerGroup', header:'Trigger Group Name'},
         {field:  'description', header:'Description'},
@@ -60,15 +60,15 @@ export class JobDetailsComponent implements OnInit {
         {field:  'cronExpression', header:'Cron Expression'},
         {field: 'operation', header: 'Operation'}
     ];
-    protected triggers: TriggerDescription[] = [];
+    public triggers: TriggerDescription[] = [];
 
-    protected isDurableOptions: SelectItem[] = BooleanSelectItems.booleanSelectItems;
-    protected isDurableSelected: string;
+    public isDurableOptions: SelectItem[] = BooleanSelectItems.booleanSelectItems;
+    public isDurableSelected: string;
 
-    protected requestRecoveryOptions: SelectItem[] = BooleanSelectItems.booleanSelectItems;
-    protected requestRecoverySelected: string;
+    public requestRecoveryOptions: SelectItem[] = BooleanSelectItems.booleanSelectItems;
+    public requestRecoverySelected: string;
 
-    protected filterCall : (jobFilter: string ) => void = (jobFilter) => {
+    public filterCall : (jobFilter: string ) => void = (jobFilter) => {
          this.jobService.getJobDescriptionsWithFilter(this.jobGroupFilter)
             .then(jobDescriptionsReportResponse => {
                 this.jobDescriptions = jobDescriptionsReportResponse.jobDescriptions;
@@ -76,13 +76,13 @@ export class JobDetailsComponent implements OnInit {
             });
         this.filterInProgress = false;
     }
-    protected filterInProgress : boolean = false;
-    protected jobGroupFilter : string;
+    public filterInProgress : boolean = false;
+    public jobGroupFilter : string;
     
 
-    protected displayCreateTriggerDialog : boolean = false;
-    protected triggerToCreate : CreateTrigger = {jobName :"", jobGroup: "", triggerDescription: "", cronExpression: ""};
-    protected expandedJob : JobDescription;
+    public displayCreateTriggerDialog : boolean = false;
+    public triggerToCreate : CreateTrigger = {jobName :"", jobGroup: "", triggerDescription: "", cronExpression: ""};
+    public expandedJob : JobDescription;
 
     ngOnInit() {
         this.jobService.getAllJobDescriptions()
@@ -93,7 +93,7 @@ export class JobDetailsComponent implements OnInit {
             });
     }
 
-    protected loadJobsLazy(event: LazyLoadEvent) : void {
+    public loadJobsLazy(event: LazyLoadEvent) : void {
 
         this.jobService.getAllJobDescriptions()
             .then(jobDescriptionsReportResponse => {
@@ -104,12 +104,12 @@ export class JobDetailsComponent implements OnInit {
         
     }
 
-    protected expandRow(event: any) : void {
+    public expandRow(event: any) : void {
         this.expandedJob = this.jobDescriptions.filter(x => x.id === event.data.id)[0];
         this.triggers = this.expandedJob.triggers;
     }
 
-    protected filter(value, field, mode) : void {
+    public filter(value, field, mode) : void {
         if (field === 'jobGroup') {
             this.jobGroupFilter = value;
             if (this.filterInProgress === false) {
@@ -143,23 +143,31 @@ export class JobDetailsComponent implements OnInit {
 
    
 
-    protected deleteJob(event: any, rowData: JobDescription) : void {
+    public deleteJob(event: any, rowData: JobDescription) : void {
         this.confirmationService.confirm({
             message: `Are you sure you wish to delete the following job? <br/>  <strong> Group key: </strong> ${rowData.jobGroup} <br/> 
                 <strong> Job key: </strong> ${rowData.jobName}.`,
             accept: () => {
-                this.jobService.deleteJob(rowData.jobGroup, rowData.jobName)
-                    .then(() => {
-                        this.messages.push({severity:'success', summary:'Success', detail:'Job deleted successfully'});
-                        this.removeDeletedJobFromList(rowData.jobGroup, rowData.jobName);
-                    })
-                    .catch((error: HttpErrorResponse) => this.messages.push({severity:'error', summary:'Error', 
-                        detail:`Error while deleting the job. ${typeof error.error === 'string' ? 'Message: ' + error.error : ''}`}))
+this.jobService.deleteJob(rowData.jobGroup, rowData.jobName)
+    .then(() => {
+        this.messages.push({
+            severity:'success', 
+            summary:'Success', 
+            detail:'Job deleted successfully'});
+        this.removeDeletedJobFromList(rowData.jobGroup, rowData.jobName);
+    })
+    .catch((error: HttpErrorResponse) => 
+        this.messages.push({
+            severity:'error',
+            summary:'Error', 
+            detail:`Error while deleting the job. 
+            ${typeof error.error === 'string' ? 
+                'Message: ' + error.error : ''}`}))
             }
         });
     }
 
-    protected deleteTrigger(event: any, rowData: TriggerDescription, jobData: JobDescription) : void {
+    public deleteTrigger(event: any, rowData: TriggerDescription, jobData: JobDescription) : void {
         this.confirmationService.confirm({
             message: `Are you sure you wish to delete the following trigger? <br/>  <strong> Group key: </strong> ${rowData.triggerGroup} <br/> 
                 <strong> Trigger key: </strong> ${rowData.triggerName}.`,
@@ -177,12 +185,12 @@ export class JobDetailsComponent implements OnInit {
     
     }
 
-    protected removeDeletedJobFromList(jobGroup: string, jobKey: string) : void {
+    public removeDeletedJobFromList(jobGroup: string, jobKey: string) : void {
         this.jobDescriptionsWithoutFilter = this.jobDescriptionsWithoutFilter.filter(job => !(job.jobGroup === jobGroup && job.jobName === jobKey));
         this.jobDescriptions = this.jobDescriptions.filter(job => !(job.jobGroup === jobGroup && job.jobName === jobKey));
     }
 
-    protected removeDeletedTriggerFromList(triggerGroup: string, triggerKey: string, jobData: JobDescription) : void {
+    public removeDeletedTriggerFromList(triggerGroup: string, triggerKey: string, jobData: JobDescription) : void {
         this.triggers = this.triggers.filter(trigger => !(trigger.triggerGroup === triggerGroup && trigger.triggerName === triggerKey));
         var jobToRemoveTriggerOf = this.jobDescriptionsWithoutFilter.filter(job => job.jobGroup === jobData.jobGroup && job.jobName === jobData.jobName)[0];
         jobToRemoveTriggerOf.triggers = jobToRemoveTriggerOf.triggers.filter(trigger => !(trigger.triggerGroup === triggerGroup && trigger.triggerName === triggerKey));
@@ -191,13 +199,13 @@ export class JobDetailsComponent implements OnInit {
         }
     }
 
-    protected showDialogToAddTrigger() : void {
+    public showDialogToAddTrigger() : void {
         this.triggerToCreate.jobGroup = this.expandedJob.jobGroup;
         this.triggerToCreate.jobName = this.expandedJob.jobName;
         this.displayCreateTriggerDialog = true;
     }
 
-    protected saveTrigger() : void {
+    public saveTrigger() : void {
         this.triggerService.createTrigger(this.triggerToCreate)
             .then((successResponse : TriggerSuccessfullyCreated) => {
                 this.messages.push({severity: 'success', summary:'Success', detail: 'Trigger created successfully'});
@@ -207,7 +215,7 @@ export class JobDetailsComponent implements OnInit {
                 detail:`Error while creating the trigger. ${typeof error.error === 'string' ? 'Message ' + error.error : '' }`}))
     }
 
-    protected addCreatedTriggerToList(createdTrigger: TriggerSuccessfullyCreated) : void {
+    public addCreatedTriggerToList(createdTrigger: TriggerSuccessfullyCreated) : void {
         let newTrigger = {id: createdTrigger.id, triggerGroup : createdTrigger.triggerGroup, triggerName: createdTrigger.triggerName,
             description: createdTrigger.triggerDescription, cronExpression: createdTrigger.cronExpression, calendarName: createdTrigger.calendar};
 
@@ -219,7 +227,7 @@ export class JobDetailsComponent implements OnInit {
         this.cancelCreateTriggerDialog();
     }
 
-    protected cancelCreateTriggerDialog() : void {
+    public cancelCreateTriggerDialog() : void {
         this.displayCreateTriggerDialog = false;
     }
 }

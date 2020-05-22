@@ -97,7 +97,7 @@ namespace Scrambler.Validators.Abstract
 
             if(scrambledColumns.Count() == 0 || constantColumns.Count() == 0)
             {
-                return true;
+                return false;
             }
 
             bool isThereADuplicationConflict = false;

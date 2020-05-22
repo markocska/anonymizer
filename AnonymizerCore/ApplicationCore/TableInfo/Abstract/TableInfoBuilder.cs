@@ -75,6 +75,10 @@ namespace Scrambler.TableInfo.Abstract
         private List<ColumnAndTypeAndValue> GetConstantColumnTypesAndValues(TableInfo tableInfo)
         {
             Dictionary<string, string> constantColumnsAndTypes;
+
+            if (TableConfig.ConstantColumns == null) { return new List<ColumnAndTypeAndValue>(); }
+            if (TableConfig.ConstantColumns.Count == 0) { return new List<ColumnAndTypeAndValue>(); }
+
             try
             {
                 constantColumnsAndTypes = _columnTypeManager.GetColumnNamesAndTypes(tableInfo, TableConfig.ConstantColumns.Select(c => c.Name).ToList());
@@ -113,7 +117,11 @@ namespace Scrambler.TableInfo.Abstract
 
         private Dictionary<string, string> GetScrambledColumnTypes(TableInfo tableInfo)
         {
-            Dictionary<string, string> scrambledColumns;
+            
+            if (TableConfig.ScrambledColumns == null) { return new Dictionary<string, string>(); }
+            if (TableConfig.ScrambledColumns.Count == 0) { return new Dictionary<string, string>(); }
+
+            Dictionary<string, string> scrambledColumns = new Dictionary<string, string>();
             try
             {
                 scrambledColumns = _columnTypeManager.GetColumnNamesAndTypes(tableInfo, TableConfig.ScrambledColumns.Select(c => c.Name).ToList());
@@ -138,6 +146,12 @@ namespace Scrambler.TableInfo.Abstract
         private List<MappedTable> ParseMappedTablesOutsideFromConfig()
         {
             var mappedTablesOutside = new List<MappedTable>();
+      
+            if (TableConfig.PairedColumnsOutsideTable.Count != 0 && (TableConfig.PairedColumnsOutsideTable.First().ColumnMapping.Count == 0))
+            {
+                return mappedTablesOutside;
+            }
+
             for (int i = 0; i < TableConfig.PairedColumnsOutsideTable.Count; i++)
             {
                 var mappedTableOutsideConfig = TableConfig.PairedColumnsOutsideTable[i];

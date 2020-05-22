@@ -17,8 +17,8 @@ export class CreateSqlJobComponent implements OnInit {
 
     constructor(private jobSchedulingService : JobSchedulingService, private databaseConfigIniatializer : DatabaseConfigInitializerService) {}
 
-    protected dbTypes : SelectItem[] = [{label:"Select database type", value:""},{label:"Sql server", value: "SQLSERVER"}, {label:"MySql/Aurora", value:"MYSQL"}]
-    protected chosenDbType : string = null;
+    public dbTypes : SelectItem[] = [{label:"Select database type", value:""},{label:"Sql server", value: "SQLSERVER"}, {label:"MySql/Aurora", value:"MYSQL"}]
+    public chosenDbType : string = null;
 
     jobToCreate: CreateScheduledJob = {
         jobGroup: null,
@@ -29,17 +29,17 @@ export class CreateSqlJobComponent implements OnInit {
         jobConfig: null
     }
 
-    protected showJobCreatedSuccessfullyDialog : boolean = false;
+    public showJobCreatedSuccessfullyDialog : boolean = false;
     
-    protected showErrorWhileCreatingJobDialog : boolean = false;
-    protected errorWhileCreatingJobErrorMessage : string = null;
+    public showErrorWhileCreatingJobDialog : boolean = false;
+    public errorWhileCreatingJobErrorMessage : string = null;
 
 
     ngOnInit() {
         this.jobToCreate.jobConfig = this.databaseConfigIniatializer.initializeDatabasesConfig();
     }
 
-    protected createJobButtonClickHandler() {
+    public createJobButtonClickHandler() {
         if (!this.chosenDbType) {
             this.errorWhileCreatingJobErrorMessage = "Please choose a database type";
             this.showErrorWhileCreatingJobDialog = true;
@@ -102,7 +102,7 @@ export class CreateSqlJobComponent implements OnInit {
         };
     }
 
-    protected getDbName(database : DatabaseConfig, index : number) {
+    public getDbName(database : DatabaseConfig, index : number) {
 
         if (index === (this.jobToCreate.jobConfig.databases.length - 1) && index !== 0) {
             return "+";
@@ -114,7 +114,7 @@ export class CreateSqlJobComponent implements OnInit {
 
     }
 
-    protected getTableName(database : DatabaseConfig, index : number) {
+    public getTableName(database : DatabaseConfig, index : number) {
 
         if (index === (database.tables.length - 1) && index !== 0) {
             return "+";
@@ -126,7 +126,7 @@ export class CreateSqlJobComponent implements OnInit {
 
     }
 
-    protected getPairedColumnsOutsideName(table : TableConfig, index : number) {
+    public getPairedColumnsOutsideName(table : TableConfig, index : number) {
 
         if (index === (table.pairedColumnsOutsideTable.length - 1) && index !== 0) {
             return "+";
@@ -139,7 +139,7 @@ export class CreateSqlJobComponent implements OnInit {
     }
 
 
-    protected handleDatabaseTabClick(event) {
+    public handleDatabaseTabClick(event) {
         if (event.index === (this.jobToCreate.jobConfig.databases.length - 1)) {
             this.jobToCreate.jobConfig.databases.push({
                 connectionString: null,
@@ -183,7 +183,7 @@ export class CreateSqlJobComponent implements OnInit {
         }
     }
 
-    protected handleTableTabClick(database: DatabaseConfig, event) {
+    public handleTableTabClick(database: DatabaseConfig, event) {
         console.log(database.tables);
         if (event.index === (database.tables.length - 1)) {
            database.tables.push(
@@ -207,7 +207,7 @@ export class CreateSqlJobComponent implements OnInit {
         }
     }
 
-    protected handlePairedColumnsOutsideTabClick(table: TableConfig, event) {
+    public handlePairedColumnsOutsideTabClick(table: TableConfig, event) {
         if (event.index === (table.pairedColumnsOutsideTable.length - 1)) {
            table.pairedColumnsOutsideTable.push(
             {

@@ -12,7 +12,7 @@ namespace TestDataGenerator
         private static string _charSetForIds = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
         private static Random _random = new Random();
 
-        private static DateTime _startDate = new DateTime(1910,1,1);
+        private static DateTime _startDate = new DateTime(1910, 1, 1);
         private static int _dayRange;
 
         //Program()
@@ -29,27 +29,67 @@ namespace TestDataGenerator
             Program._dayRange = (DateTime.Today - _startDate).Days;
 
             var updateScript = new List<string>();
+            updateScript.Add("insert into Customer values ");
 
             var firstNames = File.ReadAllLines(@"F:\OneDrive - edy\NameDatabases\NamesDatabases\first names\us.txt");
             var lastNames = File.ReadAllLines(@"F:\OneDrive - edy\NameDatabases\NamesDatabases\surnames\us.txt");
+            var length = 100;
 
-            for (int i = 0; i<10_000_000;i++)
+            for (int i = 0; i < length; i++)
             {
 
-                updateScript.Add(
-                    $"insert into dbo.Customer values (" +
-                        $"'{firstNames[_random.Next(firstNames.Length)]}', " +
-                        $"'{lastNames[_random.Next(lastNames.Length)]}', " +
-                        $"'{GenerateRandomIdString()}', " +
-                        $"'{GenerateRandomDateTime().ToShortDateString()}', " +
-                        $"'{firstNames[_random.Next(firstNames.Length)] + " " + lastNames[_random.Next(lastNames.Length)]}', " +
-                        $"'{firstNames[_random.Next(firstNames.Length)] + " " + lastNames[_random.Next(lastNames.Length)] + " " + lastNames[_random.Next(lastNames.Length)]} street {_random.Next(1, 200)}', " +
-                        $"{_random.Next(1, 100)}" +
-                        $");"
-                    );
+                //updateScript.Add(
+                //    $"insert into dbo.Customer values (" +
+                //        $"'{firstNames[_random.Next(firstNames.Length)]}', " +
+                //        $"'{lastNames[_random.Next(lastNames.Length)]}', " +
+                //        $"'{GenerateRandomIdString()}', " +
+                //        $"'{GenerateRandomDateTime().ToShortDateString()}', " +
+                //        $"'{firstNames[_random.Next(firstNames.Length)] + " " + lastNames[_random.Next(lastNames.Length)]}', " +
+                //        $"'{firstNames[_random.Next(firstNames.Length)] + " " + lastNames[_random.Next(lastNames.Length)] + " " + lastNames[_random.Next(lastNames.Length)]} street {_random.Next(1, 200)}', " +
+                //        $"{_random.Next(1, 100)}" +
+                //        $");"
+                //    );
+                if (i != (length - 1))
+                {
+                    updateScript.Add("(" +
+                            $"{i + 1}, " +
+                            $"'{firstNames[_random.Next(firstNames.Length)]}', " +
+                            $"'{lastNames[_random.Next(lastNames.Length)]}', " +
+                            $"'{GenerateRandomIdString()}', " +
+                            $"'{GenerateRandomDateTime().ToString("yyyy-MM-dd")}', " +
+                            $"'{firstNames[_random.Next(firstNames.Length)] + " " + lastNames[_random.Next(lastNames.Length)]}', " +
+                            $"'{firstNames[_random.Next(firstNames.Length)] + " " + lastNames[_random.Next(lastNames.Length)] + " " + lastNames[_random.Next(lastNames.Length)]} street {_random.Next(1, 200)}', " +
+                            $"{_random.Next(1, 100)}" +
+                            $"),");
+                }
+                else 
+                {
+                    updateScript.Add("(" +
+                       $"{i + 1}, " +
+                       $"'{firstNames[_random.Next(firstNames.Length)]}', " +
+                       $"'{lastNames[_random.Next(lastNames.Length)]}', " +
+                       $"'{GenerateRandomIdString()}', " +
+                       $"'{GenerateRandomDateTime().ToString("yyyy-MM-dd")}', " +
+                       $"'{firstNames[_random.Next(firstNames.Length)] + " " + lastNames[_random.Next(lastNames.Length)]}', " +
+                       $"'{firstNames[_random.Next(firstNames.Length)] + " " + lastNames[_random.Next(lastNames.Length)] + " " + lastNames[_random.Next(lastNames.Length)]} street {_random.Next(1, 200)}', " +
+                       $"{_random.Next(1, 100)}" +
+                       $");");
+                }
+                //updateScript.Add(
+                //        $"{i+1}," +
+                //        $"{firstNames[_random.Next(firstNames.Length)]}, " +
+                //        $"{lastNames[_random.Next(lastNames.Length)]}, " +
+                //        $"{GenerateRandomIdString()}, " +
+                //        $"{GenerateRandomDateTime().ToShortDateString()}, " +
+                //        $"{firstNames[_random.Next(firstNames.Length)] + " " + lastNames[_random.Next(lastNames.Length)]}, " +
+                //        $"{firstNames[_random.Next(firstNames.Length)] + " " + lastNames[_random.Next(lastNames.Length)] + " " + lastNames[_random.Next(lastNames.Length)]} street {_random.Next(1, 200)}, " +
+                //        $"{_random.Next(1, 100)}" +
+                //        $"{Environment.NewLine}");
             }
 
-            File.WriteAllLines(@"./insertScript.txt", updateScript);
+            var massUpdateScript = string.Join("", updateScript);
+
+            File.WriteAllText(@"./insertScript.sql", massUpdateScript);
             Console.WriteLine("done");
             Console.ReadKey();
         }
@@ -60,7 +100,7 @@ namespace TestDataGenerator
             int length = 10;
 
             var generatedCharArray = new char[length];
-            for(int i = 0; i< generatedCharArray.Length;i++)
+            for (int i = 0; i < generatedCharArray.Length; i++)
             {
                 generatedCharArray[i] = _charSetForIds[_random.Next(_charSetForIds.Length)];
             }
@@ -73,7 +113,7 @@ namespace TestDataGenerator
             return _startDate.AddDays(_random.Next(_dayRange));
         }
 
-    
+
 
     }
 }

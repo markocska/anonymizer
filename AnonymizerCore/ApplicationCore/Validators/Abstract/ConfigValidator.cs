@@ -46,7 +46,8 @@ namespace Scrambler.Validators.Abstract
                 return false;
             }
 
-            if (tableConfig.PairedColumnsOutsideTable != null)
+            if (tableConfig.PairedColumnsOutsideTable != null && tableConfig.PairedColumnsOutsideTable.Count != 0 
+                && tableConfig.PairedColumnsOutsideTable.First().ColumnMapping.Count != 0)
             {
                 foreach (var pairedColumnConfig in tableConfig.PairedColumnsOutsideTable)
                 {
