@@ -15,9 +15,9 @@ The easiest way to run the project is by using the allInBundle.zip compressed fo
 
 1. Download the allInBundle.zip file, either by cloning the project, or by downloading [directly](https://github.com/markocska/anonymizer/blob/master/allInBundle.zip).
 
-2. After extracting the folder, run the **1_tables_Quartz_sqlServer.sql** and **2_tables_Serilog_sqlServer.sql** scripts (located inside the *sqlToRun* folder), on the SQL Server instance, which you intend to use for the application.
+2. After extracting the folder, run the **1_tables_Quartz_sqlServer.sql** and **2_tables_Serilog_sqlServer.sql** scripts (located inside the *prodbuild/sqlToRun* folder), on the SQL Server instance, which you intend to use for the application.
 
-3. If you wish to try the software using predefined test data, run the **3_createTestDataSqlServer.sql** on your SQL Server instance and/or the **4_createTestDataMySql.sql** scripts on your MySQL instance. Both scripts are located inside the *sqlToRun/testdata* folder.
+3. If you wish to try the software using predefined test data, run the **3_createTestDataSqlServer.sql** on your SQL Server instance and/or the **4_createTestDataMySql.sql** scripts on your MySQL instance. Both scripts are located inside the *prodbuild/sqlToRun/testdata* folder.
 
 4. In the prodbuild/appsettings.json file, under the Serilog configs, change the **data source** value of the "connectionString" config parameter, so that the data source points to your desired SQL Server instance.  
 
