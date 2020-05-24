@@ -11,7 +11,7 @@ The easiest way to run the project is by using the allInBundle.zip compressed fo
 * SQL Server 2012 or newer version
 
 
-## Steps to run and try out the application using the allInBundle.zip comporessed folder
+## Steps to run and try out the application using the "allInBundle.zip" compressed folder
 
 1. Download the allInBundle.zip file, either by cloning the project, or by downloading [directly](https://github.com/markocska/anonymizer/blob/master/allInBundle.zip).
 
