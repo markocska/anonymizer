@@ -1,3 +1,7 @@
 ::ng-deep .ui-timepicker {
     display: none
 }
+
+#reloadButton {
+    padding: 25px 25px 25px 25px
+}

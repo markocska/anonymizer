@@ -138,7 +138,17 @@ export class LogComponent implements OnInit {
     }
 
     public sortByTimeStamp(event: SortEvent) : void {
-        console.log(event);
+        // console.log(event);
+    }
+
+    public reloadLogs() {
+        this.loading = true;
+        this.logService.getLogs(this.logFilterRequest)
+            .then(logs => {
+                this.logs = logs.logs;
+                this.numberOfLogs = logs.totalNumber;
+            });
+        this.loading = false;
     }
     
 }

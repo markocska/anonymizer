@@ -185,6 +185,15 @@ this.jobService.deleteJob(rowData.jobGroup, rowData.jobName)
     
     }
 
+    public reloadJobs() {
+        this.jobService.getAllJobDescriptions()
+            .then(jobDescriptionsReportResponse => {
+                this.jobDescriptions = jobDescriptionsReportResponse.jobDescriptions; 
+                this.jobDescriptionsWithoutFilter = jobDescriptionsReportResponse.jobDescriptions;
+                this.totalNumberOfJobs = jobDescriptionsReportResponse.totalNumber;
+            });
+    }
+
     public removeDeletedJobFromList(jobGroup: string, jobKey: string) : void {
         this.jobDescriptionsWithoutFilter = this.jobDescriptionsWithoutFilter.filter(job => !(job.jobGroup === jobGroup && job.jobName === jobKey));
         this.jobDescriptions = this.jobDescriptions.filter(job => !(job.jobGroup === jobGroup && job.jobName === jobKey));
