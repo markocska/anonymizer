@@ -4,7 +4,7 @@ A database scrambler software that can dynamically generate SQL code to scramble
 
 The easiest way to run the project is by using the allInBundle.zip compressed folder, which already contains the compiled .NET Core backend and also the compiled, bundled Angular UI.
 
-##### Prerequisites for running the application:
+#### Prerequisites for running the application:
 
 * .NET Core 2.2 runtime
 * .NET Core CLI
