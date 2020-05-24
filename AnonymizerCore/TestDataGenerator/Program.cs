@@ -33,7 +33,7 @@ namespace TestDataGenerator
 
             var firstNames = File.ReadAllLines(@"F:\OneDrive - edy\NameDatabases\NamesDatabases\first names\us.txt");
             var lastNames = File.ReadAllLines(@"F:\OneDrive - edy\NameDatabases\NamesDatabases\surnames\us.txt");
-            var length = 100;
+            var length = 500;
 
             for (int i = 0; i < length; i++)
             {
@@ -51,29 +51,40 @@ namespace TestDataGenerator
                 //    );
                 if (i != (length - 1))
                 {
+                    //updateScript.Add("(" +
+                    //        //$"{i + 1}, " +
+                    //        $"'{firstNames[_random.Next(firstNames.Length)]}', " +
+                    //        $"'{lastNames[_random.Next(lastNames.Length)]}', " +
+                    //        $"'{GenerateRandomIdString()}', " +
+                    //        $"'{GenerateRandomDateTime().ToString("yyyy-MM-dd")}', " +
+                    //        $"'{firstNames[_random.Next(firstNames.Length)] + " " + lastNames[_random.Next(lastNames.Length)]}', " +
+                    //        $"'{firstNames[_random.Next(firstNames.Length)] + " " + lastNames[_random.Next(lastNames.Length)] + " " + lastNames[_random.Next(lastNames.Length)]} street {_random.Next(1, 200)}' " +
+                    //        //$"{_random.Next(1, 100)}" +
+                    //        $"), {Environment.NewLine}");
+
                     updateScript.Add("(" +
                             $"{i + 1}, " +
-                            $"'{firstNames[_random.Next(firstNames.Length)]}', " +
-                            $"'{lastNames[_random.Next(lastNames.Length)]}', " +
-                            $"'{GenerateRandomIdString()}', " +
-                            $"'{GenerateRandomDateTime().ToString("yyyy-MM-dd")}', " +
-                            $"'{firstNames[_random.Next(firstNames.Length)] + " " + lastNames[_random.Next(lastNames.Length)]}', " +
-                            $"'{firstNames[_random.Next(firstNames.Length)] + " " + lastNames[_random.Next(lastNames.Length)] + " " + lastNames[_random.Next(lastNames.Length)]} street {_random.Next(1, 200)}', " +
-                            $"{_random.Next(1, 100)}" +
-                            $"),");
+                            $"{_random.Next(1, 1000)} " +
+                            //$"{_random.Next(1, 100)}" +
+                            $"), {Environment.NewLine}");
                 }
                 else 
                 {
                     updateScript.Add("(" +
                        $"{i + 1}, " +
-                       $"'{firstNames[_random.Next(firstNames.Length)]}', " +
-                       $"'{lastNames[_random.Next(lastNames.Length)]}', " +
-                       $"'{GenerateRandomIdString()}', " +
-                       $"'{GenerateRandomDateTime().ToString("yyyy-MM-dd")}', " +
-                       $"'{firstNames[_random.Next(firstNames.Length)] + " " + lastNames[_random.Next(lastNames.Length)]}', " +
-                       $"'{firstNames[_random.Next(firstNames.Length)] + " " + lastNames[_random.Next(lastNames.Length)] + " " + lastNames[_random.Next(lastNames.Length)]} street {_random.Next(1, 200)}', " +
-                       $"{_random.Next(1, 100)}" +
+                       $"{_random.Next(1, 1000)} " +
                        $");");
+
+                    //updateScript.Add("(" +
+                    //   //$"{i + 1}, " +
+                    //   $"'{firstNames[_random.Next(firstNames.Length)]}', " +
+                    //   $"'{lastNames[_random.Next(lastNames.Length)]}', " +
+                    //   $"'{GenerateRandomIdString()}', " +
+                    //   $"'{GenerateRandomDateTime().ToString("yyyy-MM-dd")}', " +
+                    //   $"'{firstNames[_random.Next(firstNames.Length)] + " " + lastNames[_random.Next(lastNames.Length)]}', " +
+                    //   $"'{firstNames[_random.Next(firstNames.Length)] + " " + lastNames[_random.Next(lastNames.Length)] + " " + lastNames[_random.Next(lastNames.Length)]} street {_random.Next(1, 200)}' " +
+                    //   //$"{_random.Next(1, 100)}" +
+                    //   $");");
                 }
                 //updateScript.Add(
                 //        $"{i+1}," +
