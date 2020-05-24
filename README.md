@@ -28,5 +28,5 @@ The easiest way to run the project is by using the allInBundle.zip compressed fo
 7. You should be able to reach the UI now at the URL: \<application root url\>/index.html which is usually https://localhost:5001/index.html
 
 ## Notes
-* On the UI, the full table name for SQL Server tables should be in format "Database name.Schema name.Table name" , while "Schema name.Table name" for MySQL tables
+* On the UI, the full table name for SQL Server tables should be in format "\<Database name\>.\<Schema name\>.\<Table name\>" , while "\<Schema name\>.\<Table name\>" for MySQL tables
 * When writing column or database names on the UI, you don't have to use brackets or apostrophes.
