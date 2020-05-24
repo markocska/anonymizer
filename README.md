@@ -26,3 +26,4 @@ The easiest way to run the project is by using the allInBundle.zip compressed fo
 6. Run "**dotnet Scrambler.Api.dll**" for the Scrambler.Api.dll file, which is located inside prodbuild folder. 
 
 7. You should be able to reach the UI now at the URL: <application root url>/index.html which is usually https://localhost:5001/index.html
+
